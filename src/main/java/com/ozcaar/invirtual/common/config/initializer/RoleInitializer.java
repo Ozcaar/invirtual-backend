@@ -1,4 +1,4 @@
-package com.ozcaar.invirtual.common.config;
+package com.ozcaar.invirtual.common.config.initializer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
