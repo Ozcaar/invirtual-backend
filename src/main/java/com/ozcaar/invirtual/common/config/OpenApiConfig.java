@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Profile;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 
 @Configuration
@@ -19,10 +20,10 @@ public class OpenApiConfig {
 
         return new OpenAPI()
             .info(new Info()
-                .title("InviRtual")
+                .title("InviRtual API")
                 .version("1.0.0")
                 .description("Documentación de la API sistema de invitaciones digitales"))
-            // .addSecurityItem(new SecurityRequirement().addList(securitySchemeName)) // <- Add security to all endpoints (visual in swagger)
+            .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
             .components(new Components().addSecuritySchemes(securitySchemeName,
                 new SecurityScheme()
                     .name(securitySchemeName)
