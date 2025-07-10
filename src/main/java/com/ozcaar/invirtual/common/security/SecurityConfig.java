@@ -16,6 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.ozcaar.invirtual.auth.service.CustomUserDetailsService;
 import com.ozcaar.invirtual.auth.service.JwtFilter;
+import com.ozcaar.invirtual.common.security.CustomSecurityHandlers.CustomAccessDeniedHandler;
+import com.ozcaar.invirtual.common.security.CustomSecurityHandlers.CustomAuthenticationEntryPoint;
 
 @EnableMethodSecurity
 @Configuration
@@ -71,7 +73,11 @@ public class SecurityConfig {
             auth.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN", "DEV");
 
             auth.anyRequest().authenticated();
-        });
+        })
+        .exceptionHandling(eh -> eh
+            .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+            .accessDeniedHandler(new CustomAccessDeniedHandler())
+        );
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
