@@ -1,16 +1,15 @@
 package com.ozcaar.invirtual.invitation.model;
 
-import java.sql.Date;
-
-import com.ozcaar.invirtual.envelope.model.EnvelopeModel;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,15 +20,20 @@ public class InvitationModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer invitation_id;
 
-    @OneToOne
-    @JoinColumn(name = "envelope_id", unique = true, nullable = false)
-    private EnvelopeModel envelope_id;
+    // @OneToOne
+    // @JoinColumn(name = "envelope_id", unique = true, nullable = false)
+    // private EnvelopeModel envelope_id;
 
-    // private InvitationTypeModel invitation_type_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "invitation_type_id", nullable = false)
+    private InvitationTypeModel invitation_type_id;
 
     // private MusicModel music_id;
 
     // private SignBookModel sign_book_id;
+
+    @Column(nullable = false)
+    private String name;
 
     @Column(nullable = false)
     private Integer max_people;
@@ -38,10 +42,10 @@ public class InvitationModel {
     private String slug_url;
 
     @Column(nullable = false)
-    private Date creation_date;
+    private LocalDateTime creation_date;
 
     @Column(nullable = false)
-    private Date limit_date;
+    private LocalDateTime limit_date;
 
     @Column(nullable = false)
     private Boolean is_demo;
@@ -51,12 +55,28 @@ public class InvitationModel {
 
     // Getters & setters
 
+    public InvitationTypeModel getInvitation_type_id() {
+        return invitation_type_id;
+    }
+
+    public void setInvitation_type_id(InvitationTypeModel invitation_type_id) {
+        this.invitation_type_id = invitation_type_id;
+    }
+
     public Integer getInvitation_id() {
         return invitation_id;
     }
 
     public void setInvitation_id(Integer invitation_id) {
         this.invitation_id = invitation_id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getMax_people() {
@@ -75,19 +95,19 @@ public class InvitationModel {
         this.slug_url = slug_url;
     }
 
-    public Date getCreation_date() {
+    public LocalDateTime getCreation_date() {
         return creation_date;
     }
 
-    public void setCreation_date(Date creation_date) {
+    public void setCreation_date(LocalDateTime creation_date) {
         this.creation_date = creation_date;
     }
 
-    public Date getLimit_date() {
+    public LocalDateTime getLimit_date() {
         return limit_date;
     }
 
-    public void setLimit_date(Date limit_date) {
+    public void setLimit_date(LocalDateTime limit_date) {
         this.limit_date = limit_date;
     }
 
