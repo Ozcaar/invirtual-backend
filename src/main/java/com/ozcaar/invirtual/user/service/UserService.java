@@ -87,7 +87,7 @@ public class UserService {
             userRole.setId(new UserRoleID(user.getUser_id(), defaultRole.getRole_id()));
             userRole.setUser(user);
             userRole.setRole(defaultRole);
-            userRole.setAssignDate(LocalDateTime.now());
+            userRole.setAssign_date(LocalDateTime.now());
             userRole.setActive(true);
 
             userRoleRepository.save(userRole);
@@ -167,7 +167,7 @@ public class UserService {
                     userRole.setId(new UserRoleID(user.getUser_id(), role.getRole_id()));
                     userRole.setUser(user);
                     userRole.setRole(role);
-                    userRole.setAssignDate(LocalDateTime.now());
+                    userRole.setAssign_date(LocalDateTime.now());
                     userRole.setActive(true);
 
                     user.getUser_roles().add(userRole);

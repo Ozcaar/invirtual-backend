@@ -32,7 +32,7 @@ public class UserRoleModel {
     private RoleModel role;
 
     @Column(nullable = true)
-    private LocalDateTime assignDate;
+    private LocalDateTime assign_date;
 
     @Column(nullable = false)
     private Boolean active;
@@ -47,12 +47,12 @@ public class UserRoleModel {
         this.active = active;
     }
 
-    public LocalDateTime getAssignDate() {
-        return assignDate;
+    public LocalDateTime getAssign_date() {
+        return assign_date;
     }
 
-    public void setAssignDate(LocalDateTime assignDate) {
-        this.assignDate = assignDate;
+    public void setAssign_date(LocalDateTime assign_date) {
+        this.assign_date = assign_date;
     }
 
     public UserRoleID getId() {

@@ -14,7 +14,6 @@ import com.ozcaar.invirtual.user.dto.update.UserUpdateDTO;
 import com.ozcaar.invirtual.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/users")
 @Tag(name = "User Controller", description = "operaciones con usuarios")
 public class UserController implements UserApiDoc {
@@ -46,7 +44,7 @@ public class UserController implements UserApiDoc {
 
     // GET
     @GetMapping("/{id}")
-    @Operation(summary = "Obtener usuario único", description = "")
+    @Operation(summary = "Obtener usuario por ID", description = "")
     public ResponseEntity<UserReadDTO> getUser(@PathVariable Integer id) {
         UserReadDTO user = userService.getUser(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -64,8 +62,8 @@ public class UserController implements UserApiDoc {
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar usuario", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<UserReadDTO> updateUser(@PathVariable Integer id, @RequestBody UserUpdateDTO dto) {
-        UserReadDTO updated = userService.updateUser(id, dto);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+        UserReadDTO updatedUser = userService.updateUser(id, dto);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     //DELETE

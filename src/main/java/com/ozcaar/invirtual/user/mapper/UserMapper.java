@@ -43,15 +43,15 @@ public interface UserMapper {
     // }
 
     default List<RoleReadDTO> mapRoles(List<UserRoleModel> userRoles) {
-    if (userRoles == null) return Collections.emptyList();
-    return userRoles.stream()
-        .filter(UserRoleModel::getActive)
-        .map(ur -> {
-            RoleReadDTO dto = new RoleReadDTO();
-            dto.setRole_id(ur.getRole().getRole_id());
-            dto.setName(ur.getRole().getName());
-            return dto;
-        })
-        .collect(Collectors.toList());
-}
+        if (userRoles == null) return Collections.emptyList();
+        return userRoles.stream()
+            .filter(UserRoleModel::getActive)
+            .map(ur -> {
+                RoleReadDTO dto = new RoleReadDTO();
+                dto.setRole_id(ur.getRole().getRole_id());
+                dto.setName(ur.getRole().getName());
+                return dto;
+            })
+            .collect(Collectors.toList());
+    }
 }

@@ -26,14 +26,14 @@ public class AuthController implements AuthApiDoc {
     UserService userService;
 
     @PostMapping("/register")
-    @Operation(summary = "Registrar nuevo usuario", description = "")
+    @Operation(summary = "Registrar nuevo usuario", description = "", security = {})
     public ResponseEntity<UserReadDTO> register(@RequestBody UserCreateDTO dto) {
         UserReadDTO user = userService.createUser(dto);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    @Operation(summary = "Iniciar sesión", description = "")
+    @Operation(summary = "Iniciar sesión", description = "", security = {})
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO dto) {
         String token = userService.loginUser(dto);
         return ResponseEntity.ok(Map.of("token", token));

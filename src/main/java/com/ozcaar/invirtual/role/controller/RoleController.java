@@ -22,11 +22,9 @@ import com.ozcaar.invirtual.role.dto.update.RoleUpdateDTO;
 import com.ozcaar.invirtual.role.service.RoleService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/admin/roles")
 @Tag(name = "Role Controller", description = "operaciones con roles")
 public class RoleController implements RoleApiDoc {
