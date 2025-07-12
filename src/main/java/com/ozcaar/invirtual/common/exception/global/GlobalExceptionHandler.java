@@ -1,6 +1,5 @@
 package com.ozcaar.invirtual.common.exception.global;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -22,8 +21,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleBadCredentials(BadCredentialsException ex) {
         ApiError error = new ApiError(
             HttpStatus.UNAUTHORIZED.value() + " UNAUTHORIZED", 
-            "Credenciales inválidas",
-            Collections.emptyList()
+            "Credenciales inválidas"
         );
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
@@ -32,8 +30,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleAccessDenied(AccessDeniedException ex) {
         ApiError error = new ApiError(
             HttpStatus.FORBIDDEN.value() + " FORBIDDEN",
-            "No tienes permiso para realizar esta acción",
-            Collections.emptyList()
+            "No tienes permiso para realizar esta acción"
         );
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
     }
@@ -45,8 +42,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleNotFound(NotFoundException ex) {
         ApiError error = new ApiError(
             HttpStatus.NOT_FOUND.value() + " NOT_FOUND", 
-            ex.getMessage(),
-            Collections.emptyList()
+            ex.getMessage()
         );
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
@@ -56,27 +52,26 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleExists(AlreadyExistsException ex) {
         ApiError error = new ApiError(
             HttpStatus.CONFLICT.value() + " CONFLICT",
-            ex.getMessage(),
-            Collections.emptyList()
+            ex.getMessage()
         );
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiError> handleValidationErrors(MethodArgumentNotValidException ex) {
-        List<ApiError.FieldErrorDetail> fieldErrorDetail = ex.getBindingResult()
+    public ResponseEntity<ApiFieldsError> handleValidationErrors(MethodArgumentNotValidException ex) {
+        List<ApiFieldsError.FieldErrorDetail> fieldErrorDetail = ex.getBindingResult()
             .getFieldErrors()
             .stream()
-            .map(error -> new ApiError.FieldErrorDetail(
+            .map(error -> new ApiFieldsError.FieldErrorDetail(
                 error.getField(),
                 error.getDefaultMessage(),
                 String.valueOf(error.getRejectedValue()),
                 "Error de validación en los datos enviados.") )
             .toList();
 
-        ApiError error = new ApiError(
+        ApiFieldsError error = new ApiFieldsError(
             HttpStatus.BAD_REQUEST.value() + " BAD_REQUEST",
-            ex.getMessage(),
+            // ex.getMessage(),
             fieldErrorDetail
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -84,11 +79,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiError> handleJsonParseError(HttpMessageNotReadableException ex) {
-
         ApiError error = new ApiError(
             HttpStatus.BAD_REQUEST.value() + " BAD_REQUEST",
-            ex.getMessage(), 
-            Collections.emptyList()
+            ex.getMessage()
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
@@ -97,8 +90,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex) {
         ApiError error = new ApiError(
             HttpStatus.BAD_REQUEST.value() + " BAD_REQUEST",
-            "El ID proporcionado no puede ser nulo.",
-            Collections.emptyList()
+            "El ID proporcionado no puede ser nulo."
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
@@ -107,8 +99,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleGeneric(Exception ex) {
         ApiError error = new ApiError(
             HttpStatus.INTERNAL_SERVER_ERROR.value() + " INTERNAL_SERVER_ERROR",
-            "Error interno.",
-            Collections.emptyList()
+            "Error interno."
         );
         ex.printStackTrace();
 

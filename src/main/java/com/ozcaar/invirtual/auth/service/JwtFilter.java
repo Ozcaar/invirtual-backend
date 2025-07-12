@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -69,8 +68,7 @@ public class JwtFilter extends OncePerRequestFilter {
             ApiError error = new ApiError(
                 "498 INVALID_TOKEN",
                 // ex.getMessage() != null ? ex.getMessage() : "Error en la autenticación",
-                "Error en la autenticación.",
-                Collections.emptyList()
+                "Error en la autenticación."
             );
 
             String json = objectMapper.writeValueAsString(error);

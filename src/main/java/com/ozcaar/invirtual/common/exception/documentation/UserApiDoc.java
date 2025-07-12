@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import com.ozcaar.invirtual.common.exception.global.ApiError;
+import com.ozcaar.invirtual.common.exception.global.ApiFieldsError;
 import com.ozcaar.invirtual.user.dto.create.UserCreateDTO;
 import com.ozcaar.invirtual.user.dto.read.UserReadDTO;
 import com.ozcaar.invirtual.user.dto.update.UserUpdateDTO;
@@ -23,6 +24,8 @@ public interface UserApiDoc {
             content = @Content(mediaType = "application/json",
                 schema = @Schema(implementation = UserReadDTO.class))),
         @ApiResponse(responseCode = "400", description = "El formato JSON capturado está mal formado",
+            content = @Content(schema = @Schema(implementation = ApiFieldsError.class))),
+        @ApiResponse(responseCode = "401", description = "La petición carece de credenciales válidas",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "403", description = "No tiene permisos",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
@@ -38,11 +41,9 @@ public interface UserApiDoc {
         @ApiResponse(responseCode = "200", description = "",
             content = @Content(mediaType = "application/json",
                 schema = @Schema(implementation = UserReadDTO.class))),
-        @ApiResponse(responseCode = "400", description = "El formato JSON capturado está mal formado",
+        @ApiResponse(responseCode = "401", description = "La petición carece de credenciales válidas",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "403", description = "No tiene permisos",
-            content = @Content(schema = @Schema(implementation = ApiError.class))),
-        @ApiResponse(responseCode = "409", description = "Usuario ya existe",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "500", description = "Error interno",
             content = @Content(schema = @Schema(implementation = ApiError.class)))
@@ -54,7 +55,7 @@ public interface UserApiDoc {
         @ApiResponse(responseCode = "200", description = "",
             content = @Content(mediaType = "application/json",
                 array = @ArraySchema(schema = @Schema(implementation = UserReadDTO.class)))),
-        @ApiResponse(responseCode = "400", description = "El formato JSON capturado está mal formado",
+        @ApiResponse(responseCode = "401", description = "La petición carece de credenciales válidas",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "403", description = "No tiene permisos",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
@@ -69,12 +70,10 @@ public interface UserApiDoc {
             content = @Content(mediaType = "application/json",
                 schema = @Schema(implementation = UserReadDTO.class))),
         @ApiResponse(responseCode = "400", description = "El formato JSON capturado está mal formado",
-            content = @Content(schema = @Schema(implementation = ApiError.class))),
-        @ApiResponse(responseCode = "400", description = "El ID proporcionado no puede ser nulo",
+            content = @Content(schema = @Schema(implementation = ApiFieldsError.class))),
+        @ApiResponse(responseCode = "401", description = "La petición carece de credenciales válidas",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "403", description = "No tiene permisos",
-            content = @Content(schema = @Schema(implementation = ApiError.class))),
-        @ApiResponse(responseCode = "409", description = "Usuario ya existe",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "500", description = "Error interno",
             content = @Content(schema = @Schema(implementation = ApiError.class)))
@@ -84,11 +83,9 @@ public interface UserApiDoc {
     @Operation(summary = "Elimina un usuario por ID", description = "Elimina el usuario solicitado y devuelve una confirmación (NO CONTENT)")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Se eliminó correctamente"),
-        @ApiResponse(responseCode = "400", description = "El formato JSON capturado está mal formado",
+        @ApiResponse(responseCode = "401", description = "La petición carece de credenciales válidas",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "403", description = "No tiene permisos",
-            content = @Content(schema = @Schema(implementation = ApiError.class))),
-        @ApiResponse(responseCode = "409", description = "Usuario ya existe",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "500", description = "Error interno",
             content = @Content(schema = @Schema(implementation = ApiError.class)))

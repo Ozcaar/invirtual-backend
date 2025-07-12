@@ -13,7 +13,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 import java.io.IOException;
-import java.util.Collections;
 
 @Configuration
 public class CustomSecurityHandlers {
@@ -29,8 +28,7 @@ public class CustomSecurityHandlers {
 
             ApiError error = new ApiError(
                 HttpStatus.FORBIDDEN + " ACCESS_DENIED",
-                "No tienes permiso para acceder a este recurso.",
-                Collections.emptyList()
+                "No tienes permiso para acceder a este recurso."
             );
 
             response.getWriter().write(objectMapper.writeValueAsString(error));
@@ -49,8 +47,7 @@ public class CustomSecurityHandlers {
 
             ApiError error = new ApiError(
                 HttpStatus.UNAUTHORIZED + " UNAUTHORIZED",
-                "No estás autenticado para acceder a este recurso.",
-                Collections.emptyList()
+                "No estás autenticado para acceder a este recurso."
             );
 
             response.getWriter().write(objectMapper.writeValueAsString(error));

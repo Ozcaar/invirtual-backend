@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import com.ozcaar.invirtual.common.exception.global.ApiError;
+import com.ozcaar.invirtual.common.exception.global.ApiFieldsError;
 import com.ozcaar.invirtual.invitation.dto.create.InvitationCreateDTO;
 import com.ozcaar.invirtual.invitation.dto.read.InvitationReadDTO;
 import com.ozcaar.invirtual.invitation.dto.update.InvitationUpdateDTO;
@@ -24,10 +25,12 @@ public interface InvitationApiDoc {
             content = @Content(mediaType = "application/json",
                 schema = @Schema(implementation = InvitationReadDTO.class))),
         @ApiResponse(responseCode = "400", description = "El formato JSON capturado está mal formado",
+            content = @Content(schema = @Schema(implementation = ApiFieldsError.class))),
+        @ApiResponse(responseCode = "401", description = "La petición carece de credenciales válidas",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "403", description = "No tiene permisos",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
-        @ApiResponse(responseCode = "409", description = "Usuario ya existe",
+        @ApiResponse(responseCode = "409", description = "La invitación ya existe",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "500", description = "Error interno",
             content = @Content(schema = @Schema(implementation = ApiError.class)))
@@ -39,23 +42,21 @@ public interface InvitationApiDoc {
         @ApiResponse(responseCode = "200", description = "",
             content = @Content(mediaType = "application/json",
                 schema = @Schema(implementation = InvitationReadDTO.class))),
-        @ApiResponse(responseCode = "400", description = "El formato JSON capturado está mal formado",
+        @ApiResponse(responseCode = "401", description = "La petición carece de credenciales válidas",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "403", description = "No tiene permisos",
-            content = @Content(schema = @Schema(implementation = ApiError.class))),
-        @ApiResponse(responseCode = "409", description = "Usuario ya existe",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "500", description = "Error interno",
             content = @Content(schema = @Schema(implementation = ApiError.class)))
     })
     ResponseEntity<InvitationReadDTO> getInvitation(Integer id);
 
-    @Operation(summary = "Obtener lista de invitaciones", description = "Devuelve el listado de todos las invitaciones")
+    @Operation(summary = "Obtener lista de invitaciones", description = "Devuelve el listado de todas las invitaciones")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "",
             content = @Content(mediaType = "application/json",
                 array = @ArraySchema(schema = @Schema(implementation = InvitationReadDTO.class)))),
-        @ApiResponse(responseCode = "400", description = "El formato JSON capturado está mal formado",
+        @ApiResponse(responseCode = "401", description = "La petición carece de credenciales válidas",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "403", description = "No tiene permisos",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
@@ -70,12 +71,10 @@ public interface InvitationApiDoc {
             content = @Content(mediaType = "application/json",
                 schema = @Schema(implementation = InvitationReadDTO.class))),
         @ApiResponse(responseCode = "400", description = "El formato JSON capturado está mal formado",
-            content = @Content(schema = @Schema(implementation = ApiError.class))),
-        @ApiResponse(responseCode = "400", description = "El ID proporcionado no puede ser nulo",
+            content = @Content(schema = @Schema(implementation = ApiFieldsError.class))),
+        @ApiResponse(responseCode = "401", description = "La petición carece de credenciales válidas",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "403", description = "No tiene permisos",
-            content = @Content(schema = @Schema(implementation = ApiError.class))),
-        @ApiResponse(responseCode = "409", description = "Usuario ya existe",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "500", description = "Error interno",
             content = @Content(schema = @Schema(implementation = ApiError.class)))
@@ -85,11 +84,9 @@ public interface InvitationApiDoc {
     @Operation(summary = "Elimina una invitación por ID", description = "Elimina la invitación solicitada y devuelve una confirmación (NO CONTENT)")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Se eliminó correctamente"),
-        @ApiResponse(responseCode = "400", description = "El formato JSON capturado está mal formado",
+        @ApiResponse(responseCode = "401", description = "La petición carece de credenciales válidas",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "403", description = "No tiene permisos",
-            content = @Content(schema = @Schema(implementation = ApiError.class))),
-        @ApiResponse(responseCode = "409", description = "Usuario ya existe",
             content = @Content(schema = @Schema(implementation = ApiError.class))),
         @ApiResponse(responseCode = "500", description = "Error interno",
             content = @Content(schema = @Schema(implementation = ApiError.class)))
