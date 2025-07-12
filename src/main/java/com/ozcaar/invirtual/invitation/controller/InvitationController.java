@@ -23,9 +23,10 @@ import com.ozcaar.invirtual.invitation.service.InvitationService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/invitations")
+@RequestMapping("/user/invitations")
 @Tag(name = "Invitation Controller", description = "operaciones con invitaciones")
 public class InvitationController implements InvitationApiDoc {
     
@@ -36,7 +37,7 @@ public class InvitationController implements InvitationApiDoc {
     @PreAuthorize("hasRole('DEV')")
     @PostMapping()
     @Operation(summary = "Crear invitación", description = "- Se requiere el rol \"DEV\"")
-    public ResponseEntity<InvitationReadDTO> createInvitation(@RequestBody InvitationCreateDTO invitation) {
+    public ResponseEntity<InvitationReadDTO> createInvitation(@Valid @RequestBody InvitationCreateDTO invitation) {
         InvitationReadDTO created = invitationService.createInvitation(invitation);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
@@ -60,7 +61,7 @@ public class InvitationController implements InvitationApiDoc {
     @PreAuthorize("hasRole('DEV')")
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar invitación", description = "- Se requiere rol \"DEV\"")
-    public ResponseEntity<InvitationReadDTO> updateInvitation(@PathVariable Integer id, @RequestBody InvitationUpdateDTO dto) {
+    public ResponseEntity<InvitationReadDTO> updateInvitation(@PathVariable Integer id, @Valid  @RequestBody InvitationUpdateDTO dto) {
         InvitationReadDTO updatedInvitation = invitationService.updateInvitation(id, dto);
         return new ResponseEntity<>(updatedInvitation, HttpStatus.OK);
     }

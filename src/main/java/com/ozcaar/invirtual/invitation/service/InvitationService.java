@@ -80,6 +80,10 @@ public class InvitationService {
             throw new AlreadyExistsException("El usuario ya tiene una invitación con ese nombre");
         }
 
+        if (userInvitationRepository.existsDemoInvitation(user.getUser_id())) {
+            throw new AlreadyExistsException("El usuario ya tiene una invitación demo");
+        }
+
         InvitationModel invitation = invitationMapper.toEntity(dto);
         
         // Setup invitation

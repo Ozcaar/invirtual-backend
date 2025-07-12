@@ -1,10 +1,24 @@
 package com.ozcaar.invirtual.invitation.dto.create;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class InvitationCreateDTO {
+    @NotNull(message = "El tipo de invitación es requerido.")
     private Integer invitation_type_id;
+
     // private Integer music_id;
     // private Integer sign_book_id;
+
+    @NotNull(message = "El nombre es requerido.")
+    @Size(min = 3, max = 100, message = "El nombre debe tener entre 3 y 100 caracteres.")
+    @NotBlank(message = "El nombre no pueden ser solo caracteres en blanco.")
     private String name;
+
+    @NotNull(message = "El número máximo de invitados es requerido.")
+    @Min(value = 1, message = "Debe haber al menos 1 invitado.")
     private Integer max_people;
     
     // Getters & setters
