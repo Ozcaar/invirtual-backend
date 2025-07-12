@@ -28,8 +28,8 @@ public class ApiFieldsError {
     //     this.error = new ErrorDetail(code, message, details, documentationUrl);
     // }
 
-    public ApiFieldsError(String code, List<FieldErrorDetail> details) {
-        this.error = new ErrorDetail(code, details);
+    public ApiFieldsError(Integer code, String errortype, List<FieldErrorDetail> details) {
+        this.error = new ErrorDetail(code, errortype, details);
     }
 
     public ErrorDetail getError() {
@@ -37,7 +37,8 @@ public class ApiFieldsError {
     }
 
     public static class ErrorDetail {
-        private String code;
+        private Integer code;
+        private String errortype;
         // private String message;
         private List<FieldErrorDetail> details;
         // private String documentation;
@@ -48,8 +49,9 @@ public class ApiFieldsError {
         // }
 
         // public ErrorDetail(String code, String message, List<FieldErrorDetail> details, String documentation) {
-        public ErrorDetail(String code, List<FieldErrorDetail> details) {
+        public ErrorDetail(Integer code, String errortype, List<FieldErrorDetail> details) {
             this.code = code;
+            this.errortype = errortype;
             // this.message = message;
             this.details = details;
             // this.documentation = documentation;
@@ -59,12 +61,20 @@ public class ApiFieldsError {
 
         // Getters & setters
         
-        public String getCode() {
+        public Integer getCode() {
             return code;
         }
 
-        public void setCode(String code) {
+        public void setCode(Integer code) {
             this.code = code;
+        }
+
+        public String getErrortype() {
+            return errortype;
+        }
+
+        public void setErrortype(String errortype) {
+            this.errortype = errortype;
         }
 
         // public String getMessage() {

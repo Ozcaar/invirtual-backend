@@ -27,7 +27,8 @@ public class CustomSecurityHandlers {
             response.setContentType("application/json");
 
             ApiError error = new ApiError(
-                HttpStatus.FORBIDDEN + " ACCESS_DENIED",
+                HttpStatus.FORBIDDEN.value(),
+                "ACCESS_DENIED",
                 "No tienes permiso para acceder a este recurso."
             );
 
@@ -46,7 +47,8 @@ public class CustomSecurityHandlers {
             response.setContentType("application/json");
 
             ApiError error = new ApiError(
-                HttpStatus.UNAUTHORIZED + " UNAUTHORIZED",
+                HttpStatus.UNAUTHORIZED.value(),
+                "UNAUTHORIZED", 
                 "No estás autenticado para acceder a este recurso."
             );
 

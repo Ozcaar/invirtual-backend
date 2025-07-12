@@ -6,8 +6,8 @@ public class ApiError {
 
     private ErrorDetailv2 error;
 
-    public ApiError(String code, String message) {
-        this.error = new ErrorDetailv2(code, message);
+    public ApiError(Integer code, String errortype, String message) {
+        this.error = new ErrorDetailv2(code, errortype, message);
     }
 
     public ErrorDetailv2 getError() {
@@ -15,24 +15,35 @@ public class ApiError {
     }
 
     public static class ErrorDetailv2 {
-        private String code;
+        private Integer code;
+        private String errortype;
+
         private String message;
         private LocalDateTime timestamp;
 
-        public ErrorDetailv2(String code, String message) {
+        public ErrorDetailv2(Integer code, String errortype , String message) {
             this.code = code;
+            this.errortype = errortype;
             this.message = message;
             this.timestamp = LocalDateTime.now();
         }
 
         // Getters & setters
         
-        public String getCode() {
+        public Integer getCode() {
             return code;
         }
 
-        public void setCode(String code) {
+        public void setCode(Integer code) {
             this.code = code;
+        }
+
+        public String getErrortype() {
+            return errortype;
+        }
+
+        public void setErrortype(String errortype) {
+            this.errortype = errortype;
         }
 
         public String getMessage() {

@@ -66,7 +66,8 @@ public class JwtFilter extends OncePerRequestFilter {
             response.setContentType("application/json");
 
             ApiError error = new ApiError(
-                "498 INVALID_TOKEN",
+                498,
+                "INVALID_TOKEN",
                 // ex.getMessage() != null ? ex.getMessage() : "Error en la autenticación",
                 "Error en la autenticación."
             );

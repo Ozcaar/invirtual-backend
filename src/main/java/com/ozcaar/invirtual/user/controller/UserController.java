@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user/users")
 @Tag(name = "User Controller", description = "operaciones con usuarios")
 public class UserController implements UserApiDoc {
 

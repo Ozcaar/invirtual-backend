@@ -20,7 +20,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiError> handleBadCredentials(BadCredentialsException ex) {
         ApiError error = new ApiError(
-            HttpStatus.UNAUTHORIZED.value() + " UNAUTHORIZED", 
+            HttpStatus.UNAUTHORIZED.value(),
+            "UNAUTHORIZED", 
             "Credenciales inválidas"
         );
         return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
@@ -29,7 +30,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiError> handleAccessDenied(AccessDeniedException ex) {
         ApiError error = new ApiError(
-            HttpStatus.FORBIDDEN.value() + " FORBIDDEN",
+            HttpStatus.FORBIDDEN.value(),
+            "FORBIDDEN",
             "No tienes permiso para realizar esta acción"
         );
         return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
@@ -41,7 +43,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFound(NotFoundException ex) {
         ApiError error = new ApiError(
-            HttpStatus.NOT_FOUND.value() + " NOT_FOUND", 
+            HttpStatus.NOT_FOUND.value(), 
+            "NOT_FOUND",
             ex.getMessage()
         );
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
@@ -51,7 +54,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<ApiError> handleExists(AlreadyExistsException ex) {
         ApiError error = new ApiError(
-            HttpStatus.CONFLICT.value() + " CONFLICT",
+            HttpStatus.CONFLICT.value(),
+            "CONFLICT",
             ex.getMessage()
         );
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
@@ -70,7 +74,8 @@ public class GlobalExceptionHandler {
             .toList();
 
         ApiFieldsError error = new ApiFieldsError(
-            HttpStatus.BAD_REQUEST.value() + " BAD_REQUEST",
+            HttpStatus.BAD_REQUEST.value(),
+            "BAD_REQUEST",
             // ex.getMessage(),
             fieldErrorDetail
         );
@@ -80,7 +85,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiError> handleJsonParseError(HttpMessageNotReadableException ex) {
         ApiError error = new ApiError(
-            HttpStatus.BAD_REQUEST.value() + " BAD_REQUEST",
+            HttpStatus.BAD_REQUEST.value(),
+            "BAD_REQUEST",
             ex.getMessage()
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -89,7 +95,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
     public ResponseEntity<ApiError> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex) {
         ApiError error = new ApiError(
-            HttpStatus.BAD_REQUEST.value() + " BAD_REQUEST",
+            HttpStatus.BAD_REQUEST.value(),
+            "BAD_REQUEST",
             "El ID proporcionado no puede ser nulo."
         );
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
@@ -98,7 +105,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneric(Exception ex) {
         ApiError error = new ApiError(
-            HttpStatus.INTERNAL_SERVER_ERROR.value() + " INTERNAL_SERVER_ERROR",
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            "INTERNAL_SERVER_ERROR",
             "Error interno."
         );
         ex.printStackTrace();
