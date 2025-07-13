@@ -17,6 +17,7 @@ import com.ozcaar.invirtual.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @Tag(name = "Auth Controller", description = "autenticar usuarios")
@@ -27,7 +28,7 @@ public class AuthController implements AuthApiDoc {
 
     @PostMapping("/register")
     @Operation(summary = "Registrar nuevo usuario", description = "", security = {})
-    public ResponseEntity<UserReadDTO> register(@RequestBody UserCreateDTO dto) {
+    public ResponseEntity<UserReadDTO> register(@Valid @RequestBody UserCreateDTO dto) {
         UserReadDTO user = userService.createUser(dto);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }

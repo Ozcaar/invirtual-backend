@@ -1,6 +1,7 @@
 package com.ozcaar.invirtual.auth.dto;
 
 public class LoginDTO {
+    
     private String email;
     private String password;
 

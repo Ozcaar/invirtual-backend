@@ -15,6 +15,7 @@ import com.ozcaar.invirtual.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +38,7 @@ public class UserController implements UserApiDoc {
     @PreAuthorize("hasRole('DEV')")
     @PostMapping()
     @Operation(summary = "Crear usuario", description = "- Se requiere el rol \"DEV\"")
-    public ResponseEntity<UserReadDTO> createUser(@RequestBody UserCreateDTO user) {
+    public ResponseEntity<UserReadDTO> createUser(@Valid @RequestBody UserCreateDTO user) {
         UserReadDTO created = userService.createUser(user);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
@@ -61,7 +62,7 @@ public class UserController implements UserApiDoc {
     @PreAuthorize("hasRole('DEV')")
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar usuario", description = "- Se requiere rol \"DEV\"")
-    public ResponseEntity<UserReadDTO> updateUser(@PathVariable Integer id, @RequestBody UserUpdateDTO dto) {
+    public ResponseEntity<UserReadDTO> updateUser(@PathVariable Integer id, @Valid @RequestBody UserUpdateDTO dto) {
         UserReadDTO updatedUser = userService.updateUser(id, dto);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
