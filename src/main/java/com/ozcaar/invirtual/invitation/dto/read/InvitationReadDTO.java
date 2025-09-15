@@ -1,10 +1,11 @@
 package com.ozcaar.invirtual.invitation.dto.read;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class InvitationReadDTO {
     
-    private Integer invitation_id;
+    private UUID invitation_uuid;
     // private Integer envelope_id;
     // private Integer invitation_type_id;
     // private Integer music_id;
@@ -18,11 +19,11 @@ public class InvitationReadDTO {
 
     // Getters & setters
 
-    public Integer getInvitation_id() {
-        return invitation_id;
+    public UUID getInvitation_uuid() {
+        return invitation_uuid;
     }
-    public void setInvitation_id(Integer invitation_id) {
-        this.invitation_id = invitation_id;
+    public void setInvitation_uuid(UUID invitation_uuid) {
+        this.invitation_uuid = invitation_uuid;
     }
     public Integer getMax_people() {
         return max_people;

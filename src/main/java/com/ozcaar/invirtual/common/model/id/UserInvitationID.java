@@ -2,19 +2,20 @@ package com.ozcaar.invirtual.common.model.id;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 public class UserInvitationID implements Serializable {
 
     private Integer user_id;
-    private Integer invitation_id;
+    private UUID invitation_uuid;
 
     // Constructor
     public UserInvitationID() {}
 
     // Constructor fields
-    public UserInvitationID(Integer user_id, Integer invitation_id) {
+    public UserInvitationID(Integer user_id, UUID invitation_uuid) {
         this.user_id = user_id;
-        this.invitation_id = invitation_id;
+        this.invitation_uuid = invitation_uuid;
     }
 
     // Getters & setters
@@ -26,12 +27,12 @@ public class UserInvitationID implements Serializable {
         this.user_id = user_id;
     }
 
-    public Integer getInvitation_id() {
-        return invitation_id;
+    public UUID getInvitation_uuid() {
+        return invitation_uuid;
     }
 
-    public void setInvitation_id(Integer invitation_id) {
-        this.invitation_id = invitation_id;
+    public void setInvitation_uuid(UUID invitation_uuid) {
+        this.invitation_uuid = invitation_uuid;
     }
 
     // Equals
@@ -42,12 +43,12 @@ public class UserInvitationID implements Serializable {
 
         UserInvitationID that = (UserInvitationID) o;
         return  Objects.equals(getUser_id(), that.getUser_id()) &&
-                Objects.equals(getInvitation_id(), that.getInvitation_id());
+                Objects.equals(getInvitation_uuid(), that.getInvitation_uuid());
     }
 
     // Hash code
     public int hashCode() {
-        return Objects.hash(getUser_id(), getInvitation_id());
+        return Objects.hash(getUser_id(), getInvitation_uuid());
     }
 
 }

@@ -12,7 +12,7 @@ import com.ozcaar.invirtual.invitation.model.InvitationModel;
 @Mapper(componentModel = "spring")
 public interface InvitationMapper {
 
-    @Mapping(target = "invitation_id", ignore = true)
+    @Mapping(target = "invitation_uuid", ignore = true)
     // Temporaly ignore
     @Mapping(target = "invitation_type_id", ignore = true)
     // @Mapping(target = "music_id", ignore = true)

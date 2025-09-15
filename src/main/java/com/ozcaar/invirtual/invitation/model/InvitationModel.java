@@ -1,12 +1,12 @@
 package com.ozcaar.invirtual.invitation.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -16,9 +16,10 @@ import jakarta.persistence.Table;
 @Table(name = "invitation")
 public class InvitationModel {
     @Id
-    @Column(unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer invitation_id;
+    @GeneratedValue
+    @Column(unique = true, nullable = false, columnDefinition = "uuid")
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private UUID invitation_uuid;
 
     // @OneToOne
     // @JoinColumn(name = "envelope_id", unique = true, nullable = false)
@@ -40,6 +41,8 @@ public class InvitationModel {
 
     @Column(nullable = false)
     private String slug_url;
+
+    private String confirmation_message;
 
     @Column(nullable = false)
     private LocalDateTime creation_date;
@@ -63,12 +66,12 @@ public class InvitationModel {
         this.invitation_type_id = invitation_type_id;
     }
 
-    public Integer getInvitation_id() {
-        return invitation_id;
+    public UUID getInvitation_uuid() {
+        return invitation_uuid;
     }
 
-    public void setInvitation_id(Integer invitation_id) {
-        this.invitation_id = invitation_id;
+    public void setInvitation_uuid(UUID invitation_uuid) {
+        this.invitation_uuid = invitation_uuid;
     }
 
     public String getName() {
@@ -93,6 +96,14 @@ public class InvitationModel {
 
     public void setSlug_url(String slug_url) {
         this.slug_url = slug_url;
+    }
+
+    public String getConfirmation_message() {
+        return confirmation_message;
+    }
+
+    public void setConfirmation_message(String confirmation_message) {
+        this.confirmation_message = confirmation_message;
     }
 
     public LocalDateTime getCreation_date() {
@@ -126,5 +137,4 @@ public class InvitationModel {
     public void setActive(Boolean active) {
         this.active = active;
     }
-
 }
