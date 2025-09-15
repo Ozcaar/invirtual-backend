@@ -20,9 +20,9 @@ import com.ozcaar.invirtual.invitation.dto.create.InvitationCreateDTO;
 import com.ozcaar.invirtual.invitation.dto.read.InvitationReadDTO;
 import com.ozcaar.invirtual.invitation.dto.update.InvitationUpdateDTO;
 import com.ozcaar.invirtual.invitation.service.InvitationService;
-import com.ozcaar.invirtual.invited.dto.create.InvitedCreateDTO;
-import com.ozcaar.invirtual.invited.dto.read.InvitedReadDTO;
-import com.ozcaar.invirtual.invited.service.InvitedService;
+import com.ozcaar.invirtual.guest.dto.create.GuestCreateDTO;
+import com.ozcaar.invirtual.guest.dto.read.GuestReadDTO;
+import com.ozcaar.invirtual.guest.service.GuestService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,7 +37,7 @@ import lombok.RequiredArgsConstructor;
 public class InvitationController implements InvitationApiDoc {
     
     private final InvitationService invitationService;
-    private final InvitedService invitedService;
+    private final GuestService guestService;
 
     // POST
     @PreAuthorize("hasRole('DEV')")
@@ -83,25 +83,25 @@ public class InvitationController implements InvitationApiDoc {
     // INVITEDS
 
     // POST
-    @PostMapping("/{invitationUUID}/inviteds")
+    @PostMapping("/{invitationUUID}/guests")
     @Operation(summary = "Agregar un invitado a la invitación", description = "")
-    public ResponseEntity<InvitedReadDTO> createInvited(@PathVariable UUID invitationUUID, @Valid @RequestBody InvitedCreateDTO invited) {
-        InvitedReadDTO created = invitedService.createInvited(invitationUUID, invited);
+    public ResponseEntity<GuestReadDTO> createGuest(@PathVariable UUID invitationUUID, @Valid @RequestBody GuestCreateDTO guest) {
+        GuestReadDTO created = guestService.createGuest(invitationUUID, guest);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    // @PostMapping("/{invitationUUID}/inviteds/batch-create")
+    // @PostMapping("/{invitationUUID}/guests/batch-create")
     // @Operation(summary = "Agregar una lista de invitados a la invitación", description = "")
-    // public ResponseEntity<List<InvitedReadDTO>> createBatchInviteds(@PathVariable UUID invitationUUID, @Valid @RequestBody List<InvitedCreateDTO> invitedBatch) {
-    //     // List<InvitedReadDTO> created = invitedService.createBatchInviteds(invitationUUID, invitedBatch);
-    //     new List<InvitedReadDTO>();
-    //     return new ResponseEntity<List<InvitedReadDTO>>(created, HttpStatus.CREATED);
+    // public ResponseEntity<List<GuestReadDTO>> createBatchGuests(@PathVariable UUID invitationUUID, @Valid @RequestBody List<GuestCreateDTO> guestBatch) {
+    //     // List<GuestReadDTO> created = guestService.createBatchGuests(invitationUUID, guestBatch);
+    //     new List<GuestReadDTO>();
+    //     return new ResponseEntity<List<GuestReadDTO>>(created, HttpStatus.CREATED);
     // }
 
     //GET
-    // @GetMapping("/{invitationUUID}/inviteds")
+    // @GetMapping("/{invitationUUID}/guests")
     // @Operation(summary = "Obtener lista de invitados de una invitación", description = "")
-    // public ResponseEntity<List<InvitedReadDTO>> getAllInviteds() {
+    // public ResponseEntity<List<GuestReadDTO>> getAllGuests() {
     //     List<InvitationReadDTO> invitationList = invitationService.getAllInvitations();
     //     return new ResponseEntity<>(invitationList, HttpStatus.OK);
     // }
