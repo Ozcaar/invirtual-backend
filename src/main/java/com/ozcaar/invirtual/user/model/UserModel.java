@@ -19,6 +19,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "app_user")
 public class UserModel {
+
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
