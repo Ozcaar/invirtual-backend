@@ -58,7 +58,7 @@ public class SecurityConfig {
         http.userDetailsService(userDetailsService);
 
         http.authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/register", "/login").permitAll();
+            auth.requestMatchers("/auth/**").permitAll();
 
             if (isInDev) {
                 auth.requestMatchers(

@@ -6,6 +6,7 @@ import java.util.Objects;
 import jakarta.persistence.Column;
 
 public class UserRoleID implements Serializable {
+    
     @Column(name = "user_id")
     private Integer user_id;
 

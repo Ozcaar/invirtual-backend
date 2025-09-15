@@ -51,6 +51,7 @@ public class UserController implements UserApiDoc {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('DEV')")
     @GetMapping()
     @Operation(summary = "Obtener lista de usuarios", description = "")
     public ResponseEntity<List<UserReadDTO>> getAllUsers() {
@@ -61,13 +62,14 @@ public class UserController implements UserApiDoc {
     // UPDATE
     @PreAuthorize("hasRole('DEV')")
     @PutMapping("/{id}")
-    @Operation(summary = "Actualizar usuario", description = "- Se requiere rol \"DEV\"")
+    @Operation(summary = "Actualizar usuario como admin", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<UserReadDTO> updateUser(@PathVariable Integer id, @Valid @RequestBody UserUpdateDTO dto) {
         UserReadDTO updatedUser = userService.updateUser(id, dto);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     //DELETE
+    @PreAuthorize("hasRole('DEV')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar usuario", description = "")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {

@@ -2,16 +2,10 @@ package com.ozcaar.invirtual.user.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.ozcaar.invirtual.auth.dto.LoginDTO;
-import com.ozcaar.invirtual.auth.service.JwtUtil;
 import com.ozcaar.invirtual.common.exception.global.AlreadyExistsException;
 import com.ozcaar.invirtual.common.exception.global.NotFoundException;
 import com.ozcaar.invirtual.common.model.id.UserRoleID;
@@ -26,53 +20,17 @@ import com.ozcaar.invirtual.user.mapper.UserMapper;
 import com.ozcaar.invirtual.user.model.UserModel;
 import com.ozcaar.invirtual.user.repository.UserRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private UserRoleRepository userRoleRepository;
-
-    @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    public String loginUser(LoginDTO dto) {
-        // Authentication
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
-        );
-
-        // Set las login
-        updateLastLogin(dto.getEmail());
-
-        // Generate token
-        String token = jwtUtil.generateToken(dto.getEmail());
-        
-        return token;
-    }
-
-    public void updateLastLogin(String email) {
-        Optional<UserModel> optionalUser = userRepository.findByEmail(email);
-        if (optionalUser.isPresent()) {
-            UserModel user = optionalUser.get();
-            user.setLast_login(LocalDateTime.now());
-            userRepository.save(user);
-        }
-    }
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final UserRoleRepository userRoleRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     // Use only if the user already exists
     public void assignDefaultRole(UserModel user) {
@@ -111,7 +69,7 @@ public class UserService {
         // Active by default
         user.setActive(true);
 
-        // First save the usaer to generate the ID
+        // First save the user to generate the ID
         UserModel savedUser = userRepository.save(user);
 
         // Set default role
