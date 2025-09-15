@@ -1,6 +1,5 @@
 package com.ozcaar.invirtual.invitation.dto.create;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,12 +16,20 @@ public class InvitationCreateDTO {
     @NotBlank(message = "El nombre no pueden ser solo caracteres en blanco.")
     private String name;
 
-    @NotNull(message = "El número máximo de invitados es requerido.")
-    @Min(value = 1, message = "Debe haber al menos 1 invitado.")
-    private Integer max_people;
+    // @NotNull(message = "El número máximo de invitados es requerido.")
+    // @Min(value = 1, message = "Debe haber al menos 1 invitado.")
+    // private Integer max_people;
     
+    private String confirmation_message;
+
     // Getters & setters
 
+    public String getConfirmation_message() {
+        return confirmation_message;
+    }
+    public void setConfirmation_message(String confirmation_message) {
+        this.confirmation_message = confirmation_message;
+    }
     public Integer getInvitation_type_id() {
         return invitation_type_id;
     }
@@ -47,10 +54,10 @@ public class InvitationCreateDTO {
     public void setName(String name) {
         this.name = name;
     }
-    public Integer getMax_people() {
-        return max_people;
-    }
-    public void setMax_people(Integer max_people) {
-        this.max_people = max_people;
-    }
+    // public Integer getMax_people() {
+    //     return max_people;
+    // }
+    // public void setMax_people(Integer max_people) {
+    //     this.max_people = max_people;
+    // }
 }
