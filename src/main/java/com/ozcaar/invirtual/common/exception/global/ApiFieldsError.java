@@ -111,13 +111,13 @@ public class ApiFieldsError {
         private String field;
         private String issue;
         private String provided;
-        private String expected;
+        private String detail;
 
-        public FieldErrorDetail(String field, String issue, String provided, String expected) {
+        public FieldErrorDetail(String field, String issue, String provided, String detail) {
             this.field = field;
             this.issue = issue;
             this.provided = provided;
-            this.expected = expected;
+            this.detail = detail;
         }
 
         // Getters & setters
@@ -146,12 +146,12 @@ public class ApiFieldsError {
             this.provided = provided;
         }
 
-        public String getExpected() {
-            return expected;
+        public String getDetail() {
+            return detail;
         }
 
-        public void setExpected(String expected) {
-            this.expected = expected;
+        public void setDetail(String detail) {
+            this.detail = detail;
         }
     }
 }
