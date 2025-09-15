@@ -27,14 +27,17 @@ import com.ozcaar.invirtual.invited.service.InvitedService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/user/invitations")
 @Tag(name = "Invitation Controller", description = "operaciones con invitaciones")
+@RequiredArgsConstructor
+
 public class InvitationController implements InvitationApiDoc {
     
-    @Autowired
-    InvitationService invitationService;
+    private final InvitationService invitationService;
+    private final InvitedService invitedService;
 
     // POST
     @PreAuthorize("hasRole('DEV')")
@@ -78,6 +81,8 @@ public class InvitationController implements InvitationApiDoc {
     }
 
     // INVITEDS
+
+    // POST
     @PostMapping("/{invitationUUID}/inviteds")
     @Operation(summary = "Agregar un invitado a la invitación", description = "")
     public ResponseEntity<InvitedReadDTO> createInvited(@PathVariable UUID invitationUUID, @Valid @RequestBody InvitedCreateDTO invited) {
@@ -92,5 +97,14 @@ public class InvitationController implements InvitationApiDoc {
     //     new List<InvitedReadDTO>();
     //     return new ResponseEntity<List<InvitedReadDTO>>(created, HttpStatus.CREATED);
     // }
+
+    //GET
+    // @GetMapping("/{invitationUUID}/inviteds")
+    // @Operation(summary = "Obtener lista de invitados de una invitación", description = "")
+    // public ResponseEntity<List<InvitedReadDTO>> getAllInviteds() {
+    //     List<InvitationReadDTO> invitationList = invitationService.getAllInvitations();
+    //     return new ResponseEntity<>(invitationList, HttpStatus.OK);
+    // }
+
 
 }

@@ -2,7 +2,6 @@ package com.ozcaar.invirtual.role.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,14 +22,15 @@ import com.ozcaar.invirtual.role.service.RoleService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/admin/roles")
 @Tag(name = "Role Controller", description = "operaciones con roles")
+@RequiredArgsConstructor
 public class RoleController implements RoleApiDoc {
 
-    @Autowired
-    RoleService roleService;
+    private final RoleService roleService;
 
     // POST
     @PostMapping()

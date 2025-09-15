@@ -2,7 +2,6 @@ package com.ozcaar.invirtual.user.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +15,7 @@ import com.ozcaar.invirtual.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user/users")
 @Tag(name = "User Controller", description = "operaciones con usuarios")
+@RequiredArgsConstructor
 public class UserController implements UserApiDoc {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
 
     // POST
     @PreAuthorize("hasRole('DEV')")

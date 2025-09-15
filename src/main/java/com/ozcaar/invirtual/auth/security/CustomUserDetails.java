@@ -9,12 +9,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.ozcaar.invirtual.user.model.UserModel;
 
-public class CustomUserDetails implements UserDetails {
-    private final UserModel user;
+import lombok.RequiredArgsConstructor;
 
-    public CustomUserDetails(UserModel user) {
-        this.user = user;
-    }
+@RequiredArgsConstructor
+public class CustomUserDetails implements UserDetails {
+    
+    private final UserModel user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

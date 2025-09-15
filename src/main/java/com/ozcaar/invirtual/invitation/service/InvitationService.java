@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -25,23 +24,17 @@ import com.ozcaar.invirtual.invitation.repository.InvitationTypeRepository;
 import com.ozcaar.invirtual.user.model.UserModel;
 import com.ozcaar.invirtual.user.repository.UserRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class InvitationService {
     
-    @Autowired
-    private InvitationRepository invitationRepository;
-
-    @Autowired
-    private InvitationTypeRepository invitationTypeRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserInvitationRepository userInvitationRepository;
-
-    @Autowired
-    private InvitationMapper invitationMapper;
+    private final InvitationRepository invitationRepository;
+    private final InvitationTypeRepository invitationTypeRepository;
+    private final UserRepository userRepository;
+    private final UserInvitationRepository userInvitationRepository;
+    private final InvitationMapper invitationMapper;
 
     public static String toSlug(String input) {
         if (input == null) {
@@ -53,8 +46,8 @@ public class InvitationService {
 
         // Remove accents and diacritics
         slug = Normalizer.normalize(slug, Normalizer.Form.NFD);
-        slug = slug.replaceAll("\\p{M}", ""); // Quitar marcas de acento
-
+        slug = slug.replaceAll("\\p{M}", ""); // Remove accents
+        
         // Replace non-alphanumeric characters with hyphens
         slug = slug.replaceAll("[^a-z0-9]+", "-");
 
@@ -96,7 +89,8 @@ public class InvitationService {
             .orElseThrow(() -> new NotFoundException("Tipo de invitación no encontrado"));
 
         invitation.setInvitation_type_id(invitation_type);
-        invitation.setMax_people(dto.getMax_people());
+        // invitation.setMax_people(dto.getMax_people()); // Must be indicated by order's table
+        invitation.setMax_people(100); // Must be indicated by order's table
         invitation.setSlug_url(toSlug(dto.getName()));
         invitation.setCreation_date(LocalDateTime.now());
         invitation.setLimit_date(LocalDateTime.now().plusYears(1));

@@ -2,7 +2,6 @@ package com.ozcaar.invirtual.role.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ozcaar.invirtual.common.exception.global.AlreadyExistsException;
@@ -14,12 +13,13 @@ import com.ozcaar.invirtual.role.mapper.RoleMapper;
 import com.ozcaar.invirtual.role.model.RoleModel;
 import com.ozcaar.invirtual.role.repository.RoleRepository;
 
-@Service
-public class RoleService {
-    @Autowired
-    private RoleRepository roleRepository;
+import lombok.RequiredArgsConstructor;
 
-    @Autowired
+@Service
+@RequiredArgsConstructor
+public class RoleService {
+
+    private RoleRepository roleRepository;
     private RoleMapper roleMapper;
 
     // CRUDs
