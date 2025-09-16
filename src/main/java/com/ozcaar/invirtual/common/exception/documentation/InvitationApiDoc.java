@@ -41,7 +41,7 @@ public interface InvitationApiDoc {
         @ApiResponse(responseCode = "500", description = "Error interno",
             content = @Content(schema = @Schema(implementation = ApiError.class)))
     })
-    ResponseEntity<InvitationReadDTO> createInvitation(InvitationCreateDTO invitation);
+    ResponseEntity<InvitationReadDTO> createInvitation(@Valid @RequestBody InvitationCreateDTO invitation);
 
     @Operation(summary = "Busca una invitación rol por ID", description = "Devuelve la invitación")
     @ApiResponses(value = {
@@ -85,7 +85,7 @@ public interface InvitationApiDoc {
         @ApiResponse(responseCode = "500", description = "Error interno",
             content = @Content(schema = @Schema(implementation = ApiError.class)))
     })
-    ResponseEntity<InvitationReadDTO> updateInvitation(UUID invitationUUID, InvitationUpdateDTO dto);
+    ResponseEntity<InvitationReadDTO> updateInvitation(@PathVariable UUID invitationUUID, @Valid  @RequestBody InvitationUpdateDTO dto);
 
     @Operation(summary = "Elimina una invitación por ID", description = "Elimina la invitación solicitada y devuelve una confirmación (NO CONTENT)")
     @ApiResponses(value = {
@@ -117,6 +117,24 @@ public interface InvitationApiDoc {
     })
     ResponseEntity<GuestReadDTO> createGuest(@PathVariable UUID invitationUUID, @Valid @RequestBody GuestCreateDTO guest);
     
+    @Operation(summary = "Agregar varios invitados a una invitación", description = "Devuelve la lista de invitados creados")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Registro correcto",
+            content = @Content(mediaType = "application/json",
+                array = @ArraySchema(schema = @Schema(implementation = GuestReadDTO.class)))),
+        @ApiResponse(responseCode = "400", description = "El formato JSON capturado está mal formado",
+            content = @Content(schema = @Schema(implementation = ApiFieldsError.class))),
+        @ApiResponse(responseCode = "401", description = "La petición carece de credenciales válidas",
+            content = @Content(schema = @Schema(implementation = ApiError.class))),
+        @ApiResponse(responseCode = "403", description = "No tiene permisos",
+            content = @Content(schema = @Schema(implementation = ApiError.class))),
+        @ApiResponse(responseCode = "409", description = "Alguno de los invitados ya existe",
+            content = @Content(schema = @Schema(implementation = ApiError.class))),
+        @ApiResponse(responseCode = "500", description = "Error interno",
+            content = @Content(schema = @Schema(implementation = ApiError.class)))
+    })
+    ResponseEntity<List<GuestReadDTO>> createBatchGuests(@PathVariable UUID invitationUUID, @Valid @RequestBody List<@Valid GuestCreateDTO> guestBatch);
+
     @Operation(summary = "Obtener lista de invitados de una invitación", description = "Devuelve el listado de todos los invitados de una invitación")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "",
