@@ -33,7 +33,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/user/invitations")
 @Tag(name = "Invitation Controller", description = "operaciones con invitaciones")
 @RequiredArgsConstructor
-
 public class InvitationController implements InvitationApiDoc {
     
     private final InvitationService invitationService;
@@ -90,13 +89,13 @@ public class InvitationController implements InvitationApiDoc {
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    // @PostMapping("/{invitationUUID}/guests/batch-create")
-    // @Operation(summary = "Agregar una lista de invitados a la invitación", description = "")
-    // public ResponseEntity<List<GuestReadDTO>> createBatchGuests(@PathVariable UUID invitationUUID, @Valid @RequestBody List<GuestCreateDTO> guestBatch) {
-    //     // List<GuestReadDTO> created = guestService.createBatchGuests(invitationUUID, guestBatch);
-    //     new List<GuestReadDTO>();
-    //     return new ResponseEntity<List<GuestReadDTO>>(created, HttpStatus.CREATED);
-    // }
+    @PostMapping("/{invitationUUID}/guests/batch-create")
+    @Operation(summary = "Agregar una lista de invitados a la invitación", description = "")
+    public ResponseEntity<List<GuestReadDTO>> createBatchGuests(@PathVariable UUID invitationUUID, @Valid @RequestBody List<@Valid GuestCreateDTO> guestBatch) {
+        List<GuestReadDTO> created = guestService.createBatchGuests(invitationUUID, guestBatch);
+        // new List<GuestReadDTO>();
+        return new ResponseEntity<List<GuestReadDTO>>(created, HttpStatus.CREATED);
+    }
 
     // GET
     @GetMapping("/{invitationUUID}/guests")

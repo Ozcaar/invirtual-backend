@@ -1,5 +1,6 @@
 package com.ozcaar.invirtual.guest.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,15 +47,17 @@ public class GuestService {
             .orElseThrow(() -> new NotFoundException("Ha ocurrido un error con el usuario"));
 
         InvitationModel invitation = invitationRepository.findByUUID(invitationUUID)
-            .orElseThrow(() -> new NotFoundException("Invitación no encontrada"));
+            .orElseThrow(() -> new NotFoundException("Invitación no encontrada: " + invitationUUID));
 
         GuestGroupModel guestGroup = groupRepository.findById(dto.getGuest_group_id())
-            .orElseThrow(() -> new NotFoundException("Grupo no encontrado"));
+            .orElseThrow(() -> new NotFoundException("Grupo no encontrado: " + dto.getGuest_group_id()));
             
+        // Validate the user's access to the invitation
         if (!userInvitationRepository.findByUserIdAndInvitationName(user.getUser_id(), invitation.getName()).isPresent()) {
             throw new AccessDeniedException("No puedes modificar esta invitación");
         }
         
+        // Validate duplicates
         if (invitationGuestRepository.findByInvitationUUIDAndGuestName(invitation.getInvitationUuid(), dto.getName().trim()).isPresent()) {
             throw new AlreadyExistsException("Ya existe un invitado con ese nombre");
         }
@@ -73,6 +76,48 @@ public class GuestService {
         invitationGuestRepository.save(invitationGuest);
 
         return guestMapper.toDTO(guest);
+    }
+
+    public List<GuestReadDTO> createBatchGuests(UUID invitationUUID, List<GuestCreateDTO> dtos) {
+
+        UserModel user = authService.getUserFromToken()
+            .orElseThrow(() -> new NotFoundException("Ha ocurrido un error con el usuario"));
+
+        InvitationModel invitation = invitationRepository.findByUUID(invitationUUID)
+            .orElseThrow(() -> new NotFoundException("Invitación no encontrada: " + invitationUUID));
+
+        // Validate the user's access to the invitation
+        if (!userInvitationRepository.findByUserIdAndInvitationName(user.getUser_id(), invitation.getName()).isPresent()) {
+            throw new AccessDeniedException("No puedes modificar esta invitación");
+        }
+
+        List<GuestReadDTO> result = new ArrayList<>();
+
+        for (GuestCreateDTO dto : dtos) {
+
+            GuestGroupModel guestGroup = groupRepository.findById(dto.getGuest_group_id())
+                .orElseThrow(() -> new NotFoundException("Grupo no encontrado: " + dto.getGuest_group_id()));
+
+            // Validate duplicates within the invitation
+            if (invitationGuestRepository.findByInvitationUUIDAndGuestName(
+                    invitation.getInvitationUuid(), dto.getName().trim()).isPresent()) {
+                throw new AlreadyExistsException("Ya existe un invitado con ese nombre: " + dto.getName());
+            }
+
+            GuestModel guest = guestMapper.toEntity(dto);
+            guest.setGuest_group(guestGroup);
+            guestRepository.save(guest);
+
+            InvitationGuestModel invitationGuest = new InvitationGuestModel();
+            invitationGuest.setInvitation(invitation);
+            invitationGuest.setGuest_group(guestGroup);
+            invitationGuest.setGuest(guest);
+            invitationGuestRepository.save(invitationGuest);
+
+            result.add(guestMapper.toDTO(guest));
+        }
+
+        return result;
     }
 
     // READ
