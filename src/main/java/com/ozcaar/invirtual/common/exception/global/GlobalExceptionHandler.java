@@ -8,9 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 @ControllerAdvice 
 public class GlobalExceptionHandler {
@@ -61,26 +64,53 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
     
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiFieldsError> handleValidationErrors(MethodArgumentNotValidException ex) {
-        List<ApiFieldsError.FieldErrorDetail> fieldErrorDetail = ex.getBindingResult()
+    @ExceptionHandler({ MethodArgumentNotValidException.class, HandlerMethodValidationException.class })
+public ResponseEntity<ApiFieldsError> handleValidationExceptions(Exception ex) {
+    List<ApiFieldsError.FieldErrorDetail> fieldErrorDetail;
+
+    if (ex instanceof MethodArgumentNotValidException manve) {
+        fieldErrorDetail = manve.getBindingResult()
             .getFieldErrors()
             .stream()
             .map(error -> new ApiFieldsError.FieldErrorDetail(
                 error.getField(),
                 error.getDefaultMessage(),
                 String.valueOf(error.getRejectedValue()),
-                "Error de validación en los datos enviados.") )
+                "Error de validación en los datos enviados."))
             .toList();
 
-        ApiFieldsError error = new ApiFieldsError(
-            HttpStatus.BAD_REQUEST.value(),
-            "BAD_REQUEST",
-            // ex.getMessage(),
-            fieldErrorDetail
-        );
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    } else if (ex instanceof HandlerMethodValidationException hmve) {
+        fieldErrorDetail = hmve.getAllErrors()
+            .stream()
+            .map(err -> {
+                ObjectError error = (ObjectError) err;
+                if (error instanceof FieldError fe) {
+                    return new ApiFieldsError.FieldErrorDetail(
+                        fe.getField(),
+                        fe.getDefaultMessage(),
+                        String.valueOf(fe.getRejectedValue()),
+                        "Error de validación en los datos enviados.");
+                } else {
+                    return new ApiFieldsError.FieldErrorDetail(
+                        error.getObjectName(),
+                        error.getDefaultMessage(),
+                        null,
+                        "Error de validación en los datos enviados.");
+                }
+            })
+            .toList();
+    } else {
+        fieldErrorDetail = List.of();
     }
+
+    ApiFieldsError error = new ApiFieldsError(
+        HttpStatus.BAD_REQUEST.value(),
+        "BAD_REQUEST",
+        fieldErrorDetail
+    );
+
+    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+}
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiError> handleJsonParseError(HttpMessageNotReadableException ex) {
