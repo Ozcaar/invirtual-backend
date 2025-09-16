@@ -20,7 +20,7 @@ public class InvitationGuestModel {
     private InvitationGuestID id = new InvitationGuestID();
 
     @ManyToOne
-    @MapsId("invitation_uuid")
+    @MapsId("invitationUuid")
     @JoinColumn(name = "invitation_uuid")
     private InvitationModel invitation;
 
@@ -30,18 +30,18 @@ public class InvitationGuestModel {
     private GuestModel guest;
 
     @ManyToOne
-    @MapsId("invitated_group_id")
-    @JoinColumn(name = "invitated_group_id")
-    private GuestGroupModel invitated_group;
+    @MapsId("guest_group_id")
+    @JoinColumn(name = "guest_group_id")
+    private GuestGroupModel guest_group;
 
     // Getters & setters
 
-    public GuestGroupModel getInvitated_group() {
-        return invitated_group;
+    public GuestGroupModel getGuest_group() {
+        return guest_group;
     }
 
-    public void setInvitated_group(GuestGroupModel invitated_group) {
-        this.invitated_group = invitated_group;
+    public void setGuest_group(GuestGroupModel guest_group) {
+        this.guest_group = guest_group;
     }
 
     public InvitationGuestID getId() {

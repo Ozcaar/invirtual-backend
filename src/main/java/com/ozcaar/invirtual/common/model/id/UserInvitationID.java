@@ -7,15 +7,15 @@ import java.util.UUID;
 public class UserInvitationID implements Serializable {
 
     private Integer user_id;
-    private UUID invitation_uuid;
+    private UUID invitationUuid;
 
     // Constructor
     public UserInvitationID() {}
 
     // Constructor fields
-    public UserInvitationID(Integer user_id, UUID invitation_uuid) {
+    public UserInvitationID(Integer user_id, UUID invitationUuid) {
         this.user_id = user_id;
-        this.invitation_uuid = invitation_uuid;
+        this.invitationUuid = invitationUuid;
     }
 
     // Getters & setters
@@ -27,12 +27,12 @@ public class UserInvitationID implements Serializable {
         this.user_id = user_id;
     }
 
-    public UUID getInvitation_uuid() {
-        return invitation_uuid;
+    public UUID getInvitationUuid() {
+        return invitationUuid;
     }
 
-    public void setInvitation_uuid(UUID invitation_uuid) {
-        this.invitation_uuid = invitation_uuid;
+    public void setInvitationUuid(UUID invitationUuid) {
+        this.invitationUuid = invitationUuid;
     }
 
     // Equals
@@ -43,12 +43,12 @@ public class UserInvitationID implements Serializable {
 
         UserInvitationID that = (UserInvitationID) o;
         return  Objects.equals(getUser_id(), that.getUser_id()) &&
-                Objects.equals(getInvitation_uuid(), that.getInvitation_uuid());
+                Objects.equals(getInvitationUuid(), that.getInvitationUuid());
     }
 
     // Hash code
     public int hashCode() {
-        return Objects.hash(getUser_id(), getInvitation_uuid());
+        return Objects.hash(getUser_id(), getInvitationUuid());
     }
 
 }

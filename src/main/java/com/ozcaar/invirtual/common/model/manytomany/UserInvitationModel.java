@@ -27,7 +27,7 @@ public class UserInvitationModel {
     private UserModel user;
 
     @ManyToOne
-    @MapsId("invitation_uuid")
+    @MapsId("invitationUuid")
     @JoinColumn(name = "invitation_uuid")
     private InvitationModel invitation;
 

@@ -14,7 +14,7 @@ import com.ozcaar.invirtual.invitation.model.InvitationModel;
 public interface InvitationRepository extends CrudRepository<InvitationModel, Integer> {
        public abstract Optional<InvitationModel> findByName(String name);
        
-       @Query("SELECT i FROM InvitationModel i WHERE i.invitation_uuid = :uuid")
+       @Query("SELECT i FROM InvitationModel i WHERE i.invitationUuid = :uuid")
        Optional<InvitationModel> findByUUID(@Param("uuid") UUID uuid);
 
 }

@@ -8,32 +8,32 @@ import jakarta.persistence.Column;
 public class InvitationGuestID implements Serializable {
  
     @Column(name = "invitation_uuid")
-    private UUID invitation_uuid;
+    private UUID invitationUuid;
 
     @Column(name = "guest_id")
     private Integer guest_id;
 
-    @Column(name = "invitated_group_id")
-    private Integer invitated_group_id;
+    @Column(name = "guest_group_id")
+    private Integer guest_group_id;
     
     // Constructor
     public InvitationGuestID() {}
 
     // Constructor fields
-    public InvitationGuestID(UUID invitation_uuid, Integer guest_id, Integer invitated_group_id) {
-        this.invitation_uuid = invitation_uuid;
+    public InvitationGuestID(UUID invitationUuid, Integer guest_id, Integer guest_group_id) {
+        this.invitationUuid = invitationUuid;
         this.guest_id = guest_id;
-        this.invitated_group_id = invitated_group_id;
+        this.guest_group_id = guest_group_id;
     }
 
     // Getters & setters
 
-    public UUID getInvitation_uuid() {
-        return invitation_uuid;
+    public UUID getInvitationUuid() {
+        return invitationUuid;
     }
 
-    public void setInvitation_uuid(UUID invitation_uuid) {
-        this.invitation_uuid = invitation_uuid;
+    public void setInvitationUuid(UUID invitationUuid) {
+        this.invitationUuid = invitationUuid;
     }
 
     public Integer getGuest_id() {
@@ -44,12 +44,12 @@ public class InvitationGuestID implements Serializable {
         this.guest_id = guest_id;
     }
 
-    public Integer getInvitated_group_id() {
-        return invitated_group_id;
+    public Integer getGuest_group_id() {
+        return guest_group_id;
     }
 
-    public void setInvitated_group_id(Integer invitated_group_id) {
-        this.invitated_group_id = invitated_group_id;
+    public void setGuest_group_id(Integer guest_group_id) {
+        this.guest_group_id = guest_group_id;
     }
 
     // Hash code
@@ -57,9 +57,9 @@ public class InvitationGuestID implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((invitation_uuid == null) ? 0 : invitation_uuid.hashCode());
+        result = prime * result + ((invitationUuid == null) ? 0 : invitationUuid.hashCode());
         result = prime * result + ((guest_id == null) ? 0 : guest_id.hashCode());
-        result = prime * result + ((invitated_group_id == null) ? 0 : invitated_group_id.hashCode());
+        result = prime * result + ((guest_group_id == null) ? 0 : guest_group_id.hashCode());
         return result;
     }
 
@@ -73,20 +73,20 @@ public class InvitationGuestID implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         InvitationGuestID other = (InvitationGuestID) obj;
-        if (invitation_uuid == null) {
-            if (other.invitation_uuid != null)
+        if (invitationUuid == null) {
+            if (other.invitationUuid != null)
                 return false;
-        } else if (!invitation_uuid.equals(other.invitation_uuid))
+        } else if (!invitationUuid.equals(other.invitationUuid))
             return false;
         if (guest_id == null) {
             if (other.guest_id != null)
                 return false;
         } else if (!guest_id.equals(other.guest_id))
             return false;
-        if (invitated_group_id == null) {
-            if (other.invitated_group_id != null)
+        if (guest_group_id == null) {
+            if (other.guest_group_id != null)
                 return false;
-        } else if (!invitated_group_id.equals(other.invitated_group_id))
+        } else if (!guest_group_id.equals(other.guest_group_id))
             return false;
         return true;
     }

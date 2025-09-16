@@ -49,10 +49,10 @@ public class InvitationController implements InvitationApiDoc {
     }
 
     // GET
-    @GetMapping("/{id}")
-    @Operation(summary = "Obtener invitación por ID", description = "")
-    public ResponseEntity<InvitationReadDTO> getInvitation(@PathVariable Integer id) {
-        InvitationReadDTO invitation = invitationService.getInvitation(id);
+    @GetMapping("/{invitationUUID}")
+    @Operation(summary = "Obtener invitación por UUID", description = "")
+    public ResponseEntity<InvitationReadDTO> getInvitation(@PathVariable UUID invitationUUID) {
+        InvitationReadDTO invitation = invitationService.getInvitation(invitationUUID);
         return new ResponseEntity<>(invitation, HttpStatus.OK);
     }
 
@@ -65,18 +65,18 @@ public class InvitationController implements InvitationApiDoc {
 
     // UPDATE
     @PreAuthorize("hasRole('DEV')")
-    @PutMapping("/{id}")
+    @PutMapping("/{invitationUUID}")
     @Operation(summary = "Actualizar invitación", description = "- Se requiere rol \"DEV\"")
-    public ResponseEntity<InvitationReadDTO> updateInvitation(@PathVariable Integer id, @Valid  @RequestBody InvitationUpdateDTO dto) {
-        InvitationReadDTO updatedInvitation = invitationService.updateInvitation(id, dto);
+    public ResponseEntity<InvitationReadDTO> updateInvitation(@PathVariable UUID invitationUUID, @Valid  @RequestBody InvitationUpdateDTO dto) {
+        InvitationReadDTO updatedInvitation = invitationService.updateInvitation(invitationUUID, dto);
         return new ResponseEntity<>(updatedInvitation, HttpStatus.OK);
     }
 
     // DELETE
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{invitationUUID}")
     @Operation(summary = "Eliminar invitación", description = "")
-    public ResponseEntity<Void> deleteInvitation(@PathVariable Integer id) {
-        invitationService.deleteInvitation(id);
+    public ResponseEntity<Void> deleteInvitation(@PathVariable UUID invitationUUID) {
+        invitationService.deleteInvitation(invitationUUID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -98,13 +98,13 @@ public class InvitationController implements InvitationApiDoc {
     //     return new ResponseEntity<List<GuestReadDTO>>(created, HttpStatus.CREATED);
     // }
 
-    //GET
-    // @GetMapping("/{invitationUUID}/guests")
-    // @Operation(summary = "Obtener lista de invitados de una invitación", description = "")
-    // public ResponseEntity<List<GuestReadDTO>> getAllGuests() {
-    //     List<InvitationReadDTO> invitationList = invitationService.getAllInvitations();
-    //     return new ResponseEntity<>(invitationList, HttpStatus.OK);
-    // }
+    // GET
+    @GetMapping("/{invitationUUID}/guests")
+    @Operation(summary = "Obtener lista de invitados de una invitación", description = "")
+    public ResponseEntity<List<GuestReadDTO>> getAllGuests(@PathVariable UUID invitationUUID) {
+        List<GuestReadDTO> guestList = guestService.getAllGuests(invitationUUID);
+        return new ResponseEntity<>(guestList, HttpStatus.OK);
+    }
 
 
 }

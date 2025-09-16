@@ -4,6 +4,7 @@ import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -116,9 +117,9 @@ public class InvitationService {
     }
 
     // READ
-    public InvitationReadDTO getInvitation(Integer id) {
-        InvitationModel invitation = invitationRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("No se encontró la invitación con el ID: " + id));
+    public InvitationReadDTO getInvitation(UUID invitationUUID) {
+        InvitationModel invitation = invitationRepository.findByUUID(invitationUUID)
+            .orElseThrow(() -> new NotFoundException("No se encontró la invitación con el UUID: " + invitationUUID));
 
         return invitationMapper.toDTO(invitation);
     }
@@ -129,9 +130,9 @@ public class InvitationService {
     }
 
     // UPDATE
-    public InvitationReadDTO updateInvitation(Integer id, InvitationUpdateDTO dto) {
-        InvitationModel invitation = invitationRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("No se encontró la invitación con el ID: " + id));
+    public InvitationReadDTO updateInvitation(UUID invitationUUID, InvitationUpdateDTO dto) {
+        InvitationModel invitation = invitationRepository.findByUUID(invitationUUID)
+            .orElseThrow(() -> new NotFoundException("No se encontró la invitación con el UUID: " + invitationUUID));
 
         if (dto.getName() != null) invitation.setName(dto.getName());
         if (dto.getMax_people() != null) invitation.setMax_people(dto.getMax_people());
@@ -142,11 +143,11 @@ public class InvitationService {
     }
 
     // DELETE
-    public void deleteInvitation(Integer id) {
+    public void deleteInvitation(UUID invitationUUID) {
 
         // Soft delete
-        InvitationModel invitation = invitationRepository.findById(id)
-        .orElseThrow(() -> new NotFoundException("No se encontró la invitación con el ID: " + id));
+        InvitationModel invitation = invitationRepository.findByUUID(invitationUUID)
+        .orElseThrow(() -> new NotFoundException("No se encontró la invitación con el ID: " + invitationUUID));
 
         invitation.setActive(false);
         invitationRepository.save(invitation);

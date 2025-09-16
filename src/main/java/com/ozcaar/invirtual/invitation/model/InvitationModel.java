@@ -17,9 +17,9 @@ import jakarta.persistence.Table;
 public class InvitationModel {
     @Id
     @GeneratedValue
-    @Column(unique = true, nullable = false, columnDefinition = "uuid")
+    @Column(name = "invitation_uuid", unique = true, nullable = false, columnDefinition = "uuid")
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID invitation_uuid;
+    private UUID invitationUuid;
 
     // @OneToOne
     // @JoinColumn(name = "envelope_id", unique = true, nullable = false)
@@ -66,12 +66,12 @@ public class InvitationModel {
         this.invitation_type_id = invitation_type_id;
     }
 
-    public UUID getInvitation_uuid() {
-        return invitation_uuid;
+    public UUID getInvitationUuid() {
+        return invitationUuid;
     }
 
-    public void setInvitation_uuid(UUID invitation_uuid) {
-        this.invitation_uuid = invitation_uuid;
+    public void setInvitationUuid(UUID invitationUuid) {
+        this.invitationUuid = invitationUuid;
     }
 
     public String getName() {

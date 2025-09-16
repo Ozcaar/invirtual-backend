@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class InvitationReadDTO {
     
-    private UUID invitation_uuid;
+    private UUID invitationUuid;
     // private Integer envelope_id;
     // private Integer invitation_type_id;
     // private Integer music_id;
@@ -19,11 +19,11 @@ public class InvitationReadDTO {
 
     // Getters & setters
 
-    public UUID getInvitation_uuid() {
-        return invitation_uuid;
+    public UUID getInvitationUuid() {
+        return invitationUuid;
     }
-    public void setInvitation_uuid(UUID invitation_uuid) {
-        this.invitation_uuid = invitation_uuid;
+    public void setInvitationUuid(UUID invitationUuid) {
+        this.invitationUuid = invitationUuid;
     }
     public Integer getMax_people() {
         return max_people;

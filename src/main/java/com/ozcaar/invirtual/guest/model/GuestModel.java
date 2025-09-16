@@ -22,7 +22,7 @@ public class GuestModel {
     public Integer guest_id;
 
     // @Column(nullable = true)
-    // public Integer invitated_group_id;
+    // public Integer guest_group_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "guest_group_id")
@@ -52,11 +52,11 @@ public class GuestModel {
     public void setGuest_id(Integer guest_id) {
         this.guest_id = guest_id;
     }
-    // public Integer getInvitated_group_id() {
-    //     return invitated_group_id;
+    // public Integer getGuest_group_id() {
+    //     return guest_group_id;
     // }
-    // public void setInvitated_group_id(Integer invitated_group_id) {
-    //     this.invitated_group_id = invitated_group_id;
+    // public void setGuest_group_id(Integer guest_group_id) {
+    //     this.guest_group_id = guest_group_id;
     // }
     // public Integer getSign_book_id() {
     //     return sign_book_id;
