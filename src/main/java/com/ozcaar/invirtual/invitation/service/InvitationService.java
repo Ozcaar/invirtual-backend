@@ -9,6 +9,7 @@ import java.util.UUID;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ozcaar.invirtual.common.exception.global.AlreadyExistsException;
 import com.ozcaar.invirtual.common.exception.global.NotFoundException;
@@ -61,6 +62,7 @@ public class InvitationService {
     // CRUDs
 
     // CREATE
+    @Transactional
     public InvitationReadDTO createInvitation(InvitationCreateDTO dto) {
 
         // ? I think we can use extractUsername() from JwtUtil.java
