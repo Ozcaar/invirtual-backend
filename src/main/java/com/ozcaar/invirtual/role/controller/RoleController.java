@@ -35,7 +35,7 @@ public class RoleController implements RoleApiDoc {
     // POST
     @PreAuthorize("hasRole('DEV')")
     @PostMapping()
-    @Operation(summary = "Crear Rol", description = "")
+    @Operation(summary = "Crear Rol", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<RoleReadDTO> createRole(@RequestBody RoleCreateDTO role) {
         RoleReadDTO created = roleService.createRol(role);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
@@ -68,7 +68,7 @@ public class RoleController implements RoleApiDoc {
     //DELETE
     @PreAuthorize("hasRole('DEV')")
     @DeleteMapping("/{id}")
-    @Operation(summary = "Eliminar rol", description = "")
+    @Operation(summary = "Eliminar rol", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<Void> deleteRole(@PathVariable Integer id) {
         roleService.deleteRole(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

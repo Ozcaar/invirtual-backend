@@ -72,8 +72,9 @@ public class InvitationController implements InvitationApiDoc {
     }
 
     // DELETE
+    @PreAuthorize("hasRole('DEV')")
     @DeleteMapping("/{invitationUUID}")
-    @Operation(summary = "Eliminar invitación", description = "")
+    @Operation(summary = "Eliminar invitación", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<Void> deleteInvitation(@PathVariable UUID invitationUUID) {
         invitationService.deleteInvitation(invitationUUID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
