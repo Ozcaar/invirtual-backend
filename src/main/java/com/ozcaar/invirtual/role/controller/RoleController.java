@@ -33,6 +33,7 @@ public class RoleController implements RoleApiDoc {
     private final RoleService roleService;
 
     // POST
+    @PreAuthorize("hasRole('DEV')")
     @PostMapping()
     @Operation(summary = "Crear Rol", description = "")
     public ResponseEntity<RoleReadDTO> createRole(@RequestBody RoleCreateDTO role) {
@@ -65,6 +66,7 @@ public class RoleController implements RoleApiDoc {
     }
 
     //DELETE
+    @PreAuthorize("hasRole('DEV')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar rol", description = "")
     public ResponseEntity<Void> deleteRole(@PathVariable Integer id) {
