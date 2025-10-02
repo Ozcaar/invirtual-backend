@@ -3,9 +3,12 @@ package com.ozcaar.invirtual.user.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.ozcaar.invirtual.auth.service.JwtUtil;
 import com.ozcaar.invirtual.common.exception.global.AlreadyExistsException;
 import com.ozcaar.invirtual.common.exception.global.NotFoundException;
 import com.ozcaar.invirtual.common.model.id.UserRoleID;
@@ -26,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
@@ -33,6 +37,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // Use only if the user already exists
+    @Transactional
     public void assignDefaultRole(UserModel user) {
 
         RoleModel defaultRole = roleRepository.findByName("USER")
@@ -55,6 +60,7 @@ public class UserService {
     // CRUDs
 
     // CREATE
+    @Transactional
     public UserReadDTO createUser(UserCreateDTO dto) {
         if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new AlreadyExistsException("Ya existe un usuario con ese correo");
@@ -78,7 +84,6 @@ public class UserService {
         return userMapper.toDTO(savedUser);
     }
 
-
     // READ
     public UserReadDTO getUser(Integer id) {
         UserModel user = userRepository.findById(id)
@@ -92,8 +97,8 @@ public class UserService {
         return userMapper.toDTOList(users);
     }
 
-
     // UPDATE
+    @Transactional
     public UserReadDTO updateUser(Integer id, UserUpdateDTO dto) {
         UserModel user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("No se encontró el usuario con el ID: " + id));

@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ozcaar.invirtual.auth.service.AuthService;
 import com.ozcaar.invirtual.common.exception.global.AlreadyExistsException;
@@ -41,6 +42,7 @@ public class GuestService {
     // CRUDs
 
     // CREATE
+    @Transactional
     public GuestReadDTO createGuest(UUID invitationUUID, GuestCreateDTO dto) {
 
         UserModel user = authService.getUserFromToken()
@@ -78,6 +80,7 @@ public class GuestService {
         return guestMapper.toDTO(guest);
     }
 
+    @Transactional
     public List<GuestReadDTO> createBatchGuests(UUID invitationUUID, List<GuestCreateDTO> dtos) {
 
         UserModel user = authService.getUserFromToken()
@@ -121,7 +124,6 @@ public class GuestService {
     }
 
     // READ
-
     public List<GuestReadDTO> getAllGuests(UUID invitationUUID) {
 
         UserModel user = authService.getUserFromToken()
