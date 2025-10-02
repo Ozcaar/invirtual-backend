@@ -13,8 +13,6 @@ import com.ozcaar.invirtual.auth.dto.LoginDTO;
 import com.ozcaar.invirtual.auth.service.AuthService;
 import com.ozcaar.invirtual.common.exception.documentation.AuthApiDoc;
 import com.ozcaar.invirtual.user.dto.create.UserCreateDTO;
-import com.ozcaar.invirtual.user.dto.read.UserReadDTO;
-import com.ozcaar.invirtual.user.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,20 +25,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController implements AuthApiDoc {
     
-    private final UserService userService;
     private final AuthService authService;
 
     @PostMapping("/register")
     @Operation(summary = "Registrar nuevo usuario", description = "", security = {})
-    public ResponseEntity<UserReadDTO> register(@Valid @RequestBody UserCreateDTO dto) {
-        UserReadDTO user = userService.createUser(dto);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    public ResponseEntity<Map<String, Object>> register(@Valid @RequestBody UserCreateDTO dto) {
+        Map<String, Object> response = authService.registerUser(dto);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
     @Operation(summary = "Iniciar sesión", description = "", security = {})
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO dto) {
         String token = authService.loginUser(dto);
-        return ResponseEntity.ok(Map.of("token", token));
+        return new ResponseEntity<>(Map.of("token", token), HttpStatus.CREATED);
     }
 }

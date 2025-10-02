@@ -32,7 +32,7 @@ public interface AuthApiDoc {
             content = @Content(schema = @Schema(implementation = ApiError.class))),
 
     })
-    ResponseEntity<UserReadDTO> register(UserCreateDTO dto);
+    ResponseEntity<Map<String, Object>> register(UserCreateDTO dto);
 
 
     @Operation(summary = "Iniciar sesión", description = "Devuelve un JWT")
