@@ -1,8 +1,14 @@
 package com.ozcaar.invirtual.auth.service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -56,5 +62,37 @@ public class JwtUtil {
             // Any error (invalid token, bad token, etc.) retunrs false
             return false;
         }
+    }
+
+    public String getEmailOfAuthenticatedUser() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    public List<String> getRolesOfAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication != null) {
+            // Get athorities from authenticated user
+            List<String> roles = authentication.getAuthorities()
+                                              .stream()
+                                              .map(GrantedAuthority::getAuthority) // Get role name
+                                              .collect(Collectors.toList());
+            return roles;
+        } else {
+            throw new RuntimeException("El usuario no está autenticado.");
+        }
+    }
+
+    public Boolean authenticatedUserUserIsAdminOrDev() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AccessDeniedException("No autenticado");
+        }
+
+        boolean isAdminOrDev = authentication.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .anyMatch(a -> a.equals("ROLE_ADMIN") || a.equals("ROLE_DEV"));            
+
+        return isAdminOrDev;
     }
 }
