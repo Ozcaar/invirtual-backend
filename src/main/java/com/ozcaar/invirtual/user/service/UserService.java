@@ -89,6 +89,15 @@ public class UserService {
         UserModel user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("No se encontró el usuario con el ID: " + id));
 
+        boolean isAdminOrDev = jwtUtil.authenticatedUserUserIsAdminOrDev();
+        
+        if (!isAdminOrDev) {
+            String userEmail = jwtUtil.getEmailOfAuthenticatedUser();
+            if (userEmail == null || !userEmail.trim().equalsIgnoreCase(user.getEmail().trim())) {
+                throw new AccessDeniedException("No tienes permiso para consultar este usuario");
+            }
+        }
+
         return userMapper.toDTO(user);
     }
 
@@ -134,7 +143,7 @@ public class UserService {
                     userRole.setActive(true);
 
                     user.getUser_roles().add(userRole);
-                    userRoleRepository.save(userRole);
+                    // userRoleRepository.save(userRole);
                 }
             }
         } 
