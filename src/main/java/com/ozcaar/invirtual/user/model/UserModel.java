@@ -43,7 +43,7 @@ public class UserModel {
     @Column(nullable = false)
     private Boolean active;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRoleModel> user_roles = new ArrayList<>();
 
     // Getters & setters
