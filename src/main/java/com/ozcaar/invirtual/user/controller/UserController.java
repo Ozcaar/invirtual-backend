@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user/users")
+@RequestMapping("/user")
 @Tag(name = "User Controller", description = "operaciones con usuarios")
 @RequiredArgsConstructor
 public class UserController implements UserApiDoc {
@@ -37,7 +37,7 @@ public class UserController implements UserApiDoc {
     // POST
     @PreAuthorize("hasRole('DEV')")
     @PostMapping()
-    @Operation(summary = "Crear usuario", description = "- Se requiere el rol \"DEV\"")
+    @Operation(summary = "Crear usuario", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<UserReadDTO> createUser(@Valid @RequestBody UserCreateDTO user) {
         UserReadDTO created = userService.createUser(user);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
@@ -52,8 +52,8 @@ public class UserController implements UserApiDoc {
     }
 
     @PreAuthorize("hasRole('DEV')")
-    @GetMapping()
-    @Operation(summary = "Obtener lista de usuarios", description = "")
+    @GetMapping("/list")
+    @Operation(summary = "Obtener lista de usuarios", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<List<UserReadDTO>> getAllUsers() {
         List<UserReadDTO> userList = userService.getAllUsers();
         return new ResponseEntity<>(userList, HttpStatus.OK);
@@ -71,7 +71,7 @@ public class UserController implements UserApiDoc {
     //DELETE
     @PreAuthorize("hasRole('DEV')")
     @DeleteMapping("/{id}")
-    @Operation(summary = "Eliminar usuario", description = "")
+    @Operation(summary = "Eliminar usuario", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

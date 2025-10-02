@@ -30,7 +30,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/user/invitations")
+@RequestMapping("/invitation")
 @Tag(name = "Invitation Controller", description = "operaciones con invitaciones")
 @RequiredArgsConstructor
 public class InvitationController implements InvitationApiDoc {
@@ -55,7 +55,7 @@ public class InvitationController implements InvitationApiDoc {
         return new ResponseEntity<>(invitation, HttpStatus.OK);
     }
 
-    @GetMapping()
+    @GetMapping("/list")
     @Operation(summary = "Obtener lista de invitaciones", description = "")
     public ResponseEntity<List<InvitationReadDTO>> getAllInvitations() {
         List<InvitationReadDTO> invitationList = invitationService.getAllInvitations();
@@ -83,14 +83,14 @@ public class InvitationController implements InvitationApiDoc {
     // INVITEDS
 
     // POST
-    @PostMapping("/{invitationUUID}/guests")
+    @PostMapping("/{invitationUUID}/guest")
     @Operation(summary = "Agregar un invitado a la invitación", description = "")
     public ResponseEntity<GuestReadDTO> createGuest(@PathVariable UUID invitationUUID, @Valid @RequestBody GuestCreateDTO guest) {
         GuestReadDTO created = guestService.createGuest(invitationUUID, guest);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{invitationUUID}/guests/batch-create")
+    @PostMapping("/{invitationUUID}/guest/batch-create")
     @Operation(summary = "Agregar una lista de invitados a la invitación", description = "")
     public ResponseEntity<List<GuestReadDTO>> createBatchGuests(@PathVariable UUID invitationUUID, @Valid @RequestBody List<@Valid GuestCreateDTO> guestBatch) {
         List<GuestReadDTO> created = guestService.createBatchGuests(invitationUUID, guestBatch);
@@ -99,7 +99,7 @@ public class InvitationController implements InvitationApiDoc {
     }
 
     // GET
-    @GetMapping("/{invitationUUID}/guests")
+    @GetMapping("/{invitationUUID}/guest/list")
     @Operation(summary = "Obtener lista de invitados de una invitación", description = "")
     public ResponseEntity<List<GuestReadDTO>> getAllGuests(@PathVariable UUID invitationUUID) {
         List<GuestReadDTO> guestList = guestService.getAllGuests(invitationUUID);

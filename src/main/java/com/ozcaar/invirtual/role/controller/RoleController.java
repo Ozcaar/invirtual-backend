@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/admin/roles")
+@RequestMapping("/admin/role")
 @Tag(name = "Role Controller", description = "operaciones con roles")
 @RequiredArgsConstructor
 public class RoleController implements RoleApiDoc {
@@ -49,7 +49,7 @@ public class RoleController implements RoleApiDoc {
         return new ResponseEntity<>(role, HttpStatus.OK);
     }
 
-    @GetMapping()
+    @GetMapping("/list")
     @Operation(summary = "Obtener lista de roles", description = "")
     public ResponseEntity<List<RoleReadDTO>> getAllRoles() {
         List<RoleReadDTO> roleList = roleService.getAllRoles();
