@@ -3,12 +3,12 @@ package com.ozcaar.invirtual.common.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ozcaar.invirtual.common.exception.global.ApiError;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
@@ -18,41 +18,56 @@ import java.io.IOException;
 public class CustomSecurityHandlers {
 
     public static class CustomAccessDeniedHandler implements AccessDeniedHandler {
-        private final ObjectMapper objectMapper = new ObjectMapper();
+
+        private final ObjectMapper mapper;
+
+        public CustomAccessDeniedHandler(ObjectMapper mapper) {
+            this.mapper = mapper;
+        }
 
         @Override
-        public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException ex)
-                throws IOException, ServletException {
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-            response.setContentType("application/json");
+        public void handle(HttpServletRequest request,
+                HttpServletResponse response,
+                AccessDeniedException ex) throws IOException {
+
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
 
             ApiError error = new ApiError(
-                HttpStatus.FORBIDDEN.value(),
-                "ACCESS_DENIED",
-                "No tienes permiso para acceder a este recurso."
-            );
+                    403,
+                    "FORBIDDEN",
+                    "No tienes permiso para realizar esta acción");
 
-            response.getWriter().write(objectMapper.writeValueAsString(error));
+            mapper.writeValue(response.getOutputStream(), error);
+            response.flushBuffer();
         }
     }
 
     public static class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
-        private final ObjectMapper objectMapper = new ObjectMapper();
+
+        private final ObjectMapper mapper;
+
+        public CustomAuthenticationEntryPoint(ObjectMapper mapper) {
+            this.mapper = mapper;
+        }
 
         @Override
-        public void commence(HttpServletRequest request, HttpServletResponse response,
-                             org.springframework.security.core.AuthenticationException ex)
-                throws IOException, ServletException {
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            response.setContentType("application/json");
+        public void commence(HttpServletRequest request,
+                HttpServletResponse response,
+                AuthenticationException authException) throws IOException {
+
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
 
             ApiError error = new ApiError(
-                HttpStatus.UNAUTHORIZED.value(),
-                "UNAUTHORIZED", 
-                "No estás autenticado para acceder a este recurso."
-            );
+                    401,
+                    "UNAUTHORIZED",
+                    "Token faltante, inválido o expirado");
 
-            response.getWriter().write(objectMapper.writeValueAsString(error));
+            mapper.writeValue(response.getOutputStream(), error);
+            response.flushBuffer();
         }
     }
 }

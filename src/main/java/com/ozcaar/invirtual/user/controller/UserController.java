@@ -35,6 +35,7 @@ public class UserController implements UserApiDoc {
     private final UserService userService;
 
     // POST
+    @Deprecated
     @PreAuthorize("hasRole('DEV')")
     @PostMapping()
     @Operation(summary = "Crear usuario", description = "- Se requiere rol \"DEV\"")
@@ -44,6 +45,7 @@ public class UserController implements UserApiDoc {
     }
 
     // GET
+    @Deprecated
     @GetMapping("/{id}")
     @Operation(summary = "Obtener usuario por ID", description = "")
     public ResponseEntity<UserReadDTO> getUser(@PathVariable Integer id) {
@@ -60,6 +62,7 @@ public class UserController implements UserApiDoc {
     }
 
     // UPDATE
+    @Deprecated
     @PreAuthorize("hasRole('DEV')")
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar usuario como admin", description = "- Se requiere rol \"DEV\"")
@@ -69,6 +72,7 @@ public class UserController implements UserApiDoc {
     }
 
     //DELETE
+    @Deprecated
     @PreAuthorize("hasRole('DEV')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar usuario", description = "- Se requiere rol \"DEV\"")

@@ -1,5 +1,5 @@
-# Usa una imagen de Java
-FROM openjdk:17-jdk-slim
+# Usa una imagen de Java 21
+FROM eclipse-temurin:21-jre-jammy
 
 # Argumento para pasar el jar
 ARG JAR_FILE=target/*.jar
@@ -7,7 +7,7 @@ ARG JAR_FILE=target/*.jar
 # Copia el jar al contenedor
 COPY ${JAR_FILE} app.jar
 
-# Expone el puerto (ajústalo si tu app corre en otro)
+# Expone el puerto
 EXPOSE 8080
 
 # Comando de ejecución

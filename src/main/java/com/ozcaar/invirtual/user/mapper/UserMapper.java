@@ -17,14 +17,12 @@ import com.ozcaar.invirtual.user.model.UserModel;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    @Mapping(target = "password_hash", ignore = true)
     @Mapping(target = "active", ignore = true)
     @Mapping(target = "user_id", ignore = true)
     @Mapping(target = "last_login", ignore = true)
     @Mapping(target = "user_roles", ignore = true)
     UserModel toEntity(UserCreateDTO dto);
 
-    @Mapping(target = "password_hash", ignore = true)
     @Mapping(target = "user_id", ignore = true)
     @Mapping(target = "last_login", ignore = true)
     @Mapping(target = "user_roles", ignore = true)

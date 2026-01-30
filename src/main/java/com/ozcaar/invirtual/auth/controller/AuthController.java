@@ -4,10 +4,15 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import com.ozcaar.invirtual.auth.dto.LoginDTO;
 import com.ozcaar.invirtual.auth.service.AuthService;
@@ -24,9 +29,10 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Auth Controller", description = "autenticar usuarios")
 @RequiredArgsConstructor
 public class AuthController implements AuthApiDoc {
-    
+
     private final AuthService authService;
 
+    @Deprecated
     @PostMapping("/register")
     @Operation(summary = "Registrar nuevo usuario", description = "", security = {})
     public ResponseEntity<Map<String, Object>> register(@Valid @RequestBody UserCreateDTO dto) {
@@ -34,10 +40,39 @@ public class AuthController implements AuthApiDoc {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @Deprecated
     @PostMapping("/login")
     @Operation(summary = "Iniciar sesión", description = "", security = {})
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO dto) {
         String token = authService.loginUser(dto);
         return new ResponseEntity<>(Map.of("token", token), HttpStatus.CREATED);
     }
+
+    @GetMapping("/api/debug/me")
+    public Map<String, Object> debug(@AuthenticationPrincipal Jwt jwt, Authentication authentication) {
+        if (jwt == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing JWT");
+        }
+
+        Object userMetadata = jwt.getClaim("user_metadata");
+        Object appMetadata = jwt.getClaim("app_metadata");
+
+        return Map.of(
+                // "sub", jwt.getSubject(),
+                "email", jwt.getClaimAsString("email"),
+                // "aud", jwt.getAudience(),
+                // "iss", jwt.getIssuer() != null ? jwt.getIssuer().toString() : null,
+
+                // metadatos típicos en Supabase
+                "user_metadata", userMetadata,
+                // "app_metadata", appMetadata,
+
+                // authorities reales (no claim)
+                "authorities", authentication != null ? authentication.getAuthorities() : null
+
+                // para inspección general (en dev)
+                // "claims", jwt.getClaims()
+        );
+    }
+
 }

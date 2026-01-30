@@ -28,7 +28,8 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword_hash();
+        return "nohash";
+        // return user.getPassword_hash();
     }
 
     @Override

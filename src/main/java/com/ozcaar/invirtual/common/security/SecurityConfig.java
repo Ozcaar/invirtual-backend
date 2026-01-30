@@ -4,18 +4,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+// import org.springframework.security.authentication.AuthenticationManager;
+// import org.springframework.security.config.Customizer;
+// import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidatorResult;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.oauth2.jwt.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ozcaar.invirtual.auth.service.CustomUserDetailsService;
-import com.ozcaar.invirtual.auth.service.JwtFilter;
 import com.ozcaar.invirtual.common.security.CustomSecurityHandlers.CustomAccessDeniedHandler;
 import com.ozcaar.invirtual.common.security.CustomSecurityHandlers.CustomAuthenticationEntryPoint;
 
@@ -28,59 +33,75 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        builder.userDetailsService(userDetailsService)
-            .passwordEncoder(passwordEncoder());
+    // @Bean
+    // public AuthenticationManager authenticationManager(HttpSecurity http) throws
+    // Exception {
+    // AuthenticationManagerBuilder builder =
+    // http.getSharedObject(AuthenticationManagerBuilder.class);
+    // builder.userDetailsService(userDetailsService)
+    // .passwordEncoder(passwordEncoder());
 
-        return builder.build();
-    }
+    // return builder.build();
+    // }
 
-    private final JwtFilter jwtFilter;
     private final CustomUserDetailsService userDetailsService;
     private final Environment environment;
 
-    public SecurityConfig(Environment environment, JwtFilter jwtFilter, CustomUserDetailsService userDetailsService) {
+    public SecurityConfig(Environment environment, CustomUserDetailsService userDetailsService) {
         this.environment = environment;
-        this.jwtFilter = jwtFilter;
         this.userDetailsService = userDetailsService;
     }
 
     // Configure security filters
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+            SupabaseJwtAuthenticationConverter converter, ObjectMapper mapper) throws Exception {
+
         boolean isInDev = environment.acceptsProfiles(Profiles.of("dev", "test"));
 
-        http.csrf(csrf -> csrf.disable());
+        http
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/auth/**", "/api/public/**").permitAll();
 
-        http.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.userDetailsService(userDetailsService);
+                    if (isInDev) {
+                        auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();
+                    }
 
-        http.authorizeHttpRequests(auth -> {
-            auth.requestMatchers("/auth/**").permitAll();
-
-            if (isInDev) {
-                auth.requestMatchers(
-                    "/v3/api-docs/**",
-                    "/swagger-ui/**",
-                    "/swagger-ui.html"
-                ).permitAll();
-            }
-
-            // auth.requestMatchers("/admin/**").hasRole("ADMIN", "DEV")
-            auth.requestMatchers("/admin/**").hasAnyRole("ADMIN", "DEV");
-            auth.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN", "DEV");
-
-            auth.anyRequest().authenticated();
-        })
-        .exceptionHandling(eh -> eh
-            .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-            .accessDeniedHandler(new CustomAccessDeniedHandler())
-        );
-
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                    auth.requestMatchers("/admin/**").hasAnyRole("ADMIN", "DEV");
+                    auth.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN", "DEV");
+                    auth.anyRequest().authenticated();
+                })
+                .exceptionHandling(eh -> eh
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint(mapper))
+                        .accessDeniedHandler(new CustomAccessDeniedHandler(mapper)))
+                .oauth2ResourceServer(oauth -> oauth
+                        .jwt(jwt -> jwt
+                                .decoder(jwtDecoder())
+                                .jwtAuthenticationConverter(converter)));
 
         return http.build();
+    }
+
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        JwtDecoder decoder = JwtDecoders.fromIssuerLocation(
+                "https://jooaptsldvtinckgvwhx.supabase.co/auth/v1");
+
+        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators
+                .createDefaultWithIssuer("https://jooaptsldvtinckgvwhx.supabase.co/auth/v1");
+
+        OAuth2TokenValidator<Jwt> audienceValidator = jwt -> {
+            var aud = jwt.getAudience();
+            return (aud != null && aud.contains("authenticated"))
+                    ? OAuth2TokenValidatorResult.success()
+                    : OAuth2TokenValidatorResult.failure(
+                            new OAuth2Error("invalid_token", "Invalid audience", null));
+        };
+
+        NimbusJwtDecoder nimbus = (NimbusJwtDecoder) decoder;
+        nimbus.setJwtValidator(new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator));
+        return nimbus;
     }
 }

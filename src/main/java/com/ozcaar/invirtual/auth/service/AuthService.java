@@ -7,8 +7,10 @@ import java.util.Optional;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +29,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final JwtUtil jwtUtil; 
-    private final AuthenticationManager authenticationManager; 
+    private final JwtUtil jwtUtil;
+    // private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final UserService userService;
@@ -43,8 +45,8 @@ public class AuthService {
         UserModel user = userMapper.toEntity(dto);
 
         // Encrypt password
-        String hashedPassword = passwordEncoder.encode(dto.getPassword_plain());
-        user.setPassword_hash(hashedPassword);
+        // String hashedPassword = passwordEncoder.encode(dto.getPassword_plain());
+        // user.setPassword_hash(hashedPassword);
 
         // Active by default
         user.setActive(true);
@@ -73,27 +75,51 @@ public class AuthService {
 
     public String loginUser(LoginDTO dto) {
         // Authentication
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
-        );
+        // authenticationManager.authenticate(
+        // new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword())
+        // );
 
         // Set last login
         updateLastLogin(dto.getEmail());
 
         // Generate token
         String token = jwtUtil.generateToken(dto.getEmail());
-        
+
         return token;
     }
 
     // public Optional<UserModel> getUserFromToken(String token) {
-    //     String email = jwtUtil.extractUsername(token);
-    //     return userRepository.findByEmail(email);
+    // String email = jwtUtil.extractUsername(token);
+    // return userRepository.findByEmail(email);
     // }
 
     public Optional<UserModel> getUserFromToken() {
-        String email = ((CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        return userRepository.findByEmail(email);
+        // String email = ((CustomUserDetails)
+        // SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        // return userRepository.findByEmail(email);
+
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return Optional.empty();
+        }
+
+        Object principal = authentication.getPrincipal();
+
+        // Get user based on Jwt
+        if (principal instanceof Jwt jwt) {
+            String supabaseId = jwt.getSubject();
+            return userRepository.findBySupabaseId(supabaseId);
+        }
+
+        // Get user based on CustomUserDetails
+        if (principal instanceof CustomUserDetails userDetails) {
+            return userRepository.findByEmail(userDetails.getUsername());
+        }
+
+        return Optional.empty();
     }
 
     public void updateLastLogin(String email) {
@@ -106,10 +132,11 @@ public class AuthService {
     }
 
     // public String extractTokenFromRequest(HttpServletRequest request) {
-    //     String authorizationHeader = request.getHeader("Authorization");
-    //     if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-    //         return authorizationHeader.substring(7);
-    //     }
-    //     return null;
+    // String authorizationHeader = request.getHeader("Authorization");
+    // if (authorizationHeader != null && authorizationHeader.startsWith("Bearer "))
+    // {
+    // return authorizationHeader.substring(7);
+    // }
+    // return null;
     // }
 }

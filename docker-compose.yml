@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   postgres:
@@ -21,9 +21,10 @@ services:
     depends_on:
       - postgres
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/midb
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/invirtual
       SPRING_DATASOURCE_USERNAME: oscar
       SPRING_DATASOURCE_PASSWORD: oscar
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://jooaptsldvtinckgvwhx.supabase.co/auth/v1
     ports:
       - "8080:8080"
 
@@ -38,5 +39,6 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     depends_on:
       - postgres
+
 volumes:
   postgres_data:

@@ -20,8 +20,8 @@
 
 ```json
 {
-    "first_name": "string",
-    "last_name": "string",
+    "name": "string",
+    "full_name": "string",
     "email": "string",
     "password_plain": "string",
 }

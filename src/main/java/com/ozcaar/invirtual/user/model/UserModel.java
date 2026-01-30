@@ -25,17 +25,20 @@ public class UserModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer user_id;
 
+    @Column(name = "supabase_id", unique = true, nullable = false, length = 60)
+    private String supabaseId;
+
     @Column(nullable = false)
-    private String first_name;
+    private String name;
 
     @Column(nullable = true)
-    private String last_name;
+    private String full_name;
 
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
-    private String password_hash;
+    // @Column(nullable = false)
+    // private String password_hash;
 
     @Column(name = "last_login")
     private LocalDateTime last_login;
@@ -64,12 +67,12 @@ public class UserModel {
         this.last_login = last_login;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getFull_name() {
+        return full_name;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
     }
 
     public String getEmail() {
@@ -80,13 +83,13 @@ public class UserModel {
         this.email = email;
     }
 
-    public String getPassword_hash() {
-        return password_hash;
-    }
+    // public String getPassword_hash() {
+    //     return password_hash;
+    // }
 
-    public void setPassword_hash(String password_hash) {
-        this.password_hash = password_hash;
-    }
+    // public void setPassword_hash(String password_hash) {
+    //     this.password_hash = password_hash;
+    // }
 
     public Boolean getActive() {
         return active;
@@ -104,11 +107,19 @@ public class UserModel {
         this.user_id = user_id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getName() {
+        return name;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getSupabaseId() {
+        return supabaseId;
+    }
+
+    public void setSupabaseId(String supabaseId) {
+        this.supabaseId = supabaseId;
     }
 }

@@ -6,8 +6,8 @@ import com.ozcaar.invirtual.role.dto.read.RoleReadDTO;
 
 public class UserReadDTO {
     private Integer user_id;
-    private String first_name;
-    private String last_name;
+    private String name;
+    private String full_name;
     private String email;
     private List<RoleReadDTO> roles;
 
@@ -24,17 +24,17 @@ public class UserReadDTO {
     public void setUser_id(Integer user_id) {
         this.user_id = user_id;
     }
-    public String getFirst_name() {
-        return first_name;
+    public String getName() {
+        return name;
     }
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setName(String name) {
+        this.name = name;
     }
-    public String getLast_name() {
-        return last_name;
+    public String getFull_name() {
+        return full_name;
     }
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setFull_name(String full_name) {
+        this.full_name = full_name;
     }
     public String getEmail() {
         return email;

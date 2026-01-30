@@ -40,7 +40,7 @@ public class UserService {
     @Transactional
     public void assignDefaultRole(UserModel user) {
 
-        RoleModel defaultRole = roleRepository.findByName("USER")
+        RoleModel defaultRole = roleRepository.findByName("ROLE_USER")
         .orElseThrow(() -> new NotFoundException("No se encuentra el rol predeterminado 'USER'"));
 
         boolean alreadyAssigned = userRoleRepository.existsById(new UserRoleID(user.getUser_id(), defaultRole.getRole_id()));
@@ -69,8 +69,8 @@ public class UserService {
         UserModel user = userMapper.toEntity(dto);
 
         // Encrypt password
-        String hashedPassword = passwordEncoder.encode(dto.getPassword_plain());
-        user.setPassword_hash(hashedPassword);
+        // String hashedPassword = passwordEncoder.encode(dto.getPassword_plain());
+        // user.setPassword_hash(hashedPassword);
 
         // Active by default
         user.setActive(true);
@@ -151,8 +151,8 @@ public class UserService {
         //     assignDefaultRole(user);
         // }
 
-        if (dto.getFirst_name() != null) user.setFirst_name(dto.getFirst_name());
-        if (dto.getLast_name() != null) user.setLast_name(dto.getLast_name());
+        if (dto.getFirst_name() != null) user.setName(dto.getFirst_name());
+        if (dto.getLast_name() != null) user.setFull_name(dto.getLast_name());
         if (dto.getEmail() != null) user.setEmail(dto.getEmail());
         if (dto.getActive() != null) user.setActive(dto.getActive());
 
