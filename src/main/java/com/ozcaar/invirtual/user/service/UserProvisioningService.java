@@ -20,7 +20,7 @@ public class UserProvisioningService {
     }
 
     @Transactional
-    public UserModel getOrCreate(String supabaseId, Object userMetadata) {
+    public UserModel getOrCreate(String supabase_id, Object userMetadata) {
 
         final String email;
         final String fullName;
@@ -42,11 +42,11 @@ public class UserProvisioningService {
             name = null;
         }
 
-        return userRepository.findBySupabaseId(supabaseId)
+        return userRepository.findBySupabaseId(supabase_id)
                 .orElseGet(() -> {
 
                     UserModel user = new UserModel();
-                    user.setSupabaseId(supabaseId);
+                    user.setSupabaseId(supabase_id);
 
                     user.setName(name);
                     user.setFull_name(fullName);

@@ -39,7 +39,7 @@ public class InvitationController implements InvitationApiDoc {
     private final GuestService guestService;
 
     // POST
-    @PreAuthorize("hasRole('DEV')")
+    // @PreAuthorize("hasRole('DEV')")
     @PostMapping()
     @Operation(summary = "Crear invitación", description = "- Se requiere el rol \"DEV\"")
     public ResponseEntity<InvitationReadDTO> createInvitation(@Valid @RequestBody InvitationCreateDTO invitation) {

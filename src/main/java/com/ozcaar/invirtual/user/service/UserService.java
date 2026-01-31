@@ -43,11 +43,11 @@ public class UserService {
         RoleModel defaultRole = roleRepository.findByName("ROLE_USER")
         .orElseThrow(() -> new NotFoundException("No se encuentra el rol predeterminado 'USER'"));
 
-        boolean alreadyAssigned = userRoleRepository.existsById(new UserRoleID(user.getUser_id(), defaultRole.getRole_id()));
+        boolean alreadyAssigned = userRoleRepository.existsById(new UserRoleID(user.getUserId(), defaultRole.getRole_id()));
 
         if (!alreadyAssigned) {
             UserRoleModel userRole = new UserRoleModel();
-            userRole.setId(new UserRoleID(user.getUser_id(), defaultRole.getRole_id()));
+            userRole.setId(new UserRoleID(user.getUserId(), defaultRole.getRole_id()));
             userRole.setUser(user);
             userRole.setRole(defaultRole);
             userRole.setAssign_date(LocalDateTime.now());
@@ -136,7 +136,7 @@ public class UserService {
 
                 if (!alreadyAssigned) {
                     UserRoleModel userRole = new UserRoleModel();
-                    userRole.setId(new UserRoleID(user.getUser_id(), role.getRole_id()));
+                    userRole.setId(new UserRoleID(user.getUserId(), role.getRole_id()));
                     userRole.setUser(user);
                     userRole.setRole(role);
                     userRole.setAssign_date(LocalDateTime.now());

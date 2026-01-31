@@ -22,11 +22,11 @@ public class InvitationUpdateDTO {
 
     @NotNull(message = "El número máximo de invitados es requerido.")
     @Min(value = 1, message = "Debe haber al menos 1 invitado.")
-    public Integer max_people;
+    public Integer maxPeople;
 
     @Size(min = 3, max = 100, message = "El nombre debe tener entre 3 y 100 caracteres.")
     @NotBlank(message = "El nombre no pueden ser solo caracteres en blanco.")
-    public String slug_url;
+    public String slugUrl;
 
     // Getters & setters
 
@@ -42,16 +42,16 @@ public class InvitationUpdateDTO {
     public void setName(String name) {
         this.name = name;
     }
-    public Integer getMax_people() {
-        return max_people;
+    public Integer getMaxPeople() {
+        return maxPeople;
     }
-    public void setMax_people(Integer max_people) {
-        this.max_people = max_people;
+    public void setMaxPeople(Integer maxPeople) {
+        this.maxPeople = maxPeople;
     }
-    public String getSlug_url() {
-        return slug_url;
+    public String getSlugUrl() {
+        return slugUrl;
     }
-    public void setSlug_url(String slug_url) {
-        this.slug_url = slug_url;
+    public void setSlugUrl(String slugUrl) {
+        this.slugUrl = slugUrl;
     }    
 }

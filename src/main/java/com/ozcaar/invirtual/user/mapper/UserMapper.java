@@ -18,12 +18,12 @@ import com.ozcaar.invirtual.user.model.UserModel;
 public interface UserMapper {
 
     @Mapping(target = "active", ignore = true)
-    @Mapping(target = "user_id", ignore = true)
+    @Mapping(target = "userId", ignore = true)
     @Mapping(target = "last_login", ignore = true)
     @Mapping(target = "user_roles", ignore = true)
     UserModel toEntity(UserCreateDTO dto);
 
-    @Mapping(target = "user_id", ignore = true)
+    @Mapping(target = "userId", ignore = true)
     @Mapping(target = "last_login", ignore = true)
     @Mapping(target = "user_roles", ignore = true)
     UserModel toEntity(UserUpdateDTO dto);

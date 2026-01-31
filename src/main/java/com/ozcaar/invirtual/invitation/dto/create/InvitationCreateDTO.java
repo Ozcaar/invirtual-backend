@@ -16,10 +16,15 @@ public class InvitationCreateDTO {
     @NotBlank(message = "El nombre no pueden ser solo caracteres en blanco.")
     private String name;
 
+    @NotNull(message = "El nombre de la url es requerido.")
+    @Size(min = 3, max = 50, message = "El nombre de la url debe tener entre 3 y 50 caracteres.")
+    @NotBlank(message = "El nombre no pueden ser solo caracteres en blanco.")
+    private String slugUrl;
+
     // @NotNull(message = "El número máximo de invitados es requerido.")
     // @Min(value = 1, message = "Debe haber al menos 1 invitado.")
     // private Integer max_people;
-    
+
     private String confirmation_message;
 
     // Getters & setters
@@ -27,37 +32,51 @@ public class InvitationCreateDTO {
     public String getConfirmation_message() {
         return confirmation_message;
     }
+
     public void setConfirmation_message(String confirmation_message) {
         this.confirmation_message = confirmation_message;
     }
+
     public Integer getInvitation_type_id() {
         return invitation_type_id;
     }
+
     public void setInvitation_type_id(Integer invitation_type_id) {
         this.invitation_type_id = invitation_type_id;
     }
+
     // public Integer getMusic_id() {
-    //     return music_id;
+    // return music_id;
     // }
     // public void setMusic_id(Integer music_id) {
-    //     this.music_id = music_id;
+    // this.music_id = music_id;
     // }
     // public Integer getSign_book_id() {
-    //     return sign_book_id;
+    // return sign_book_id;
     // }
     // public void setSign_book_id(Integer sign_book_id) {
-    //     this.sign_book_id = sign_book_id;
+    // this.sign_book_id = sign_book_id;
     // }
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     // public Integer getMax_people() {
-    //     return max_people;
+    // return max_people;
     // }
     // public void setMax_people(Integer max_people) {
-    //     this.max_people = max_people;
+    // this.max_people = max_people;
     // }
+    
+    public String getSlugUrl() {
+        return slugUrl;
+    }
+
+    public void setSlugUrl(String slugUrl) {
+        this.slugUrl = slugUrl;
+    }
 }

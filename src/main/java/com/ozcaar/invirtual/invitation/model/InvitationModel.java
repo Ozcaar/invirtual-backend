@@ -3,6 +3,8 @@ package com.ozcaar.invirtual.invitation.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.ozcaar.invirtual.entitlement.model.EntitlementModel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -37,26 +40,37 @@ public class InvitationModel {
     private String name;
 
     @Column(nullable = false)
-    private Integer max_people;
+    private Integer maxPeople;
 
-    @Column(nullable = false)
-    private String slug_url;
+    @Column(name="slug_url", nullable = false)
+    private String slugUrl;
 
-    private String confirmation_message;
+    private String confirmationMessage;
 
-    @Column(nullable = false)
-    private LocalDateTime creation_date;
+    @Column(name="creation_date", nullable = false)
+    private LocalDateTime creationDate;
 
-    @Column(nullable = false)
-    private LocalDateTime limit_date;
+    @Column(name="limit_date", nullable = false)
+    private LocalDateTime limitDate;
 
-    @Column(nullable = false)
-    private Boolean is_demo;
+    @Column(name="is_demo", nullable = false)
+    private Boolean isDemo;
 
-    @Column(nullable = false)
+    @Column(name="active", nullable = false)
     private Boolean active;
 
+    @OneToOne(mappedBy = "invitation", fetch = FetchType.LAZY)
+    private EntitlementModel entitlement;
+
     // Getters & setters
+
+    public EntitlementModel getEntitlement() {
+        return entitlement;
+    }
+
+    public void setEntitlement(EntitlementModel entitlement) {
+        this.entitlement = entitlement;
+    }
 
     public InvitationTypeModel getInvitation_type_id() {
         return invitation_type_id;
@@ -82,52 +96,52 @@ public class InvitationModel {
         this.name = name;
     }
 
-    public Integer getMax_people() {
-        return max_people;
+    public Integer getMaxPeople() {
+        return maxPeople;
     }
 
-    public void setMax_people(Integer max_people) {
-        this.max_people = max_people;
+    public void setMaxPeople(Integer maxPeople) {
+        this.maxPeople = maxPeople;
     }
 
-    public String getSlug_url() {
-        return slug_url;
+    public String getSlugUrl() {
+        return slugUrl;
     }
 
-    public void setSlug_url(String slug_url) {
-        this.slug_url = slug_url;
+    public void setSlugUrl(String slugUrl) {
+        this.slugUrl = slugUrl;
     }
 
-    public String getConfirmation_message() {
-        return confirmation_message;
+    public String getConfirmationMessage() {
+        return confirmationMessage;
     }
 
-    public void setConfirmation_message(String confirmation_message) {
-        this.confirmation_message = confirmation_message;
+    public void setConfirmationMessage(String confirmationMessage) {
+        this.confirmationMessage = confirmationMessage;
     }
 
-    public LocalDateTime getCreation_date() {
-        return creation_date;
+    public LocalDateTime getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreation_date(LocalDateTime creation_date) {
-        this.creation_date = creation_date;
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public LocalDateTime getLimit_date() {
-        return limit_date;
+    public LocalDateTime getLimitDate() {
+        return limitDate;
     }
 
-    public void setLimit_date(LocalDateTime limit_date) {
-        this.limit_date = limit_date;
+    public void setLimitDate(LocalDateTime limitDate) {
+        this.limitDate = limitDate;
     }
 
-    public Boolean getIs_demo() {
-        return is_demo;
+    public Boolean getIsDemo() {
+        return isDemo;
     }
 
-    public void setIs_demo(Boolean is_demo) {
-        this.is_demo = is_demo;
+    public void setIsDemo(Boolean isDemo) {
+        this.isDemo = isDemo;
     }
 
     public Boolean getActive() {

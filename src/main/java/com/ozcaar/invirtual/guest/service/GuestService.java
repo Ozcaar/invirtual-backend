@@ -55,7 +55,7 @@ public class GuestService {
             .orElseThrow(() -> new NotFoundException("Grupo no encontrado: " + dto.getGuest_group_id()));
             
         // Validate the user's access to the invitation
-        if (!userInvitationRepository.findByUserIdAndInvitationName(user.getUser_id(), invitation.getName()).isPresent()) {
+        if (!userInvitationRepository.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), invitation.getName()).isPresent()) {
             throw new AccessDeniedException("No puedes modificar esta invitación");
         }
         
@@ -90,7 +90,7 @@ public class GuestService {
             .orElseThrow(() -> new NotFoundException("Invitación no encontrada: " + invitationUUID));
 
         // Validate the user's access to the invitation
-        if (!userInvitationRepository.findByUserIdAndInvitationName(user.getUser_id(), invitation.getName()).isPresent()) {
+        if (!userInvitationRepository.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), invitation.getName()).isPresent()) {
             throw new AccessDeniedException("No puedes modificar esta invitación");
         }
 
@@ -132,7 +132,7 @@ public class GuestService {
         InvitationModel invitation = invitationRepository.findByUUID(invitationUUID)
             .orElseThrow(() -> new NotFoundException("Invitación no encontrada"));
   
-        if (!userInvitationRepository.findByUserIdAndInvitationName(user.getUser_id(), invitation.getName()).isPresent()) {
+        if (!userInvitationRepository.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), invitation.getName()).isPresent()) {
             throw new AccessDeniedException("No puedes modificar esta invitación");
         }
 

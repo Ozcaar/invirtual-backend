@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,7 +51,7 @@ public class AuthService {
 
         // First save the user to generate the ID
         UserModel savedUser = userRepository.save(user);
-        if (savedUser.getUser_id() == null) {
+        if (savedUser.getUserId() == null) {
             throw new RuntimeException("El usuario no se guardó correctamente. ID no generado.");
         }
 

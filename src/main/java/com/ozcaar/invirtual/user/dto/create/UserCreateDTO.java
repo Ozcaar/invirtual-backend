@@ -8,8 +8,8 @@ import jakarta.validation.constraints.Size;
 
 public class UserCreateDTO {
 
-    @Size(min = 3, max = 100, message = "El nombre debe tener entre 3 y 100 caracteres.")
-    @NotNull(message = "El nombre es requerido.")
+    // @Size(min = 3, max = 100, message = "El nombre debe tener entre 3 y 100 caracteres.")
+    // @NotNull(message = "El nombre es requerido.")
     private String first_name;
 
     @Size(min = 3, max = 100, message = "El apellido debe tener entre 3 y 100 caracteres.")

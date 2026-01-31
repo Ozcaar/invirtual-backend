@@ -53,6 +53,26 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ApiError> handleConflict(ConflictException ex) {
+        ApiError error = new ApiError(
+            HttpStatus.CONFLICT.value(),
+            "CONFLICT",
+            ex.getMessage()
+        );
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ApiError> handleForbidden(ForbiddenException ex) {
+        ApiError error = new ApiError(
+            HttpStatus.FORBIDDEN.value(),
+            "FORBIDDEN",
+            ex.getMessage()
+        );
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
     // Custom class
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<ApiError> handleExists(AlreadyExistsException ex) {

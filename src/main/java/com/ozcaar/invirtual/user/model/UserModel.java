@@ -23,7 +23,7 @@ public class UserModel {
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer user_id;
+    private Integer userId;
 
     @Column(name = "supabase_id", unique = true, nullable = false, length = 60)
     private String supabaseId;
@@ -99,12 +99,12 @@ public class UserModel {
         this.active = active;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -120,6 +120,6 @@ public class UserModel {
     }
 
     public void setSupabaseId(String supabaseId) {
-        this.supabaseId = supabaseId;
+            this.supabaseId = supabaseId;
     }
 }
