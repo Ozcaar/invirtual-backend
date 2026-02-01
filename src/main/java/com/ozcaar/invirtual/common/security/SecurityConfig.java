@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.jwt.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ozcaar.invirtual.auth.service.CustomUserDetailsService;
+import com.ozcaar.invirtual.common.exception.global.JwtAuthEntryPoint;
 import com.ozcaar.invirtual.common.security.CustomSecurityHandlers.CustomAccessDeniedHandler;
 import com.ozcaar.invirtual.common.security.CustomSecurityHandlers.CustomAuthenticationEntryPoint;
 
@@ -77,6 +78,7 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint(mapper))
                         .accessDeniedHandler(new CustomAccessDeniedHandler(mapper)))
                 .oauth2ResourceServer(oauth -> oauth
+                        .authenticationEntryPoint(new JwtAuthEntryPoint())
                         .jwt(jwt -> jwt
                                 .decoder(jwtDecoder())
                                 .jwtAuthenticationConverter(converter)));

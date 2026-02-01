@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "guest_group")
 public class GuestGroupModel {
-    
+
     @Id
     @Column(unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,20 +32,16 @@ public class GuestGroupModel {
 
     // @Column(nullable = false)
     // private String confirmation_message;
-    
+
     // @Column(nullable = false)
     // private Boolean enabled_conf_mess;
-    
+
     @ManyToMany
-    @JoinTable(
-        name = "invitation_type_guest_group",
-        joinColumns = @JoinColumn(name = "guest_group_id"),
-        inverseJoinColumns = @JoinColumn(name = "invitation_type_id")
-        )
-        private Set<InvitationTypeModel> invitationTypes = new HashSet<>();
-        
+    @JoinTable(name = "invitation_type_guest_group", joinColumns = @JoinColumn(name = "guest_group_id"), inverseJoinColumns = @JoinColumn(name = "invitation_type_id"))
+    private Set<InvitationTypeModel> invitationTypes = new HashSet<>();
+
     // Getters & setters
-    
+
     public String getDescription() {
         return description;
     }
@@ -57,7 +53,7 @@ public class GuestGroupModel {
     public Set<InvitationTypeModel> getInvitationTypes() {
         return invitationTypes;
     }
-        
+
     public void setInvitationTypes(Set<InvitationTypeModel> invitationTypes) {
         this.invitationTypes = invitationTypes;
     }
@@ -79,19 +75,19 @@ public class GuestGroupModel {
     }
 
     // public String getConfirmation_message() {
-    //     return confirmation_message;
+    // return confirmation_message;
     // }
 
     // public void setConfirmation_message(String confirmation_message) {
-    //     this.confirmation_message = confirmation_message;
+    // this.confirmation_message = confirmation_message;
     // }
 
     // public Boolean getEnabled_conf_mess() {
-    //     return enabled_conf_mess;
+    // return enabled_conf_mess;
     // }
 
     // public void setEnabled_conf_mess(Boolean enabled_conf_mess) {
-    //     this.enabled_conf_mess = enabled_conf_mess;
+    // this.enabled_conf_mess = enabled_conf_mess;
     // }
 
 }

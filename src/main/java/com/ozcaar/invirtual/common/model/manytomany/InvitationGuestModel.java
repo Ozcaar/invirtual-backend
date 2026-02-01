@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "invitation_guest")
 public class InvitationGuestModel {
-    
+
     @EmbeddedId
     private InvitationGuestID id = new InvitationGuestID();
 

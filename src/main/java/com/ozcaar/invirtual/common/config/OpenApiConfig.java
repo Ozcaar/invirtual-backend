@@ -19,17 +19,16 @@ public class OpenApiConfig {
         final String securitySchemeName = "bearerAuth";
 
         return new OpenAPI()
-            .info(new Info()
-                .title("InviRtual API")
-                .version("1.0.0")
-                .description("Documentación de la API sistema de invitaciones digitales"))
-            .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
-            .components(new Components().addSecuritySchemes(securitySchemeName,
-                new SecurityScheme()
-                    .name(securitySchemeName)
-                    .type(SecurityScheme.Type.HTTP)
-                    .scheme("bearer")
-                    .bearerFormat("JWT")
-            ));
+                .info(new Info()
+                        .title("InviRtual API")
+                        .version("1.0.0")
+                        .description("Documentación de la API sistema de invitaciones digitales"))
+                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+                .components(new Components().addSecuritySchemes(securitySchemeName,
+                        new SecurityScheme()
+                                .name(securitySchemeName)
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")));
     }
 }

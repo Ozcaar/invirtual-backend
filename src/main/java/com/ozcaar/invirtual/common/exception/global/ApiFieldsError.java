@@ -12,20 +12,20 @@ public class ApiFieldsError {
     // private LocalDateTime timestamp;
 
     // public ApiErrorV1(int status, String message) {
-    //     this.status = status;
-    //     this.message = message + ".";
-    //     this.timestamp = LocalDateTime.now();
+    // this.status = status;
+    // this.message = message + ".";
+    // this.timestamp = LocalDateTime.now();
     // }
 
     // // Getters & setters
-    
 
     // Version 2
 
     private ErrorDetail error;
-    
-    // public ApiError(String code, String message, List<FieldErrorDetail> details, String documentationUrl) {
-    //     this.error = new ErrorDetail(code, message, details, documentationUrl);
+
+    // public ApiError(String code, String message, List<FieldErrorDetail> details,
+    // String documentationUrl) {
+    // this.error = new ErrorDetail(code, message, details, documentationUrl);
     // }
 
     public ApiFieldsError(Integer code, String errortype, List<FieldErrorDetail> details) {
@@ -45,10 +45,11 @@ public class ApiFieldsError {
         private LocalDateTime timestamp;
 
         // public void setDocumentation(String documentation) {
-        //     this.documentation = documentation;
+        // this.documentation = documentation;
         // }
 
-        // public ErrorDetail(String code, String message, List<FieldErrorDetail> details, String documentation) {
+        // public ErrorDetail(String code, String message, List<FieldErrorDetail>
+        // details, String documentation) {
         public ErrorDetail(Integer code, String errortype, List<FieldErrorDetail> details) {
             this.code = code;
             this.errortype = errortype;
@@ -60,7 +61,7 @@ public class ApiFieldsError {
         }
 
         // Getters & setters
-        
+
         public Integer getCode() {
             return code;
         }
@@ -78,11 +79,11 @@ public class ApiFieldsError {
         }
 
         // public String getMessage() {
-        //     return message;
+        // return message;
         // }
 
         // public void setMessage(String message) {
-        //     this.message = message;
+        // this.message = message;
         // }
 
         public List<FieldErrorDetail> getDetails() {
@@ -94,7 +95,7 @@ public class ApiFieldsError {
         }
 
         // public String getDocumentation() {
-        //     return documentation;
+        // return documentation;
         // }
 
         public LocalDateTime getTimestamp() {
@@ -155,4 +156,3 @@ public class ApiFieldsError {
         }
     }
 }
-

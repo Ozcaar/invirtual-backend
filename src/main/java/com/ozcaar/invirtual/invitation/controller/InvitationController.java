@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Invitation Controller", description = "operaciones con invitaciones")
 @RequiredArgsConstructor
 public class InvitationController implements InvitationApiDoc {
-    
+
     private final InvitationService invitationService;
     private final GuestService guestService;
 
@@ -66,7 +66,8 @@ public class InvitationController implements InvitationApiDoc {
     @PreAuthorize("hasRole('DEV')")
     @PutMapping("/{invitationUUID}")
     @Operation(summary = "Actualizar invitación", description = "- Se requiere rol \"DEV\"")
-    public ResponseEntity<InvitationReadDTO> updateInvitation(@PathVariable UUID invitationUUID, @Valid  @RequestBody InvitationUpdateDTO dto) {
+    public ResponseEntity<InvitationReadDTO> updateInvitation(@PathVariable UUID invitationUUID,
+            @Valid @RequestBody InvitationUpdateDTO dto) {
         InvitationReadDTO updatedInvitation = invitationService.updateInvitation(invitationUUID, dto);
         return new ResponseEntity<>(updatedInvitation, HttpStatus.OK);
     }
@@ -85,14 +86,16 @@ public class InvitationController implements InvitationApiDoc {
     // POST
     @PostMapping("/{invitationUUID}/guest")
     @Operation(summary = "Agregar un invitado a la invitación", description = "")
-    public ResponseEntity<GuestReadDTO> createGuest(@PathVariable UUID invitationUUID, @Valid @RequestBody GuestCreateDTO guest) {
+    public ResponseEntity<GuestReadDTO> createGuest(@PathVariable UUID invitationUUID,
+            @Valid @RequestBody GuestCreateDTO guest) {
         GuestReadDTO created = guestService.createGuest(invitationUUID, guest);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @PostMapping("/{invitationUUID}/guest/batch-create")
     @Operation(summary = "Agregar una lista de invitados a la invitación", description = "")
-    public ResponseEntity<List<GuestReadDTO>> createBatchGuests(@PathVariable UUID invitationUUID, @Valid @RequestBody List<@Valid GuestCreateDTO> guestBatch) {
+    public ResponseEntity<List<GuestReadDTO>> createBatchGuests(@PathVariable UUID invitationUUID,
+            @Valid @RequestBody List<@Valid GuestCreateDTO> guestBatch) {
         List<GuestReadDTO> created = guestService.createBatchGuests(invitationUUID, guestBatch);
         // new List<GuestReadDTO>();
         return new ResponseEntity<List<GuestReadDTO>>(created, HttpStatus.CREATED);
@@ -105,6 +108,5 @@ public class InvitationController implements InvitationApiDoc {
         List<GuestReadDTO> guestList = guestService.getAllGuests(invitationUUID);
         return new ResponseEntity<>(guestList, HttpStatus.OK);
     }
-
 
 }

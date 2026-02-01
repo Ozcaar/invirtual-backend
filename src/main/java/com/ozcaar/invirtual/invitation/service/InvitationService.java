@@ -4,22 +4,15 @@ import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpClientErrorException.Forbidden;
-
 import com.ozcaar.invirtual.auth.service.AuthService;
 import com.ozcaar.invirtual.common.exception.global.AlreadyExistsException;
-import com.ozcaar.invirtual.common.exception.global.ForbiddenException;
 import com.ozcaar.invirtual.common.exception.global.NotFoundException;
 import com.ozcaar.invirtual.common.model.manytomany.UserInvitationModel;
 import com.ozcaar.invirtual.common.repository.UserInvitationRepository;
-import com.ozcaar.invirtual.entitlement.model.EntitlementModel;
 import com.ozcaar.invirtual.entitlement.repository.EntitlementRepository;
 import com.ozcaar.invirtual.entitlement.service.EntitlementService;
 import com.ozcaar.invirtual.invitation.dto.create.InvitationCreateDTO;
@@ -27,7 +20,6 @@ import com.ozcaar.invirtual.invitation.dto.read.InvitationReadDTO;
 import com.ozcaar.invirtual.invitation.dto.update.InvitationUpdateDTO;
 import com.ozcaar.invirtual.invitation.mapper.InvitationMapper;
 import com.ozcaar.invirtual.invitation.model.InvitationModel;
-import com.ozcaar.invirtual.invitation.model.InvitationTypeModel;
 import com.ozcaar.invirtual.invitation.policy.CreationContext;
 import com.ozcaar.invirtual.invitation.repository.InvitationRepository;
 import com.ozcaar.invirtual.invitation.repository.InvitationTypeRepository;
@@ -83,7 +75,8 @@ public class InvitationService {
                 .orElseThrow(() -> new NotFoundException("Ha ocurrido un error con el usuario"));
 
         // 1) Basic validations
-        if (userInvitationRepository.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), dto.getName()).isPresent()) {
+        if (userInvitationRepository.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), dto.getName())
+                .isPresent()) {
             throw new AlreadyExistsException("El usuario ya tiene una invitación con ese nombre");
         }
 

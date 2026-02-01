@@ -6,5 +6,5 @@ import com.ozcaar.invirtual.common.model.id.UserRoleID;
 import com.ozcaar.invirtual.common.model.manytomany.UserRoleModel;
 
 public interface UserRoleRepository extends JpaRepository<UserRoleModel, UserRoleID> {
-    
+
 }

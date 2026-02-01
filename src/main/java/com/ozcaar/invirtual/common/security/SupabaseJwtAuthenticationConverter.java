@@ -33,7 +33,8 @@ public class SupabaseJwtAuthenticationConverter implements Converter<Jwt, Abstra
       Map<String, Object> userMeta = jwt.getClaim("user_metadata");
       if (userMeta != null) {
         Object e = userMeta.get("email");
-        if (e instanceof String s) email = s;
+        if (e instanceof String s)
+          email = s;
       }
     }
 
@@ -52,14 +53,15 @@ public class SupabaseJwtAuthenticationConverter implements Converter<Jwt, Abstra
   }
 
   private Collection<GrantedAuthority> toAuthorities(Set<String> roles) {
-    if (roles == null || roles.isEmpty()) return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    if (roles == null || roles.isEmpty())
+      return List.of(new SimpleGrantedAuthority("ROLE_USER"));
 
     return roles.stream()
-      .filter(Objects::nonNull)
-      .map(String::trim)
-      .filter(s -> !s.isBlank())
-      .map(s -> s.startsWith("ROLE_") ? s : "ROLE_" + s)
-      .map(SimpleGrantedAuthority::new)
-      .collect(Collectors.toUnmodifiableList());
+        .filter(Objects::nonNull)
+        .map(String::trim)
+        .filter(s -> !s.isBlank())
+        .map(s -> s.startsWith("ROLE_") ? s : "ROLE_" + s)
+        .map(SimpleGrantedAuthority::new)
+        .collect(Collectors.toUnmodifiableList());
   }
 }

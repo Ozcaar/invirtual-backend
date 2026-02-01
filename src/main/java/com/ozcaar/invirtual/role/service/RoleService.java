@@ -31,7 +31,7 @@ public class RoleService {
         }
 
         RoleModel rol = roleMapper.toEntity(dto);
-        
+
         RoleModel saved = roleRepository.save(rol);
         return roleMapper.toDTO(saved);
     }
@@ -39,7 +39,7 @@ public class RoleService {
     // READ
     public RoleReadDTO getRole(Integer id) {
         RoleModel role = roleRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("No se encontró el rol con el ID: " + id));
+                .orElseThrow(() -> new NotFoundException("No se encontró el rol con el ID: " + id));
 
         return roleMapper.toDTO(role);
     }
@@ -52,9 +52,10 @@ public class RoleService {
     // UPDATE
     public RoleReadDTO updateRole(Integer id, RoleUpdateDTO dto) {
         RoleModel role = roleRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("No se encontró el rol con el ID" + id));
+                .orElseThrow(() -> new NotFoundException("No se encontró el rol con el ID" + id));
 
-        if (dto.getName() != null) role.setName(dto.getName());
+        if (dto.getName() != null)
+            role.setName(dto.getName());
 
         RoleModel updated = roleRepository.save(role);
         return roleMapper.toDTO(updated);

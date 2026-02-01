@@ -16,7 +16,7 @@ public interface RoleMapper {
 
     @Mapping(target = "role_id", ignore = true)
     RoleModel toEntity(RoleCreateDTO dto);
-    
+
     RoleReadDTO toDTO(RoleModel user);
 
     List<RoleReadDTO> toDTOList(List<RoleModel> users);

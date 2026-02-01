@@ -63,15 +63,15 @@ public class AuthController implements AuthApiDoc {
                 // "aud", jwt.getAudience(),
                 // "iss", jwt.getIssuer() != null ? jwt.getIssuer().toString() : null,
 
-                // metadatos típicos en Supabase
+                // supabase metadata
                 "user_metadata", userMetadata,
                 // "app_metadata", appMetadata,
 
-                // authorities reales (no claim)
+                // real authorities (no claim)
                 "authorities", authentication != null ? authentication.getAuthorities() : null
 
-                // para inspección general (en dev)
-                // "claims", jwt.getClaims()
+        // general inspection
+        // "claims", jwt.getClaims()
         );
     }
 

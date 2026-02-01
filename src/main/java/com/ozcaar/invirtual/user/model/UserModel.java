@@ -84,11 +84,11 @@ public class UserModel {
     }
 
     // public String getPassword_hash() {
-    //     return password_hash;
+    // return password_hash;
     // }
 
     // public void setPassword_hash(String password_hash) {
-    //     this.password_hash = password_hash;
+    // this.password_hash = password_hash;
     // }
 
     public Boolean getActive() {
@@ -114,12 +114,12 @@ public class UserModel {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     public String getSupabaseId() {
         return supabaseId;
     }
 
     public void setSupabaseId(String supabaseId) {
-            this.supabaseId = supabaseId;
+        this.supabaseId = supabaseId;
     }
 }

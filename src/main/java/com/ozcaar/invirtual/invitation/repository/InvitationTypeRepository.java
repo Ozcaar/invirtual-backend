@@ -10,5 +10,5 @@ import com.ozcaar.invirtual.invitation.model.InvitationTypeModel;
 @Repository
 public interface InvitationTypeRepository extends CrudRepository<InvitationTypeModel, Integer> {
     Optional<InvitationTypeModel> findByName(String name);
-    
+
 }

@@ -71,7 +71,7 @@ public class UserController implements UserApiDoc {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    //DELETE
+    // DELETE
     @Deprecated
     @PreAuthorize("hasRole('DEV')")
     @DeleteMapping("/{id}")

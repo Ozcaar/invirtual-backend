@@ -13,9 +13,10 @@ import com.ozcaar.invirtual.common.model.manytomany.InvitationGuestModel;
 import com.ozcaar.invirtual.guest.model.GuestModel;
 
 public interface InvitationGuestRepository extends CrudRepository<InvitationGuestModel, InvitationGuestID> {
-    
+
     @Query("SELECT i FROM InvitationGuestModel i WHERE i.invitation.invitationUuid = :invitation_uuid AND i.guest.name = :guestName")
-    Optional<InvitationGuestModel> findByInvitationUUIDAndGuestName(@Param("invitation_uuid") UUID invitation_uuid, @Param("guestName") String guestName);
+    Optional<InvitationGuestModel> findByInvitationUUIDAndGuestName(@Param("invitation_uuid") UUID invitation_uuid,
+            @Param("guestName") String guestName);
 
     @Query("SELECT i.guest FROM InvitationGuestModel i WHERE i.invitation.invitationUuid = :invitation_uuid ORDER BY i.guest.name ASC")
     List<GuestModel> findGuestsByInvitationUuid(@Param("invitation_uuid") UUID invitation_uuid);

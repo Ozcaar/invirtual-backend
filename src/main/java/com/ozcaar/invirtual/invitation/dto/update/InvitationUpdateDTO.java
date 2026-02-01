@@ -31,27 +31,32 @@ public class InvitationUpdateDTO {
     // Getters & setters
 
     // public String getInvitation_type_id() {
-    //     return invitation_type_id;
+    // return invitation_type_id;
     // }
     // public void setInvitation_type_id(String invitation_type_id) {
-    //     this.invitation_type_id = invitation_type_id;
+    // this.invitation_type_id = invitation_type_id;
     // }
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public Integer getMaxPeople() {
         return maxPeople;
     }
+
     public void setMaxPeople(Integer maxPeople) {
         this.maxPeople = maxPeople;
     }
+
     public String getSlugUrl() {
         return slugUrl;
     }
+
     public void setSlugUrl(String slugUrl) {
         this.slugUrl = slugUrl;
-    }    
+    }
 }

@@ -75,6 +75,13 @@
 			<version>1.6.3</version>
 		</dependency>
 
+		<!-- Payments -->
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>31.3.0</version>
+		</dependency>
+
 		<!-- Security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

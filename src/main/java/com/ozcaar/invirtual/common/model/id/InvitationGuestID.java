@@ -6,7 +6,7 @@ import java.util.UUID;
 import jakarta.persistence.Column;
 
 public class InvitationGuestID implements Serializable {
- 
+
     @Column(name = "invitation_uuid")
     private UUID invitationUuid;
 
@@ -15,9 +15,10 @@ public class InvitationGuestID implements Serializable {
 
     @Column(name = "guest_group_id")
     private Integer guest_group_id;
-    
+
     // Constructor
-    public InvitationGuestID() {}
+    public InvitationGuestID() {
+    }
 
     // Constructor fields
     public InvitationGuestID(UUID invitationUuid, Integer guest_id, Integer guest_group_id) {

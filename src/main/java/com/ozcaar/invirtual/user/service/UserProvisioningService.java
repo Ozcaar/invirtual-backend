@@ -27,7 +27,7 @@ public class UserProvisioningService {
         final String name;
 
         if (userMetadata instanceof Map<?, ?> map) {
-            
+
             Object e = map.get("email");
             email = (e != null) ? e.toString() : null;
 

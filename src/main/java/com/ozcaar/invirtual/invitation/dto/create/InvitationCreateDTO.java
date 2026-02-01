@@ -71,7 +71,7 @@ public class InvitationCreateDTO {
     // public void setMax_people(Integer max_people) {
     // this.max_people = max_people;
     // }
-    
+
     public String getSlugUrl() {
         return slugUrl;
     }

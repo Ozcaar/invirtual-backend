@@ -41,9 +41,10 @@ public class UserService {
     public void assignDefaultRole(UserModel user) {
 
         RoleModel defaultRole = roleRepository.findByName("ROLE_USER")
-        .orElseThrow(() -> new NotFoundException("No se encuentra el rol predeterminado 'USER'"));
+                .orElseThrow(() -> new NotFoundException("No se encuentra el rol predeterminado 'USER'"));
 
-        boolean alreadyAssigned = userRoleRepository.existsById(new UserRoleID(user.getUserId(), defaultRole.getRole_id()));
+        boolean alreadyAssigned = userRoleRepository
+                .existsById(new UserRoleID(user.getUserId(), defaultRole.getRole_id()));
 
         if (!alreadyAssigned) {
             UserRoleModel userRole = new UserRoleModel();
@@ -87,10 +88,10 @@ public class UserService {
     // READ
     public UserReadDTO getUser(Integer id) {
         UserModel user = userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("No se encontró el usuario con el ID: " + id));
+                .orElseThrow(() -> new NotFoundException("No se encontró el usuario con el ID: " + id));
 
         boolean isAdminOrDev = jwtUtil.authenticatedUserUserIsAdminOrDev();
-        
+
         if (!isAdminOrDev) {
             String userEmail = jwtUtil.getEmailOfAuthenticatedUser();
             if (userEmail == null || !userEmail.trim().equalsIgnoreCase(user.getEmail().trim())) {
@@ -110,7 +111,7 @@ public class UserService {
     @Transactional
     public UserReadDTO updateUser(Integer id, UserUpdateDTO dto) {
         UserModel user = userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException("No se encontró el usuario con el ID: " + id));
+                .orElseThrow(() -> new NotFoundException("No se encontró el usuario con el ID: " + id));
 
         if (dto.getRole_ids() != null && !dto.getRole_ids().isEmpty()) {
 
@@ -129,10 +130,10 @@ public class UserService {
             // Add new roles
             for (Integer roleId : dto.getRole_ids()) {
                 RoleModel role = roleRepository.findById(roleId)
-                    .orElseThrow(() -> new NotFoundException("No se encontró el rol con el ID: " + roleId));
+                        .orElseThrow(() -> new NotFoundException("No se encontró el rol con el ID: " + roleId));
 
                 boolean alreadyAssigned = user.getUser_roles().stream()
-                    .anyMatch(ur -> ur.getRole().getRole_id().equals(role.getRole_id()));
+                        .anyMatch(ur -> ur.getRole().getRole_id().equals(role.getRole_id()));
 
                 if (!alreadyAssigned) {
                     UserRoleModel userRole = new UserRoleModel();
@@ -146,15 +147,19 @@ public class UserService {
                     // userRoleRepository.save(userRole);
                 }
             }
-        } 
+        }
         // else {
-        //     assignDefaultRole(user);
+        // assignDefaultRole(user);
         // }
 
-        if (dto.getFirst_name() != null) user.setName(dto.getFirst_name());
-        if (dto.getLast_name() != null) user.setFull_name(dto.getLast_name());
-        if (dto.getEmail() != null) user.setEmail(dto.getEmail());
-        if (dto.getActive() != null) user.setActive(dto.getActive());
+        if (dto.getFirst_name() != null)
+            user.setName(dto.getFirst_name());
+        if (dto.getLast_name() != null)
+            user.setFull_name(dto.getLast_name());
+        if (dto.getEmail() != null)
+            user.setEmail(dto.getEmail());
+        if (dto.getActive() != null)
+            user.setActive(dto.getActive());
 
         UserModel updatedUser = userRepository.save(user);
         return userMapper.toDTO(updatedUser);
@@ -169,7 +174,8 @@ public class UserService {
 
         // Soft delete
         // UserModel user = userRepository.findById(id)
-        // .orElseThrow(() -> new NotFoundException("No se encontró el usuario con el ID: " + id));
+        // .orElseThrow(() -> new NotFoundException("No se encontró el usuario con el
+        // ID: " + id));
 
         // user.setActive(false);
         // userRepository.save(user);

@@ -42,21 +42,21 @@ public class InvitationModel {
     @Column(nullable = false)
     private Integer maxPeople;
 
-    @Column(name="slug_url", nullable = false)
+    @Column(name = "slug_url", nullable = false)
     private String slugUrl;
 
     private String confirmationMessage;
 
-    @Column(name="creation_date", nullable = false)
+    @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
-    @Column(name="limit_date", nullable = false)
+    @Column(name = "limit_date", nullable = false)
     private LocalDateTime limitDate;
 
-    @Column(name="is_demo", nullable = false)
+    @Column(name = "is_demo", nullable = false)
     private Boolean isDemo;
 
-    @Column(name="active", nullable = false)
+    @Column(name = "active", nullable = false)
     private Boolean active;
 
     @OneToOne(mappedBy = "invitation", fetch = FetchType.LAZY)

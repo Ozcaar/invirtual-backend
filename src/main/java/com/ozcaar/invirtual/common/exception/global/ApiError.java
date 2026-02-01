@@ -21,7 +21,7 @@ public class ApiError {
         private String message;
         private LocalDateTime timestamp;
 
-        public ErrorDetailv2(Integer code, String errortype , String message) {
+        public ErrorDetailv2(Integer code, String errortype, String message) {
             this.code = code;
             this.errortype = errortype;
             this.message = message;
@@ -29,7 +29,7 @@ public class ApiError {
         }
 
         // Getters & setters
-        
+
         public Integer getCode() {
             return code;
         }

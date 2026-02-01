@@ -27,7 +27,7 @@ public interface UserMapper {
     @Mapping(target = "last_login", ignore = true)
     @Mapping(target = "user_roles", ignore = true)
     UserModel toEntity(UserUpdateDTO dto);
-    
+
     @Mapping(target = "roles", expression = "java(mapRoles(user.getUser_roles()))")
     UserReadDTO toDTO(UserModel user);
 
@@ -35,21 +35,22 @@ public interface UserMapper {
 
     // default List<String> mapRoles(Set<UserRoleModel> userRoles) {
     // if (userRoles == null) return List.of();
-    //     return userRoles.stream()
-    //         .map(ur -> ur.getRole().getName())
-    //         .toList();
+    // return userRoles.stream()
+    // .map(ur -> ur.getRole().getName())
+    // .toList();
     // }
 
     default List<RoleReadDTO> mapRoles(List<UserRoleModel> userRoles) {
-        if (userRoles == null) return Collections.emptyList();
+        if (userRoles == null)
+            return Collections.emptyList();
         return userRoles.stream()
-            .filter(UserRoleModel::getActive)
-            .map(ur -> {
-                RoleReadDTO dto = new RoleReadDTO();
-                dto.setRole_id(ur.getRole().getRole_id());
-                dto.setName(ur.getRole().getName());
-                return dto;
-            })
-            .collect(Collectors.toList());
+                .filter(UserRoleModel::getActive)
+                .map(ur -> {
+                    RoleReadDTO dto = new RoleReadDTO();
+                    dto.setRole_id(ur.getRole().getRole_id());
+                    dto.setName(ur.getRole().getName());
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }

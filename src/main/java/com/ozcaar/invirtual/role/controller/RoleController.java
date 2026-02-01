@@ -65,7 +65,7 @@ public class RoleController implements RoleApiDoc {
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
-    //DELETE
+    // DELETE
     @PreAuthorize("hasRole('DEV')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar rol", description = "- Se requiere rol \"DEV\"")

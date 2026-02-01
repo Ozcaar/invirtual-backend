@@ -10,7 +10,8 @@ public class UserInvitationID implements Serializable {
     private UUID invitationUuid;
 
     // Constructor
-    public UserInvitationID() {}
+    public UserInvitationID() {
+    }
 
     // Constructor fields
     public UserInvitationID(Integer user_id, UUID invitationUuid) {
@@ -38,11 +39,13 @@ public class UserInvitationID implements Serializable {
     // Equals
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserInvitationID)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof UserInvitationID))
+            return false;
 
         UserInvitationID that = (UserInvitationID) o;
-        return  Objects.equals(getUser_id(), that.getUser_id()) &&
+        return Objects.equals(getUser_id(), that.getUser_id()) &&
                 Objects.equals(getInvitationUuid(), that.getInvitationUuid());
     }
 

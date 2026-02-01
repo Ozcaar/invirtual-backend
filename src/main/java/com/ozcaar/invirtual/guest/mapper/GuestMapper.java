@@ -21,7 +21,8 @@ public interface GuestMapper {
 
     // GuestModel toEntity(GuestUpdateDTO)
 
-    // @Mapping(target = "roles", expression = "java(mapRoles(user.getUser_roles()))")
+    // @Mapping(target = "roles", expression =
+    // "java(mapRoles(user.getUser_roles()))")
     GuestReadDTO toDTO(GuestModel guest);
 
     List<GuestReadDTO> toDTOList(List<GuestModel> guests);

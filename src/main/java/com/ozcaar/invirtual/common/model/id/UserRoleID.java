@@ -6,7 +6,7 @@ import java.util.Objects;
 import jakarta.persistence.Column;
 
 public class UserRoleID implements Serializable {
-    
+
     @Column(name = "user_id")
     private Integer user_id;
 
@@ -14,7 +14,8 @@ public class UserRoleID implements Serializable {
     private Integer role_id;
 
     // Constructor
-    public UserRoleID() {}
+    public UserRoleID() {
+    }
 
     // Constructor fields
     public UserRoleID(Integer user_id, Integer role_id) {
@@ -42,11 +43,13 @@ public class UserRoleID implements Serializable {
     // Equals
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserRoleID)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof UserRoleID))
+            return false;
 
         UserRoleID that = (UserRoleID) o;
-        return  Objects.equals(getUser_id(), that.getUser_id()) &&
+        return Objects.equals(getUser_id(), that.getUser_id()) &&
                 Objects.equals(getRole_id(), that.getRole_id());
     }
 

@@ -46,21 +46,23 @@ public class GuestService {
     public GuestReadDTO createGuest(UUID invitationUUID, GuestCreateDTO dto) {
 
         UserModel user = authService.getUserFromToken()
-            .orElseThrow(() -> new NotFoundException("Ha ocurrido un error con el usuario"));
+                .orElseThrow(() -> new NotFoundException("Ha ocurrido un error con el usuario"));
 
         InvitationModel invitation = invitationRepository.findByUUID(invitationUUID)
-            .orElseThrow(() -> new NotFoundException("Invitación no encontrada: " + invitationUUID));
+                .orElseThrow(() -> new NotFoundException("Invitación no encontrada: " + invitationUUID));
 
         GuestGroupModel guestGroup = groupRepository.findById(dto.getGuest_group_id())
-            .orElseThrow(() -> new NotFoundException("Grupo no encontrado: " + dto.getGuest_group_id()));
-            
+                .orElseThrow(() -> new NotFoundException("Grupo no encontrado: " + dto.getGuest_group_id()));
+
         // Validate the user's access to the invitation
-        if (!userInvitationRepository.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), invitation.getName()).isPresent()) {
+        if (!userInvitationRepository.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), invitation.getName())
+                .isPresent()) {
             throw new AccessDeniedException("No puedes modificar esta invitación");
         }
-        
+
         // Validate duplicates
-        if (invitationGuestRepository.findByInvitationUUIDAndGuestName(invitation.getInvitationUuid(), dto.getName().trim()).isPresent()) {
+        if (invitationGuestRepository
+                .findByInvitationUUIDAndGuestName(invitation.getInvitationUuid(), dto.getName().trim()).isPresent()) {
             throw new AlreadyExistsException("Ya existe un invitado con ese nombre");
         }
 
@@ -84,13 +86,14 @@ public class GuestService {
     public List<GuestReadDTO> createBatchGuests(UUID invitationUUID, List<GuestCreateDTO> dtos) {
 
         UserModel user = authService.getUserFromToken()
-            .orElseThrow(() -> new NotFoundException("Ha ocurrido un error con el usuario"));
+                .orElseThrow(() -> new NotFoundException("Ha ocurrido un error con el usuario"));
 
         InvitationModel invitation = invitationRepository.findByUUID(invitationUUID)
-            .orElseThrow(() -> new NotFoundException("Invitación no encontrada: " + invitationUUID));
+                .orElseThrow(() -> new NotFoundException("Invitación no encontrada: " + invitationUUID));
 
         // Validate the user's access to the invitation
-        if (!userInvitationRepository.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), invitation.getName()).isPresent()) {
+        if (!userInvitationRepository.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), invitation.getName())
+                .isPresent()) {
             throw new AccessDeniedException("No puedes modificar esta invitación");
         }
 
@@ -99,7 +102,7 @@ public class GuestService {
         for (GuestCreateDTO dto : dtos) {
 
             GuestGroupModel guestGroup = groupRepository.findById(dto.getGuest_group_id())
-                .orElseThrow(() -> new NotFoundException("Grupo no encontrado: " + dto.getGuest_group_id()));
+                    .orElseThrow(() -> new NotFoundException("Grupo no encontrado: " + dto.getGuest_group_id()));
 
             // Validate duplicates within the invitation
             if (invitationGuestRepository.findByInvitationUUIDAndGuestName(
@@ -127,12 +130,13 @@ public class GuestService {
     public List<GuestReadDTO> getAllGuests(UUID invitationUUID) {
 
         UserModel user = authService.getUserFromToken()
-            .orElseThrow(() -> new NotFoundException("Ha ocurrido un error con el usuario"));
+                .orElseThrow(() -> new NotFoundException("Ha ocurrido un error con el usuario"));
 
         InvitationModel invitation = invitationRepository.findByUUID(invitationUUID)
-            .orElseThrow(() -> new NotFoundException("Invitación no encontrada"));
-  
-        if (!userInvitationRepository.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), invitation.getName()).isPresent()) {
+                .orElseThrow(() -> new NotFoundException("Invitación no encontrada"));
+
+        if (!userInvitationRepository.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), invitation.getName())
+                .isPresent()) {
             throw new AccessDeniedException("No puedes modificar esta invitación");
         }
 

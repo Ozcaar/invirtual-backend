@@ -11,11 +11,11 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class InvitationTypeInitializer implements CommandLineRunner {
-    
+
     private final InvitationTypeRepository invitationTypeRepository;
 
     @Override
-    public void run(String ...args) throws Exception {
+    public void run(String... args) throws Exception {
         createInvitationTypeIfNotExists("BODA", "");
         createInvitationTypeIfNotExists("CUMPLEAÑOS", "");
         createInvitationTypeIfNotExists("EMPRESARIAL", "");

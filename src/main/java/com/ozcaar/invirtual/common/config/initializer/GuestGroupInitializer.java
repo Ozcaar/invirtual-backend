@@ -21,14 +21,15 @@ public class GuestGroupInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Crear tipos si no existen
+
+        // Create invitation types if not exist
         InvitationTypeModel boda = invitationTypeRepository.findByName("BODA")
-            .orElseThrow(() -> new RuntimeException("Tipo BODA no existe"));
+                .orElseThrow(() -> new RuntimeException("Tipo BODA no existe"));
 
         InvitationTypeModel cumple = invitationTypeRepository.findByName("CUMPLEAÑOS")
-            .orElseThrow(() -> new RuntimeException("Tipo CUMPLEAÑOS no existe"));
+                .orElseThrow(() -> new RuntimeException("Tipo CUMPLEAÑOS no existe"));
 
-        // Crear grupos y asociarlos
+        // Create guest groups and associate them
         createGuestGroupIfNotExists("FAMILIA", "Familia cercana", Set.of(boda, cumple));
         createGuestGroupIfNotExists("AMIGOS", "Amigos del anfitrión", Set.of(boda, cumple));
         createGuestGroupIfNotExists("VIP", "Invitados especiales", Set.of(boda));

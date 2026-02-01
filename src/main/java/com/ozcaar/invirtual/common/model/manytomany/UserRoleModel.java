@@ -17,7 +17,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "user_role")
 public class UserRoleModel {
-    
+
     @EmbeddedId
     private UserRoleID id = new UserRoleID();
 
