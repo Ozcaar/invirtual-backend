@@ -102,6 +102,22 @@ public class UserService {
         return userMapper.toDTO(user);
     }
 
+    public UserReadDTO getUserBySupabaseId(String supabaseId) {
+        UserModel user = userRepository.findBySupabaseId(supabaseId)
+                .orElseThrow(() -> new NotFoundException("No se encontró el usuario con el ID: " + supabaseId));
+
+        boolean isAdminOrDev = jwtUtil.authenticatedUserUserIsAdminOrDev();
+
+        if (!isAdminOrDev) {
+            String userEmail = jwtUtil.getEmailOfAuthenticatedUser();
+            if (userEmail == null || !userEmail.trim().equalsIgnoreCase(user.getEmail().trim())) {
+                throw new AccessDeniedException("No tienes permiso para consultar este usuario");
+            }
+        }
+
+        return userMapper.toDTO(user);
+    }
+
     public List<UserReadDTO> getAllUsers() {
         List<UserModel> users = (List<UserModel>) userRepository.findAll();
         return userMapper.toDTOList(users);

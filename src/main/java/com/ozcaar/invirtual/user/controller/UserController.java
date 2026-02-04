@@ -37,7 +37,7 @@ public class UserController implements UserApiDoc {
     // POST
     @Deprecated
     @PreAuthorize("hasRole('DEV')")
-    @PostMapping()
+    // @PostMapping()
     @Operation(summary = "Crear usuario", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<UserReadDTO> createUser(@Valid @RequestBody UserCreateDTO user) {
         UserReadDTO created = userService.createUser(user);
@@ -46,10 +46,17 @@ public class UserController implements UserApiDoc {
 
     // GET
     @Deprecated
-    @GetMapping("/{id}")
+    // @GetMapping("/{id}")
     @Operation(summary = "Obtener usuario por ID", description = "")
     public ResponseEntity<UserReadDTO> getUser(@PathVariable Integer id) {
         UserReadDTO user = userService.getUser(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/{supabaseId}")
+    @Operation(summary = "Obtener usuario por supabaseId", description = "")
+    public ResponseEntity<UserReadDTO> getUserBySupabaseId(@PathVariable String supabaseId) {
+        UserReadDTO user = userService.getUserBySupabaseId(supabaseId);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -64,7 +71,7 @@ public class UserController implements UserApiDoc {
     // UPDATE
     @Deprecated
     @PreAuthorize("hasRole('DEV')")
-    @PutMapping("/{id}")
+    // @PutMapping("/{id}")
     @Operation(summary = "Actualizar usuario como admin", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<UserReadDTO> updateUser(@PathVariable Integer id, @Valid @RequestBody UserUpdateDTO dto) {
         UserReadDTO updatedUser = userService.updateUser(id, dto);
@@ -74,7 +81,7 @@ public class UserController implements UserApiDoc {
     // DELETE
     @Deprecated
     @PreAuthorize("hasRole('DEV')")
-    @DeleteMapping("/{id}")
+    // @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar usuario", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);

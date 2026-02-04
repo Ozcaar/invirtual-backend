@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.ozcaar.invirtual.billing.dto.create.CheckoutSessionCreate;
 import com.ozcaar.invirtual.billing.enums.PlanKeyEnum;
+import com.ozcaar.invirtual.common.exception.global.NotFoundException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 
@@ -23,7 +24,13 @@ public class BillingService {
     public String createCheckoutSession(String supabaseId, CheckoutSessionCreate req)
             throws Exception {
 
-        PlanKeyEnum plan = PlanKeyEnum.valueOf(req.getPlan());
+        PlanKeyEnum plan;
+        try {
+            plan = PlanKeyEnum.valueOf(req.getPlan());
+        } catch (IllegalArgumentException e) {
+            throw new NotFoundException("Plan no encontrado.");
+        }
+
         String priceId = stripeService.priceIdFor(plan);
 
         String successUrl = (frontendUrl + "/billing/success?session_id={CHECKOUT_SESSION_ID}");

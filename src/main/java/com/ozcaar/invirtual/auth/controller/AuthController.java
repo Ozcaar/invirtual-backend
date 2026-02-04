@@ -33,7 +33,7 @@ public class AuthController implements AuthApiDoc {
     private final AuthService authService;
 
     @Deprecated
-    @PostMapping("/register")
+    // @PostMapping("/register")
     @Operation(summary = "Registrar nuevo usuario", description = "", security = {})
     public ResponseEntity<Map<String, Object>> register(@Valid @RequestBody UserCreateDTO dto) {
         Map<String, Object> response = authService.registerUser(dto);
@@ -41,7 +41,7 @@ public class AuthController implements AuthApiDoc {
     }
 
     @Deprecated
-    @PostMapping("/login")
+    // @PostMapping("/login")
     @Operation(summary = "Iniciar sesión", description = "", security = {})
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO dto) {
         String token = authService.loginUser(dto);
