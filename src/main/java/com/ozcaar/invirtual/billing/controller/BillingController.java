@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ozcaar.invirtual.billing.dto.create.CheckoutSessionCreate;
 import com.ozcaar.invirtual.billing.service.BillingService;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Billing Controller", description = "operaciones con facturación")
 @RequestMapping("/api/billing")
 public class BillingController {
 

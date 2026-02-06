@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ozcaar.invirtual.billing.service.StripeService;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Stripe Controller", description = "operaciones con stripe")
 @RequestMapping("/api/stripe")
 public class StripeController {
 
