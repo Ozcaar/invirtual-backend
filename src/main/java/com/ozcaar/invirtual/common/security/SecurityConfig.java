@@ -4,9 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
-// import org.springframework.security.authentication.AuthenticationManager;
-// import org.springframework.security.config.Customizer;
-// import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -20,12 +17,14 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.oauth2.jwt.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ozcaar.invirtual.auth.service.CustomUserDetailsService;
 import com.ozcaar.invirtual.common.exception.global.JwtAuthEntryPoint;
 import com.ozcaar.invirtual.common.security.CustomSecurityHandlers.CustomAccessDeniedHandler;
 import com.ozcaar.invirtual.common.security.CustomSecurityHandlers.CustomAuthenticationEntryPoint;
 
+import lombok.RequiredArgsConstructor;
+
 @EnableMethodSecurity
+@RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
 
@@ -34,24 +33,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // @Bean
-    // public AuthenticationManager authenticationManager(HttpSecurity http) throws
-    // Exception {
-    // AuthenticationManagerBuilder builder =
-    // http.getSharedObject(AuthenticationManagerBuilder.class);
-    // builder.userDetailsService(userDetailsService)
-    // .passwordEncoder(passwordEncoder());
-
-    // return builder.build();
-    // }
-
-    private final CustomUserDetailsService userDetailsService;
     private final Environment environment;
-
-    public SecurityConfig(Environment environment, CustomUserDetailsService userDetailsService) {
-        this.environment = environment;
-        this.userDetailsService = userDetailsService;
-    }
 
     // Configure security filters
     @Bean
