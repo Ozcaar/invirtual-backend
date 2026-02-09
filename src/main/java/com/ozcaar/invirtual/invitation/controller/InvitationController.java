@@ -81,7 +81,7 @@ public class InvitationController implements InvitationApiDoc {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    // INVITEDS
+    // GUESTS
 
     // POST
     @PostMapping("/{invitationUUID}/guest")
