@@ -2,6 +2,9 @@ package com.ozcaar.invirtual.common.exception.global;
 
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,153 +18,120 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
+@Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Authorization exceptions
-
+    // ---------- Security ----------
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ApiError> handleBadCredentials(BadCredentialsException ex) {
-        ApiError error = new ApiError(
-                HttpStatus.UNAUTHORIZED.value(),
-                "UNAUTHORIZED",
-                "Credenciales inválidas");
-        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
+        return build(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED", "Credenciales inválidas");
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ApiError> handleAccessDenied(AccessDeniedException ex) {
-        ApiError error = new ApiError(
-                HttpStatus.FORBIDDEN.value(),
-                "FORBIDDEN",
-                ex.getMessage().isBlank() ? "No tienes permiso para realizar esta acción" : ex.getMessage().trim());
-        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+        return build(HttpStatus.FORBIDDEN, "FORBIDDEN",
+                defaultIfBlank(ex.getMessage(), "No tienes permiso para realizar esta acción"));
     }
 
-    // Global exceptions
-
-    // Custom class
+    // ---------- Custom domain exceptions ----------
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ApiError> handleNotFound(NotFoundException ex) {
-        ApiError error = new ApiError(
-                HttpStatus.NOT_FOUND.value(),
-                "NOT_FOUND",
-                ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return build(HttpStatus.NOT_FOUND, "NOT_FOUND", defaultIfBlank(ex.getMessage(), "No encontrado."));
     }
 
-    @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<ApiError> handleConflict(ConflictException ex) {
-        ApiError error = new ApiError(
-                HttpStatus.CONFLICT.value(),
-                "CONFLICT",
-                ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    @ExceptionHandler({ ConflictException.class, AlreadyExistsException.class })
+    public ResponseEntity<ApiError> handleConflict(RuntimeException ex) {
+        return build(HttpStatus.CONFLICT, "CONFLICT", defaultIfBlank(ex.getMessage(), "Conflicto."));
     }
 
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ApiError> handleForbidden(ForbiddenException ex) {
-        ApiError error = new ApiError(
-                HttpStatus.FORBIDDEN.value(),
-                "FORBIDDEN",
-                ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
-    }
-
-    // Custom class
-    @ExceptionHandler(AlreadyExistsException.class)
-    public ResponseEntity<ApiError> handleExists(AlreadyExistsException ex) {
-        ApiError error = new ApiError(
-                HttpStatus.CONFLICT.value(),
-                "CONFLICT",
-                ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
-    }
-
-    @ExceptionHandler({ MethodArgumentNotValidException.class, HandlerMethodValidationException.class })
-    public ResponseEntity<ApiFieldsError> handleValidationExceptions(Exception ex) {
-        List<ApiFieldsError.FieldErrorDetail> fieldErrorDetail;
-
-        if (ex instanceof MethodArgumentNotValidException manve) {
-            fieldErrorDetail = manve.getBindingResult()
-                    .getFieldErrors()
-                    .stream()
-                    .map(error -> new ApiFieldsError.FieldErrorDetail(
-                            error.getField(),
-                            error.getDefaultMessage(),
-                            String.valueOf(error.getRejectedValue()),
-                            "Error de validación en los datos enviados."))
-                    .toList();
-
-        } else if (ex instanceof HandlerMethodValidationException hmve) {
-            fieldErrorDetail = hmve.getAllErrors()
-                    .stream()
-                    .map(err -> {
-                        ObjectError error = (ObjectError) err;
-                        if (error instanceof FieldError fe) {
-                            return new ApiFieldsError.FieldErrorDetail(
-                                    fe.getField(),
-                                    fe.getDefaultMessage(),
-                                    String.valueOf(fe.getRejectedValue()),
-                                    "Error de validación en los datos enviados.");
-                        } else {
-                            return new ApiFieldsError.FieldErrorDetail(
-                                    error.getObjectName(),
-                                    error.getDefaultMessage(),
-                                    null,
-                                    "Error de validación en los datos enviados.");
-                        }
-                    })
-                    .toList();
-        } else {
-            fieldErrorDetail = List.of();
-        }
-
-        ApiFieldsError error = new ApiFieldsError(
-                HttpStatus.BAD_REQUEST.value(),
-                "BAD_REQUEST",
-                fieldErrorDetail);
-
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiError> handleJsonParseError(HttpMessageNotReadableException ex) {
-        ApiError error = new ApiError(
-                HttpStatus.BAD_REQUEST.value(),
-                "BAD_REQUEST",
-                ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
-    public ResponseEntity<ApiError> handleInvalidDataAccessApiUsageException(InvalidDataAccessApiUsageException ex) {
-        ApiError error = new ApiError(
-                HttpStatus.BAD_REQUEST.value(),
-                "BAD_REQUEST",
-                "El ID proporcionado no puede ser nulo.");
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return build(HttpStatus.FORBIDDEN, "FORBIDDEN", defaultIfBlank(ex.getMessage(), "Prohibido."));
     }
 
     @ExceptionHandler(GlobalBadRequestException.class)
-    public ResponseEntity<ApiError> handleInvalidSignatureException(GlobalBadRequestException ex) {
-        ApiError error = new ApiError(
-                HttpStatus.BAD_REQUEST.value(),
-                "BAD_REQUEST",
-                ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiError> handleBadRequest(GlobalBadRequestException ex) {
+        return build(HttpStatus.BAD_REQUEST, "BAD_REQUEST", defaultIfBlank(ex.getMessage(), "Solicitud inválida."));
     }
 
+    // ---------- Validation ----------
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiFieldsError> handleManve(MethodArgumentNotValidException ex) {
+        var details = ex.getBindingResult().getFieldErrors().stream()
+                .map(this::toFieldDetail)
+                .toList();
+
+        return buildFields(HttpStatus.BAD_REQUEST, "BAD_REQUEST", details);
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ApiFieldsError> handleHmve(HandlerMethodValidationException ex) {
+        var details = ex.getAllErrors().stream()
+                .map(this::toFieldDetail)
+                .toList();
+
+        return buildFields(HttpStatus.BAD_REQUEST, "BAD_REQUEST", details);
+    }
+
+    private ApiFieldsError.FieldErrorDetail toFieldDetail(MessageSourceResolvable err) {
+        if (err instanceof FieldError fe) {
+            return new ApiFieldsError.FieldErrorDetail(
+                    fe.getField(),
+                    fe.getDefaultMessage(),
+                    fe.getRejectedValue() == null ? null : String.valueOf(fe.getRejectedValue()),
+                    "Error de validación en los datos enviados.");
+        }
+
+        if (err instanceof ObjectError oe) {
+            return new ApiFieldsError.FieldErrorDetail(
+                    oe.getObjectName(),
+                    oe.getDefaultMessage(),
+                    null,
+                    "Error de validación en los datos enviados.");
+        }
+
+        // fallback por si llega otro tipo
+        return new ApiFieldsError.FieldErrorDetail(
+                "request",
+                "Error de validación en los datos enviados.",
+                null,
+                "Error de validación en los datos enviados.");
+    }
+
+    // ---------- Bad JSON / request ----------
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiError> handleJsonParseError(HttpMessageNotReadableException ex) {
+        log.warn("Malformed JSON request", ex);
+        return build(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "JSON inválido o mal formado.");
+    }
+
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    public ResponseEntity<ApiError> handleInvalidDataAccess(InvalidDataAccessApiUsageException ex) {
+        log.warn("Invalid data access usage", ex);
+        return build(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "Solicitud inválida.");
+    }
+
+    // ---------- Fallback ----------
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneric(Exception ex) {
-        ApiError error = new ApiError(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "INTERNAL_SERVER_ERROR",
-                ex.getMessage().isBlank() ? "Error interno." : ex.getMessage().trim());
-        ex.printStackTrace();
+        log.error("Unhandled exception", ex);
+        return build(HttpStatus.INTERNAL_SERVER_ERROR, "INTERNAL_SERVER_ERROR", "Error interno.");
+    }
 
-        System.err.println(ex);
-        System.err.println(error);
-        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    // ---------- Helpers ----------
+    private ResponseEntity<ApiError> build(HttpStatus status, String code, String message) {
+        return ResponseEntity.status(status)
+                .body(new ApiError(status.value(), code, message));
+    }
+
+    private ResponseEntity<ApiFieldsError> buildFields(HttpStatus status, String code,
+            List<ApiFieldsError.FieldErrorDetail> details) {
+        return ResponseEntity.status(status)
+                .body(new ApiFieldsError(status.value(), code, details));
+    }
+
+    private String defaultIfBlank(String value, String fallback) {
+        return (value == null || value.isBlank()) ? fallback : value.trim();
     }
 }
