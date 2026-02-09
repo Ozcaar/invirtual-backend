@@ -17,7 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "plan_price_overrides")
+@Table(name = "plan_price_override")
 public class PlanPriceOverrideModel {
 
     @Id

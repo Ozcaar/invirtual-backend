@@ -17,7 +17,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "plan_discounts")
+@Table(name = "plan_discount")
 public class PlanDiscountModel {
 
     @Id
@@ -31,6 +31,8 @@ public class PlanDiscountModel {
     @Column(name = "name", nullable = false, length = 120)
     private String name;
 
+    // Optional code to apply the discount. If null, it's an auto-applied discount
+    // (no code needed, applied based on priority and conditions)
     @Column(name = "public_code", length = 60)
     private String publicCode;
 

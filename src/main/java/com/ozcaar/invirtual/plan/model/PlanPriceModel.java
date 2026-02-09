@@ -21,7 +21,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "plan_prices")
+@Table(name = "plan_price")
 public class PlanPriceModel {
 
     @Id

@@ -5,7 +5,7 @@ import java.util.List;
 import com.ozcaar.invirtual.role.dto.read.RoleReadDTO;
 
 public class UserReadDTO {
-    private Integer user_id;
+    private String supabaseId;
     private String name;
     private String full_name;
     private String email;
@@ -20,12 +20,12 @@ public class UserReadDTO {
         this.roles = roles;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public String getSupabaseId() {
+        return supabaseId;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setSupabaseId(String supabaseId) {
+        this.supabaseId = supabaseId;
     }
 
     public String getName() {
