@@ -22,6 +22,7 @@ import com.ozcaar.invirtual.role.service.RoleService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -36,7 +37,7 @@ public class RoleController implements RoleApiDoc {
     @PreAuthorize("hasRole('DEV')")
     @PostMapping()
     @Operation(summary = "Crear Rol", description = "- Se requiere rol \"DEV\"")
-    public ResponseEntity<RoleReadDTO> createRole(@RequestBody RoleCreateDTO role) {
+    public ResponseEntity<RoleReadDTO> createRole(@Valid @RequestBody RoleCreateDTO role) {
         RoleReadDTO created = roleService.createRol(role);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
@@ -60,7 +61,7 @@ public class RoleController implements RoleApiDoc {
     @PreAuthorize("hasRole('DEV')")
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar rol", description = "- Se requiere rol \"DEV\"")
-    public ResponseEntity<RoleReadDTO> updateRole(@PathVariable Integer id, @RequestBody RoleUpdateDTO dto) {
+    public ResponseEntity<RoleReadDTO> updateRole(@Valid  @PathVariable Integer id, @RequestBody RoleUpdateDTO dto) {
         RoleReadDTO updated = roleService.updateRole(id, dto);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
