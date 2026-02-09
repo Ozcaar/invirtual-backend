@@ -7,7 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.ozcaar.invirtual.billing.enums.BillingTypeEnum;
-import com.ozcaar.invirtual.plan.enums.EnviromentEnum;
+import com.ozcaar.invirtual.plan.enums.EnvironmentEnum;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,7 +34,7 @@ public class PlanPriceModel {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "environment", nullable = false, length = 10)
-    private EnviromentEnum environment;
+    private EnvironmentEnum environment;
 
     @Column(name = "currency", nullable = false, length = 3)
     private String currency;
@@ -75,11 +75,11 @@ public class PlanPriceModel {
         this.plan = plan;
     }
 
-    public EnviromentEnum getEnvironment() {
+    public EnvironmentEnum getEnvironment() {
         return environment;
     }
 
-    public void setEnvironment(EnviromentEnum environment) {
+    public void setEnvironment(EnvironmentEnum environment) {
         this.environment = environment;
     }
 
