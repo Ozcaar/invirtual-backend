@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -100,10 +102,42 @@ public class GlobalExceptionHandler {
     }
 
     // ---------- Bad JSON / request ----------
+    // @ExceptionHandler(HttpMessageNotReadableException.class)
+    // public ResponseEntity<ApiError>
+    // handleJsonParseError(HttpMessageNotReadableException ex) {
+    // log.warn("Malformed JSON request", ex);
+    // return build(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "JSON inválido o mal
+    // formado.");
+    // }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiError> handleJsonParseError(HttpMessageNotReadableException ex) {
+    public ResponseEntity<ApiError> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+
+        Throwable cause = ex.getCause();
+
+        if (cause instanceof InvalidFormatException ife) {
+
+            String field = ife.getPath() != null && !ife.getPath().isEmpty()
+                    ? ife.getPath().get(ife.getPath().size() - 1).getFieldName()
+                    : "body";
+
+            Object rejectedValue = ife.getValue();
+            Class<?> targetType = ife.getTargetType();
+
+            // Invalid enum case
+            if (targetType != null && targetType.isEnum()) {
+                Object[] allowed = targetType.getEnumConstants();
+                return build(
+                        HttpStatus.BAD_REQUEST,
+                        "BAD_REQUEST",
+                        "Valor inválido para '%s': '%s'. Valores válidos: %s"
+                                .formatted(field, rejectedValue, java.util.Arrays.toString(allowed)));
+            }
+        }
+
+        // Fallback Malformed JSON
         log.warn("Malformed JSON request", ex);
-        return build(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "JSON inválido o mal formado.");
+        return build(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "JSON inválido o no se pudo leer.");
     }
 
     @ExceptionHandler(InvalidDataAccessApiUsageException.class)
