@@ -33,7 +33,7 @@ public class UserController implements UserApiDoc {
 
     // POST
     @Deprecated
-    @PreAuthorize("hasRole('DEV')")
+    @PreAuthorize("hasRole('ADMIN')")
     // @PostMapping()
     @Operation(summary = "Crear usuario", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<UserReadDTO> createUser(@Valid @RequestBody UserCreateDTO user) {
@@ -57,7 +57,7 @@ public class UserController implements UserApiDoc {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('DEV')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/list")
     @Operation(summary = "Obtener lista de usuarios", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<List<UserReadDTO>> getAllUsers() {
@@ -67,7 +67,7 @@ public class UserController implements UserApiDoc {
 
     // UPDATE
     @Deprecated
-    @PreAuthorize("hasRole('DEV')")
+    @PreAuthorize("hasRole('ADMIN')")
     // @PutMapping("/{id}")
     @Operation(summary = "Actualizar usuario como admin", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<UserReadDTO> updateUser(@PathVariable Integer id, @Valid @RequestBody UserUpdateDTO dto) {
@@ -77,7 +77,7 @@ public class UserController implements UserApiDoc {
 
     // DELETE
     @Deprecated
-    @PreAuthorize("hasRole('DEV')")
+    @PreAuthorize("hasRole('ADMIN')")
     // @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar usuario", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {

@@ -39,7 +39,7 @@ public class InvitationController implements InvitationApiDoc {
     private final GuestService guestService;
 
     // POST
-    // @PreAuthorize("hasRole('DEV')")
+    // @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     @Operation(summary = "Crear invitación", description = "- Se requiere el rol \"DEV\"")
     public ResponseEntity<InvitationReadDTO> createInvitation(@Valid @RequestBody InvitationCreateDTO invitation) {
@@ -63,7 +63,7 @@ public class InvitationController implements InvitationApiDoc {
     }
 
     // UPDATE
-    @PreAuthorize("hasRole('DEV')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{invitationUUID}")
     @Operation(summary = "Actualizar invitación", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<InvitationReadDTO> updateInvitation(@PathVariable UUID invitationUUID,
@@ -73,7 +73,7 @@ public class InvitationController implements InvitationApiDoc {
     }
 
     // DELETE
-    @PreAuthorize("hasRole('DEV')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{invitationUUID}")
     @Operation(summary = "Eliminar invitación", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<Void> deleteInvitation(@PathVariable UUID invitationUUID) {

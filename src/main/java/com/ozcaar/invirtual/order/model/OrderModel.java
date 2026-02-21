@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import com.ozcaar.invirtual.entitlement.model.EntitlementModel;
 import com.ozcaar.invirtual.user.model.UserModel;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

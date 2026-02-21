@@ -34,7 +34,7 @@ public class RoleController implements RoleApiDoc {
     private final RoleService roleService;
 
     // POST
-    @PreAuthorize("hasRole('DEV')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     @Operation(summary = "Crear Rol", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<RoleReadDTO> createRole(@Valid @RequestBody RoleCreateDTO role) {
@@ -58,7 +58,7 @@ public class RoleController implements RoleApiDoc {
     }
 
     // UPDATE
-    @PreAuthorize("hasRole('DEV')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Actualizar rol", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<RoleReadDTO> updateRole(@Valid  @PathVariable Integer id, @RequestBody RoleUpdateDTO dto) {
@@ -67,7 +67,7 @@ public class RoleController implements RoleApiDoc {
     }
 
     // DELETE
-    @PreAuthorize("hasRole('DEV')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Eliminar rol", description = "- Se requiere rol \"DEV\"")
     public ResponseEntity<Void> deleteRole(@PathVariable Integer id) {
