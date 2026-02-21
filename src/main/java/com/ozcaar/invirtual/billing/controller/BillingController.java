@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ozcaar.invirtual.billing.dto.create.CheckoutSessionCreate;
 import com.ozcaar.invirtual.billing.service.BillingService;
+import com.ozcaar.invirtual.plan.dto.create.CheckoutSessionCreateDTO;
+import com.ozcaar.invirtual.plan.dto.read.CheckoutSessionReadDTO;
+import com.ozcaar.invirtual.plan.service.StripeCheckoutService;
+import com.stripe.model.checkout.Session;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +24,30 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/billing")
 public class BillingController {
 
-    private final BillingService billingService;
+    private final StripeCheckoutService stripeCheckoutService;
 
-    @PostMapping("/checkout-session")
-    public Map<String, String> createCheckoutSession(@AuthenticationPrincipal Jwt jwt,
-            @RequestBody CheckoutSessionCreate req) throws Exception {
+    // @PostMapping("/checkout-session")
+    // public Map<String, String> createCheckoutSession(@AuthenticationPrincipal Jwt
+    // jwt,
+    // @RequestBody CheckoutSessionCreate req) throws Exception {
 
+    // String supabaseId = jwt.getSubject();
+    // String url = billingService.createCheckoutSession(supabaseId, req);
+
+    // return Map.of("url", url);
+    // }
+
+    @PostMapping("/checkout/session")
+    public CheckoutSessionReadDTO createCheckoutSession(@AuthenticationPrincipal Jwt jwt,
+            @RequestBody CheckoutSessionCreateDTO req) {
         String supabaseId = jwt.getSubject();
-        String url = billingService.createCheckoutSession(supabaseId, req);
+        Session session = stripeCheckoutService.createCheckoutSession(
+                req.planCode(),
+                req.currency(),
+                req.promoCode(),
+                supabaseId);
 
-        return Map.of("url", url);
+        return new CheckoutSessionReadDTO(session.getId(), session.getUrl());
     }
 
 }
