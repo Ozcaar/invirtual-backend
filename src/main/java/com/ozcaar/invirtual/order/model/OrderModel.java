@@ -1,19 +1,14 @@
 package com.ozcaar.invirtual.order.model;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
 
-import com.ozcaar.invirtual.entitlement.model.EntitlementModel;
-import com.ozcaar.invirtual.user.model.UserModel;
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,60 +16,81 @@ import jakarta.persistence.Table;
 public class OrderModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private UserModel user;
+    @Column(name = "supabase_id", nullable = false, length = 80)
+    private String supabaseId;
 
-    // @Column(nullable = false, length = 30)
-    // private String status; // PENDING, PAID, CANCELED, REFUNDED...
+    @Column(name = "stripe_session_id", nullable = false, unique = true, length = 120)
+    private String stripeSessionId;
 
-    @Column(nullable = false)
-    private Integer totalCents;
+    @Column(name = "stripe_payment_intent_id", length = 120)
+    private String stripePaymentIntentId;
 
-    @Column(nullable = false, length = 10)
-    private String currency; // "MXN"
+    @Column(name = "stripe_price_id", nullable = false, length = 120)
+    private String stripePriceId;
 
-    @Column(length = 30)
-    private String provider; // "stripe", "mercadopago", etc.
+    @Column(name = "amount_total")
+    private Long amountTotal;
 
-    @Column(name = "provider_ref", length = 100)
-    private String providerRef; // id externo
+    @Column(name = "currency", length = 3)
+    private String currency;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name = "status", nullable = false, length = 30)
+    private String status; // PAID, etc.
 
-    private LocalDateTime paidAt;
-
-    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
-    private EntitlementModel entitlement;
+    @CreationTimestamp
+    private java.time.Instant createdAt;
 
     // Getters & setters
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public UserModel getUser() {
-        return user;
+    public String getSupabaseId() {
+        return supabaseId;
     }
 
-    public void setUser(UserModel user) {
-        this.user = user;
+    public void setSupabaseId(String supabaseId) {
+        this.supabaseId = supabaseId;
     }
 
-    public Integer getTotalCents() {
-        return totalCents;
+    public String getStripeSessionId() {
+        return stripeSessionId;
     }
 
-    public void setTotalCents(Integer totalCents) {
-        this.totalCents = totalCents;
+    public void setStripeSessionId(String stripeSessionId) {
+        this.stripeSessionId = stripeSessionId;
+    }
+
+    public String getStripePaymentIntentId() {
+        return stripePaymentIntentId;
+    }
+
+    public void setStripePaymentIntentId(String stripePaymentIntentId) {
+        this.stripePaymentIntentId = stripePaymentIntentId;
+    }
+
+    public String getStripePriceId() {
+        return stripePriceId;
+    }
+
+    public void setStripePriceId(String stripePriceId) {
+        this.stripePriceId = stripePriceId;
+    }
+
+    public Long getAmountTotal() {
+        return amountTotal;
+    }
+
+    public void setAmountTotal(Long amountTotal) {
+        this.amountTotal = amountTotal;
     }
 
     public String getCurrency() {
@@ -85,43 +101,19 @@ public class OrderModel {
         this.currency = currency;
     }
 
-    public String getProvider() {
-        return provider;
+    public String getStatus() {
+        return status;
     }
 
-    public void setProvider(String provider) {
-        this.provider = provider;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public String getProviderRef() {
-        return providerRef;
-    }
-
-    public void setProviderRef(String providerRef) {
-        this.providerRef = providerRef;
-    }
-
-    public LocalDateTime getCreatedAt() {
+    public java.time.Instant getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(java.time.Instant createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getPaidAt() {
-        return paidAt;
-    }
-
-    public void setPaidAt(LocalDateTime paidAt) {
-        this.paidAt = paidAt;
-    }
-
-    public EntitlementModel getEntitlement() {
-        return entitlement;
-    }
-
-    public void setEntitlement(EntitlementModel entitlement) {
-        this.entitlement = entitlement;
     }
 }

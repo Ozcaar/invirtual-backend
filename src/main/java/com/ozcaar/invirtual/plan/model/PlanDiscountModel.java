@@ -7,8 +7,12 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.ozcaar.invirtual.plan.enums.DiscountTypeEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -43,15 +47,15 @@ public class PlanDiscountModel {
     private String stripePromotionCodeId;
 
     // Informative fields (optional cache). Stripe is still the source of truth.
-    // @Enumerated(EnumType.STRING)
-    // @Column(name = "discount_type", length = 10)
-    // private DiscountTypeEnum discountType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "discount_type", length = 10)
+    private DiscountTypeEnum discountType;
 
-    // @Column(name = "percent_off")
-    // private Integer percentOff;
+    @Column(name = "percent_off")
+    private Integer percentOff;
 
-    // @Column(name = "amount_off")
-    // private Integer amountOff; // in cents
+    @Column(name = "amount_off")
+    private Integer amountOff; // in cents
 
     @Column(name = "starts_at")
     private LocalDateTime startsAt;
@@ -202,5 +206,29 @@ public class PlanDiscountModel {
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public DiscountTypeEnum getDiscountType() {
+        return discountType;
+    }
+
+    public void setDiscountType(DiscountTypeEnum discountType) {
+        this.discountType = discountType;
+    }
+
+    public Integer getPercentOff() {
+        return percentOff;
+    }
+
+    public void setPercentOff(Integer percentOff) {
+        this.percentOff = percentOff;
+    }
+
+    public Integer getAmountOff() {
+        return amountOff;
+    }
+
+    public void setAmountOff(Integer amountOff) {
+        this.amountOff = amountOff;
     }
 }

@@ -12,4 +12,6 @@ public interface PlanRepository extends JpaRepository<PlanModel, UUID> {
     Optional<PlanModel> findByCodeAndActiveTrue(String code);
 
     List<PlanModel> findAllByActiveTrueOrderByPositionAscIdAsc();
+
+    List<PlanModel> findAllByOrderByPositionAscIdAsc();
 }

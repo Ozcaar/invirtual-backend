@@ -9,6 +9,8 @@ public record AdminPlanReadDTO(
         String code,
         String name,
         String description,
+        int maxPeople,
+        int durationDays,
         List<String> features,
         boolean active,
         Integer position,

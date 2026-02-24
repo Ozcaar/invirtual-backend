@@ -10,10 +10,14 @@ import java.util.UUID;
 
 public interface PlanDiscountRepository extends JpaRepository<PlanDiscountModel, UUID> {
 
-    Optional<PlanDiscountModel> findFirstByPlanPrice_IdAndActiveTrueAndPublicCodeIgnoreCase(UUID planPriceId,
-            String publicCode);
+        Optional<PlanDiscountModel> findFirstByPlanPrice_IdAndActiveTrueAndPublicCodeIgnoreCase(UUID planPriceId,
+                        String publicCode);
 
-    // Auto-apply discounts (without code) by priority
-    List<PlanDiscountModel> findAllByPlanPrice_IdAndActiveTrueAndPublicCodeIsNullOrderByPriorityDescIdDesc(
-            UUID planPriceId);
+        // Auto-apply discounts (without code) by priority
+        List<PlanDiscountModel> findAllByPlanPrice_IdAndActiveTrueAndPublicCodeIsNullOrderByPriorityDescIdDesc(
+                        UUID planPriceId);
+
+        List<PlanDiscountModel> findAllByPlanPrice_IdOrderByPriorityDescIdDesc(UUID planPriceId);
+
+        boolean existsByPlanPrice_IdAndPublicCodeIgnoreCase(UUID planPriceId, String publicCode);
 }

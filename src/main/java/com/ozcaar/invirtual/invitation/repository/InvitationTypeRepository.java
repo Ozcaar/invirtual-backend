@@ -11,4 +11,6 @@ import com.ozcaar.invirtual.invitation.model.InvitationTypeModel;
 public interface InvitationTypeRepository extends CrudRepository<InvitationTypeModel, Integer> {
     Optional<InvitationTypeModel> findByName(String name);
 
+    Optional<InvitationTypeModel> findByInvitationTypeId(Integer invitationTypeId);
+
 }

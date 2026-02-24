@@ -33,6 +33,12 @@ public class PlanModel {
     @Column(name = "description", columnDefinition = "text")
     private String description;
 
+    @Column(name = "max_people", nullable = false)
+    private int maxPeople;
+
+    @Column(name = "duration_days", nullable = false)
+    private int durationDays;
+
     // JSONB: ["Hasta 200 invitados", "Sin marca de agua", ...]
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "features", columnDefinition = "jsonb", nullable = false)
@@ -41,7 +47,7 @@ public class PlanModel {
     @Column(name = "active", nullable = false)
     private boolean active = true;
 
-    // To sort (optional).
+    // For sorting (optional).
     @Column(name = "position")
     private Integer position;
 
@@ -85,6 +91,22 @@ public class PlanModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+        public int getMaxPeople() {
+        return maxPeople;
+    }
+
+    public void setMaxPeople(int maxPeople) {
+        this.maxPeople = maxPeople;
+    }
+
+    public int getDurationDays() {
+        return durationDays;
+    }
+
+    public void setDurationDays(int durationDays) {
+        this.durationDays = durationDays;
     }
 
     public List<String> getFeatures() {

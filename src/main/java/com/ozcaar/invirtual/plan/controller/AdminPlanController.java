@@ -27,8 +27,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api/admin/plan")
 public class AdminPlanController {
 
-    private final PlanService planCommandService;
-    private final PlanPriceService planPriceCommandService;
+    private final PlanService planService;
+    private final PlanPriceService planPriceService;
 
     // ============================= //
 
@@ -37,13 +37,19 @@ public class AdminPlanController {
     // CREATE PLAN
     @PostMapping
     public AdminPlanReadDTO createPlan(@Valid @RequestBody AdminPlanCreateDTO request) {
-        return planCommandService.createPlan(request);
+        return planService.createPlan(request);
+    }
+
+    // GET PLANS (FOR ADMIN)
+    @GetMapping("/list")
+    public List<AdminPlanReadDTO> getPlansAsAdmin() {
+        return planService.getPlansAsAdmin();
     }
 
     // DELETE PLAN (SOFT DELETE)
     @DeleteMapping("/{code}")
     public AdminPlanReadDTO deactivatePlan(@PathVariable String code) {
-        return planCommandService.deactivatePlan(code);
+        return planService.deactivatePlan(code);
     }
 
     // ============================= //
@@ -53,20 +59,22 @@ public class AdminPlanController {
     // CREATE PLAN PRICE (map intor to a stripe_price_id)
     @PostMapping("/price")
     public AdminPlanPriceReadDTO createPlanPrice(@Valid @RequestBody AdminPlanPriceCreateDTO req) {
-        return planPriceCommandService.createPlanPrice(req);
+        return planPriceService.createPlanPrice(req);
     }
 
     // GET PLAN PRICES BY PLAN ex: /api/admin/plan-prices?planCode=BASIC
     @GetMapping("/price/list")
     public List<AdminPlanPriceReadDTO> listPlanPrices(@RequestParam String planCode) {
-        return planPriceCommandService.listByPlanPrice(planCode);
+        return planPriceService.listByPlanPrice(planCode);
     }
 
     // PATCH /api/admin/plan-price/{id}/active
-    // If active=true, set active=false to other PlanPrice with same (plan/env/currency/billingType)
+    // If active=true, set active=false to other PlanPrice with same
+    // (plan/env/currency/billingType)
     @PatchMapping("/price/{id}/active")
-    public AdminPlanPriceReadDTO setActivePlanPrice(@PathVariable UUID id, @Valid @RequestBody AdminPlanPriceUpdateDTO req) {
-        return planPriceCommandService.setActivePlanPrice(id, req.active());
+    public AdminPlanPriceReadDTO setActivePlanPrice(@PathVariable UUID id,
+            @Valid @RequestBody AdminPlanPriceUpdateDTO req) {
+        return planPriceService.setActivePlanPrice(id, req.active());
     }
 
 }

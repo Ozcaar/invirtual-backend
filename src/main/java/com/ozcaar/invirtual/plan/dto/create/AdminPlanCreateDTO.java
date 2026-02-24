@@ -16,6 +16,10 @@ public record AdminPlanCreateDTO(
 
         String description,
 
+        @NotNull(message = "El número máximo de personas es requerido.") Integer maxPeople,
+
+        @NotNull(message = "La duración en días es requerida.") Integer durationDays,
+
         @NotEmpty(message = "La lista de características no puede estar vacía.") List<String> features,
 
         Integer position) {

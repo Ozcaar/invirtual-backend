@@ -52,20 +52,32 @@ public class PlanService {
         return toDto(plan);
     }
 
-    public List<PlanReadDTO> getActivePlans() {
-        return planRepository.findAllByActiveTrueOrderByPositionAscIdAsc()
+    public List<AdminPlanReadDTO> getPlansAsAdmin() {
+        return planRepository.findAllByOrderByPositionAscIdAsc()
                 .stream()
-                .map(p -> new PlanReadDTO(p.getCode(), p.getName(), p.getDescription(), p.getFeatures()))
+                .map(p -> new AdminPlanReadDTO(p.getId(), p.getCode(), p.getName(), p.getDescription(),
+                        p.getMaxPeople(), p.getDurationDays(), p.getFeatures(),
+                        p.isActive(), p.getPosition(), p.getCreatedAt()))
                 .toList();
     }
 
-    // TODO: esto en otros métodos ya lo hace mapper, hay que unificar
+    public List<PlanReadDTO> getActivePlans() {
+        return planRepository.findAllByActiveTrueOrderByPositionAscIdAsc()
+                .stream()
+                .map(p -> new PlanReadDTO(p.getCode(), p.getName(), p.getMaxPeople(), p.getDurationDays(),
+                        p.getDescription(), p.getFeatures()))
+                .toList();
+    }
+
+    // TODO: this is also in other services, have to unify it
     private AdminPlanReadDTO toDto(PlanModel plan) {
         return new AdminPlanReadDTO(
                 plan.getId(),
                 plan.getCode(),
                 plan.getName(),
                 plan.getDescription(),
+                plan.getMaxPeople(),
+                plan.getDurationDays(),
                 plan.getFeatures(),
                 plan.isActive(),
                 plan.getPosition(),

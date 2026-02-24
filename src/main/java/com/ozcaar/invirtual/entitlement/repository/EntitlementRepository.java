@@ -1,15 +1,16 @@
 package com.ozcaar.invirtual.entitlement.repository;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.ozcaar.invirtual.entitlement.model.EntitlementModel;
-import com.ozcaar.invirtual.invitation.model.InvitationTypeModel;
 
 import jakarta.persistence.LockModeType;
 
@@ -18,14 +19,14 @@ public interface EntitlementRepository extends JpaRepository<EntitlementModel, L
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query("""
           select e from EntitlementModel e
-          where e.user.supabaseId = :supabaseId
-            and e.invitationType = :type
+          join e.user u
+          where u.supabaseId = :supabaseId
             and e.consumedAt is null
-            and (e.expiresAt is null or e.expiresAt > :now)
           order by e.id asc
       """)
-  Optional<EntitlementModel> findFirstAvailableForUpdate(
+  List<EntitlementModel> findAvailableForUpdate(
       @Param("supabaseId") String supabaseId,
-      @Param("type") InvitationTypeModel type,
-      @Param("now") LocalDateTime now);
+      Pageable pageable);
+
+  Optional<EntitlementModel> findByOrder_Id(UUID orderId);
 }
