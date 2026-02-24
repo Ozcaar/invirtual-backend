@@ -1,11 +1,15 @@
 package com.ozcaar.invirtual.common.exception.global;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -13,7 +17,9 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
@@ -102,13 +108,6 @@ public class GlobalExceptionHandler {
     }
 
     // ---------- Bad JSON / request ----------
-    // @ExceptionHandler(HttpMessageNotReadableException.class)
-    // public ResponseEntity<ApiError>
-    // handleJsonParseError(HttpMessageNotReadableException ex) {
-    // log.warn("Malformed JSON request", ex);
-    // return build(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "JSON inválido o mal
-    // formado.");
-    // }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiError> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
@@ -146,6 +145,54 @@ public class GlobalExceptionHandler {
         return build(HttpStatus.BAD_REQUEST, "BAD_REQUEST", "Solicitud inválida.");
     }
 
+    // ---------- Method not supported ----------
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ApiError> handleMethodNotSupported(
+            HttpRequestMethodNotSupportedException ex) {
+
+        String attempted = ex.getMethod();
+
+        Set<HttpMethod> supportedMethods = ex.getSupportedHttpMethods();
+
+        String allowHeader = (supportedMethods == null || supportedMethods.isEmpty())
+                ? null
+                : supportedMethods.stream()
+                        .map(HttpMethod::name)
+                        .sorted()
+                        .collect(Collectors.joining(", "));
+
+        String message = (allowHeader == null)
+                ? "Método HTTP no permitido."
+                : "Método HTTP no permitido. Usaste '%s'. Métodos permitidos: %s."
+                        .formatted(
+                                attempted == null ? "UNKNOWN" : attempted,
+                                allowHeader);
+
+        ResponseEntity.BodyBuilder builder = ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED);
+
+        if (allowHeader != null) {
+            builder.header(HttpHeaders.ALLOW, allowHeader);
+        }
+
+        return builder.body(new ApiError(
+                HttpStatus.METHOD_NOT_ALLOWED.value(),
+                "METHOD_NOT_ALLOWED",
+                message));
+    }
+
+    // ---------- Missing header ----------
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<ApiError> handleMissingRequestHeader(MissingRequestHeaderException ex) {
+
+        String headerName = ex.getHeaderName();
+
+        String message = "Falta el header requerido '%s'.".formatted(headerName);
+
+        return build(HttpStatus.BAD_REQUEST, "BAD_REQUEST", message);
+    }
+
+    // =========================================================================================
+
     // ---------- Fallback ----------
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiError> handleGeneric(Exception ex) {
@@ -154,11 +201,13 @@ public class GlobalExceptionHandler {
     }
 
     // ---------- Helpers ----------
+    @SuppressWarnings("null")
     private ResponseEntity<ApiError> build(HttpStatus status, String code, String message) {
         return ResponseEntity.status(status)
                 .body(new ApiError(status.value(), code, message));
     }
 
+    @SuppressWarnings("null")
     private ResponseEntity<ApiFieldsError> buildFields(HttpStatus status, String code,
             List<ApiFieldsError.FieldErrorDetail> details) {
         return ResponseEntity.status(status)
