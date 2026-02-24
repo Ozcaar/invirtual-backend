@@ -76,6 +76,7 @@ public class PlanPriceService {
 
     @Transactional
     public AdminPlanPriceReadDTO setActivePlanPrice(UUID planPriceId, boolean active) {
+        @SuppressWarnings("null")
         PlanPriceModel pp = planPriceRepository.findById(planPriceId)
                 .orElseThrow(() -> new NotFoundException("PlanPrice no encontrado: " + planPriceId));
 
@@ -83,9 +84,11 @@ public class PlanPriceService {
         String currency = pp.getCurrency();
 
         if (active) {
-            // If you're activating this one, deactivate the other active ones in the same group
-            List<PlanPriceModel> others = planPriceRepository.findAllByPlan_CodeAndEnvironmentAndCurrencyAndBillingTypeAndActiveTrue(
-                    planCode, pp.getEnvironment(), currency, pp.getBillingType());
+            // If you're activating this one, deactivate the other active ones in the same
+            // group
+            List<PlanPriceModel> others = planPriceRepository
+                    .findAllByPlan_CodeAndEnvironmentAndCurrencyAndBillingTypeAndActiveTrue(
+                            planCode, pp.getEnvironment(), currency, pp.getBillingType());
 
             for (PlanPriceModel other : others) {
                 if (!other.getId().equals(pp.getId())) {

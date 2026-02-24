@@ -3,6 +3,7 @@ package com.ozcaar.invirtual.invitation.service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,33 +35,25 @@ public class CreationContextService {
 
         LocalDateTime now = LocalDateTime.now();
 
-        InvitationTypeModel type = invitationTypeRepository.findById(dto.getInvitation_type_id())
+        @SuppressWarnings("null")
+        InvitationTypeModel type = invitationTypeRepository.findById(dto.getInvitationTypeId())
                 .orElseThrow(() -> new NotFoundException("Tipo de invitación no encontrado"));
 
-        // 1) Intentar pagada: tomar entitlement disponible con lock
-        Optional<EntitlementModel> entOpt = entitlementRepository.findFirstAvailableForUpdate(
-                user.getSupabaseId(),
-                type,
-                now);
+        // 1) Try paid: take available entitlement with lock (without filtering by type)
+        Optional<EntitlementModel> entOpt = entitlementRepository
+                .findAvailableForUpdate(user.getSupabaseId(), Pageable.unpaged())
+                .stream()
+                .findFirst();
 
         if (entOpt.isPresent()) {
             EntitlementModel ent = entOpt.get();
-            return new CreationContext(type, new EntitlementInvitationPolicy(ent), ent);
+            return new CreationContext(type, new EntitlementInvitationPolicy(ent, now), ent);
         }
 
-        // 2) Fallback a demo (reglas demo)
-        // regla demo: solo 1 demo activa por usuario
+        // 2) Fallback demo
         if (userInvitationRepository.existsActiveDemoInvitation(user.getSupabaseId(), now)) {
-            // aquí puedes cambiar el mensaje a algo más claro
             throw new ForbiddenException("No tienes invitaciones disponibles (y ya tienes una demo activa)");
         }
-
-        // (opcional) regla extra: cooldown de demos (ej. 30 días)
-        // if (userInvitationRepository.hasUsedDemoInLastDays(user.getUser_id(),
-        // now.minusDays(30))) {
-        // throw new ForbiddenException("Tu demo ya fue usada recientemente. Intenta más
-        // tarde o compra una invitación.");
-        // }
 
         return new CreationContext(type, new DemoInvitationPolicy(), null);
     }

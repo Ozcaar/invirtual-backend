@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +33,6 @@ public class UserService {
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
 
     // Use only if the user already exists
     @Transactional
@@ -87,6 +85,7 @@ public class UserService {
 
     // READ
     public UserReadDTO getUser(Integer id) {
+        @SuppressWarnings("null")
         UserModel user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("No se encontró el usuario con el ID: " + id));
 
@@ -126,6 +125,7 @@ public class UserService {
     // UPDATE
     @Transactional
     public UserReadDTO updateUser(Integer id, UserUpdateDTO dto) {
+        @SuppressWarnings("null")
         UserModel user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("No se encontró el usuario con el ID: " + id));
 
@@ -145,6 +145,7 @@ public class UserService {
 
             // Add new roles
             for (Integer roleId : dto.getRole_ids()) {
+                @SuppressWarnings("null")
                 RoleModel role = roleRepository.findById(roleId)
                         .orElseThrow(() -> new NotFoundException("No se encontró el rol con el ID: " + roleId));
 
@@ -177,11 +178,13 @@ public class UserService {
         if (dto.getActive() != null)
             user.setActive(dto.getActive());
 
+        @SuppressWarnings("null")
         UserModel updatedUser = userRepository.save(user);
         return userMapper.toDTO(updatedUser);
     }
 
     // DELETE
+    @SuppressWarnings("null")
     public void deleteUser(Integer id) {
         if (!userRepository.existsById(id)) {
             throw new NotFoundException("No se encontró el usuario con el ID: " + id);

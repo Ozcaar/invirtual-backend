@@ -3,7 +3,6 @@ package com.ozcaar.invirtual.entitlement.model;
 import java.time.LocalDateTime;
 
 import com.ozcaar.invirtual.invitation.model.InvitationModel;
-import com.ozcaar.invirtual.invitation.model.InvitationTypeModel;
 import com.ozcaar.invirtual.order.model.OrderModel;
 import com.ozcaar.invirtual.user.model.UserModel;
 
@@ -36,19 +35,12 @@ public class EntitlementModel {
     @JoinColumn(name = "order_id", unique = true)
     private OrderModel order; // nullable si es demo/grant manual/admin
 
-    // para qué tipo de invitación aplica
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "invitation_type_id", nullable = false)
-    private InvitationTypeModel invitationType;
-
     // snapshot de capacidades (evita que cambien si cambias planes después)
     @Column(nullable = false)
     private Integer maxPeople;
 
     @Column(nullable = false)
     private Integer durationDays;
-
-    private LocalDateTime expiresAt;
 
     // consumo
     private LocalDateTime consumedAt;
@@ -58,9 +50,7 @@ public class EntitlementModel {
     private InvitationModel invitation; // nullable hasta que se consuma
 
     public boolean isAvailable(LocalDateTime now) {
-        boolean notConsumed = consumedAt == null;
-        boolean notExpired = (expiresAt == null) || expiresAt.isAfter(now);
-        return notConsumed && notExpired;
+        return consumedAt == null;
     }
 
     // Getters & setters
@@ -89,14 +79,6 @@ public class EntitlementModel {
         this.order = order;
     }
 
-    public InvitationTypeModel getInvitationType() {
-        return invitationType;
-    }
-
-    public void setInvitationType(InvitationTypeModel invitationType) {
-        this.invitationType = invitationType;
-    }
-
     public Integer getMaxPeople() {
         return maxPeople;
     }
@@ -111,14 +93,6 @@ public class EntitlementModel {
 
     public void setDurationDays(Integer durationDays) {
         this.durationDays = durationDays;
-    }
-
-    public LocalDateTime getExpiresAt() {
-        return expiresAt;
-    }
-
-    public void setExpiresAt(LocalDateTime expiresAt) {
-        this.expiresAt = expiresAt;
     }
 
     public LocalDateTime getConsumedAt() {

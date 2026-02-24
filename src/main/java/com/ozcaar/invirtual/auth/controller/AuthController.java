@@ -5,7 +5,6 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,7 +54,7 @@ public class AuthController implements AuthApiDoc {
         }
 
         Object userMetadata = jwt.getClaim("user_metadata");
-        Object appMetadata = jwt.getClaim("app_metadata");
+        // Object appMetadata = jwt.getClaim("app_metadata");
 
         return Map.of(
                 // "sub", jwt.getSubject(),

@@ -22,9 +22,7 @@ import com.ozcaar.invirtual.invitation.mapper.InvitationMapper;
 import com.ozcaar.invirtual.invitation.model.InvitationModel;
 import com.ozcaar.invirtual.invitation.policy.CreationContext;
 import com.ozcaar.invirtual.invitation.repository.InvitationRepository;
-import com.ozcaar.invirtual.invitation.repository.InvitationTypeRepository;
 import com.ozcaar.invirtual.user.model.UserModel;
-import com.ozcaar.invirtual.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,8 +32,6 @@ public class InvitationService {
 
     private final AuthService authService;
     private final InvitationRepository invitationRepository;
-    private final InvitationTypeRepository invitationTypeRepository;
-    private final UserRepository userRepository;
     private final UserInvitationRepository userInvitationRepository;
     private final InvitationMapper invitationMapper;
     private final EntitlementRepository entitlementRepository;
@@ -66,6 +62,7 @@ public class InvitationService {
     // CRUDs
 
     // CREATE
+    @SuppressWarnings("null")
     @Transactional
     public InvitationReadDTO createInvitation(InvitationCreateDTO dto) {
 
@@ -80,7 +77,7 @@ public class InvitationService {
             throw new AlreadyExistsException("El usuario ya tiene una invitación con ese nombre");
         }
 
-        String slug = toSlug(dto.getName());
+        String slug = toSlug(dto.getSlugUrl());
         if (userInvitationRepository.existsByUserSupabaseIdAndInvitationSlugUrl(user.getSupabaseId(), slug)) {
             throw new AlreadyExistsException("Ya existe una invitación con ese nombre/slug");
         }
@@ -91,33 +88,31 @@ public class InvitationService {
         // 3) Create invitation
         InvitationModel invitation = invitationMapper.toEntity(dto);
 
-        // Set base fields
-        invitation.setInvitation_type_id(ctx.invitationType());
+        if (ctx.entitlement() != null) {
+            ctx.entitlement().setInvitation(invitation);
+            entitlementRepository.save(ctx.entitlement());
+        }
+
+        // 4) Set base fields
+        invitation.setInvitationTypeId(ctx.invitationType());
         invitation.setSlugUrl(slug);
         invitation.setCreationDate(now);
         invitation.setActive(true);
 
-        // Apply policy
+        // 5) Apply policy
         ctx.policy().apply(invitation);
 
-        // (Opcional) Si tu policy no setea limit_date, protege aquí:
-        // if (invitation.getLimit_date() == null) {
-        // throw new IllegalStateException("InvitationPolicy no asignó limit_date");
-        // }
-
-        // Save invitation
+        // 6) Save invitation
         invitationRepository.save(invitation);
 
-        // Link user and invitation
+        // 7) Link user and invitation
         UserInvitationModel userInvitation = new UserInvitationModel();
         userInvitation.setUser(user);
         userInvitation.setInvitation(invitation);
         userInvitation.setCreated_at(now);
         userInvitationRepository.save(userInvitation);
 
-        // 7) Consumir entitlement (si aplica)
-        // consume() debería validar: no consumido, no expirado, set consumedAt y set
-        // invitation.
+        // 8) Consume entitlement
         if (ctx.entitlement() != null) {
             entitlementService.consume(ctx.entitlement(), invitation, now);
         }
@@ -152,6 +147,7 @@ public class InvitationService {
         if (dto.getSlugUrl() != null)
             invitation.setSlugUrl(dto.getSlugUrl());
 
+        @SuppressWarnings("null")
         InvitationModel updatedInvitation = invitationRepository.save(invitation);
         return invitationMapper.toDTO(updatedInvitation);
     }

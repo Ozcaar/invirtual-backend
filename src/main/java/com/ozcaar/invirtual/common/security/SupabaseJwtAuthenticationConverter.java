@@ -23,6 +23,7 @@ public class SupabaseJwtAuthenticationConverter implements Converter<Jwt, Abstra
     this.users = users;
   }
 
+  @SuppressWarnings("null")
   @Override
   public AbstractAuthenticationToken convert(Jwt jwt) {
 

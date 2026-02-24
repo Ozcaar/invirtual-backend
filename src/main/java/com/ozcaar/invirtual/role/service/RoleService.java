@@ -32,12 +32,14 @@ public class RoleService {
 
         RoleModel rol = roleMapper.toEntity(dto);
 
+        @SuppressWarnings("null")
         RoleModel saved = roleRepository.save(rol);
         return roleMapper.toDTO(saved);
     }
 
     // READ
     public RoleReadDTO getRole(Integer id) {
+        @SuppressWarnings("null")
         RoleModel role = roleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("No se encontró el rol con el ID: " + id));
 
@@ -51,17 +53,20 @@ public class RoleService {
 
     // UPDATE
     public RoleReadDTO updateRole(Integer id, RoleUpdateDTO dto) {
+        @SuppressWarnings("null")
         RoleModel role = roleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("No se encontró el rol con el ID" + id));
 
         if (dto.getName() != null)
             role.setName(dto.getName());
 
+        @SuppressWarnings("null")
         RoleModel updated = roleRepository.save(role);
         return roleMapper.toDTO(updated);
     }
 
     // DELETE
+    @SuppressWarnings("null")
     public void deleteRole(Integer id) {
         if (!roleRepository.existsById(id)) {
             throw new NotFoundException("No se encontró el rol con el ID" + id);

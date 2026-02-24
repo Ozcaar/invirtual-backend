@@ -12,19 +12,19 @@ import java.util.UUID;
 
 public interface PlanPriceRepository extends JpaRepository<PlanPriceModel, UUID> {
 
-    Optional<PlanPriceModel> findFirstByPlan_CodeAndPlan_ActiveTrueAndActiveTrueAndEnvironmentAndCurrencyAndBillingType(
-            String planCode,
-            EnvironmentEnum environment,
-            String currency,
-            BillingTypeEnum billingType);
+	Optional<PlanPriceModel> findFirstByPlan_CodeAndPlan_ActiveTrueAndActiveTrueAndEnvironmentAndCurrencyAndBillingType(
+			String planCode,
+			EnvironmentEnum environment,
+			String currency,
+			BillingTypeEnum billingType);
 
-    Optional<PlanPriceModel> findByStripePriceId(String stripePriceId);
+	Optional<PlanPriceModel> findByStripePriceId(String stripePriceId);
 
-    List<PlanPriceModel> findAllByPlan_CodeOrderByEnvironmentAscCurrencyAscBillingTypeAscCreatedAtDesc(String planCode);
+	List<PlanPriceModel> findAllByPlan_CodeOrderByEnvironmentAscCurrencyAscBillingTypeAscCreatedAtDesc(String planCode);
 
-    boolean existsByPlan_CodeAndEnvironmentAndCurrencyAndBillingTypeAndActiveTrue(
-            String planCode, EnvironmentEnum environment, String currency, BillingTypeEnum billingType);
+	boolean existsByPlan_CodeAndEnvironmentAndCurrencyAndBillingTypeAndActiveTrue(
+			String planCode, EnvironmentEnum environment, String currency, BillingTypeEnum billingType);
 
-    List<PlanPriceModel> findAllByPlan_CodeAndEnvironmentAndCurrencyAndBillingTypeAndActiveTrue(
-            String planCode, EnvironmentEnum environment, String currency, BillingTypeEnum billingType);
+	List<PlanPriceModel> findAllByPlan_CodeAndEnvironmentAndCurrencyAndBillingTypeAndActiveTrue(
+			String planCode, EnvironmentEnum environment, String currency, BillingTypeEnum billingType);
 }
