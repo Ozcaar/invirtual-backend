@@ -1,15 +1,23 @@
-package com.ozcaar.invirtual.plan.service;
+package com.ozcaar.invirtual.billing.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ozcaar.invirtual.billing.config.StripeCheckoutProperties;
 import com.ozcaar.invirtual.billing.enums.BillingTypeEnum;
 import com.ozcaar.invirtual.billing.enums.PlanKeyEnum;
 import com.ozcaar.invirtual.common.exception.global.BadGatewayException;
+import com.ozcaar.invirtual.common.exception.global.ConflictException;
 import com.ozcaar.invirtual.common.exception.global.GlobalBadRequestException;
+import com.ozcaar.invirtual.entitlement.model.EntitlementModel;
+import com.ozcaar.invirtual.entitlement.repository.EntitlementRepository;
 import com.ozcaar.invirtual.plan.enums.EnvironmentEnum;
+import com.ozcaar.invirtual.plan.service.PriceResolverService;
 import com.ozcaar.invirtual.plan.service.PriceResolverService.ResolvedCheckout;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
@@ -25,7 +33,9 @@ public class StripeCheckoutService {
 
     private final StripeCheckoutProperties props;
     private final PriceResolverService resolver;
+    private final EntitlementRepository entitlementRepository;
 
+    @Transactional
     public Session createCheckoutSession(
             PlanKeyEnum planCode,
             String currency,
@@ -33,10 +43,19 @@ public class StripeCheckoutService {
             String supabaseId) {
         requirePlan(planCode);
 
+        Optional<EntitlementModel> entOpt = entitlementRepository.findAvailableForUpdate(supabaseId, Pageable.unpaged())
+                .stream()
+                .findFirst();
+
+        if (entOpt.isPresent()) {
+            throw new ConflictException("Ya tienes un plan activo sin usar.");
+        }
+
         String finalCurrency = normalizeCurrency(currency);
         EnvironmentEnum env = props.getEnvironment();
 
-        // 1) Resolve price (with overrides) and discount (by promo code or auto-applied)
+        // 1) Resolve price (with overrides) and discount (by promo code or
+        // auto-applied)
         ResolvedCheckout resolved = resolver.resolve(
                 planCode.name(),
                 env,
@@ -46,8 +65,24 @@ public class StripeCheckoutService {
 
         try {
             // 2) Build Stripe Checkout Session params
-            var builder = baseCheckoutBuilder(resolved.stripePriceIdToCharge())
-                    .putAllMetadata(buildMetadata(planCode, env, finalCurrency, resolved, supabaseId));
+            var md = buildMetadata(planCode, env, finalCurrency, resolved, supabaseId);
+
+            var builder = SessionCreateParams.builder()
+                    .setMode(SessionCreateParams.Mode.PAYMENT)
+                    .setSuccessUrl(props.getSuccessUrl())
+                    .setCancelUrl(props.getCancelUrl())
+                    .setAllowPromotionCodes(true)
+                    .addLineItem(SessionCreateParams.LineItem.builder()
+                            .setPrice(resolved.stripePriceIdToCharge())
+                            .setQuantity(1L)
+                            .build())
+                    // Checkout Session metadata
+                    .putAllMetadata(md)
+                    // PaymentIntent metadata
+                    .setPaymentIntentData(
+                            SessionCreateParams.PaymentIntentData.builder()
+                                    .putAllMetadata(md)
+                                    .build());
 
             // 3) Apply discount if present
             applyDiscountIfPresent(builder, resolved);
@@ -69,18 +104,6 @@ public class StripeCheckoutService {
         return cur.isEmpty() ? props.getDefaultCurrency() : cur.toUpperCase();
     }
 
-    private SessionCreateParams.Builder baseCheckoutBuilder(String stripePriceId) {
-        return SessionCreateParams.builder()
-                .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl(props.getSuccessUrl())
-                .setCancelUrl(props.getCancelUrl())
-                .setAllowPromotionCodes(true)
-                .addLineItem(SessionCreateParams.LineItem.builder()
-                        .setPrice(stripePriceId)
-                        .setQuantity(1L)
-                        .build());
-    }
-
     private Map<String, String> buildMetadata(
             PlanKeyEnum planCode,
             EnvironmentEnum env,
@@ -89,10 +112,11 @@ public class StripeCheckoutService {
             String supabaseId) {
         Map<String, String> md = new HashMap<>();
         md.put("planCode", planCode.name());
+        md.put("stripePriceId", resolved.stripePriceIdToCharge());
+        md.put("basePlanPriceId", safe(resolved.basePrice().getId().toString()));
         md.put("environment", env.name());
-        md.put("currency", currency);
-        md.put("basePlanPriceId", resolved.basePrice().getId().toString());
-        md.put("supabaseId", supabaseId);
+        md.put("currency", safe(currency));
+        md.put("supabaseId", safe(supabaseId));
         return md;
     }
 
