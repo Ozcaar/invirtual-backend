@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 public class InvitationCreateDTO {
     @NotNull(message = "El tipo de invitación es requerido.")
-    private Integer invitation_type_id;
+    private Integer invitationTypeId;
 
     // private Integer music_id;
     // private Integer sign_book_id;
@@ -37,12 +37,12 @@ public class InvitationCreateDTO {
         this.confirmation_message = confirmation_message;
     }
 
-    public Integer getInvitation_type_id() {
-        return invitation_type_id;
+    public Integer getInvitationTypeId() {
+        return invitationTypeId;
     }
 
-    public void setInvitation_type_id(Integer invitation_type_id) {
-        this.invitation_type_id = invitation_type_id;
+    public void setInvitationTypeId(Integer invitationTypeId) {
+        this.invitationTypeId = invitationTypeId;
     }
 
     // public Integer getMusic_id() {

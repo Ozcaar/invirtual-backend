@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 public class InvitationTypeModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer invitation_type_id;
+    private Integer invitationTypeId;
 
     @Column(unique = true, nullable = false)
     private String name;
@@ -22,12 +22,12 @@ public class InvitationTypeModel {
 
     // Getters & setters
 
-    public Integer getInvitation_type_id() {
-        return invitation_type_id;
+    public Integer getInvitationTypeId() {
+        return invitationTypeId;
     }
 
-    public void setInvitation_type_id(Integer invitation_type_id) {
-        this.invitation_type_id = invitation_type_id;
+    public void setInvitationTypeId(Integer invitationTypeId) {
+        this.invitationTypeId = invitationTypeId;
     }
 
     public String getName() {

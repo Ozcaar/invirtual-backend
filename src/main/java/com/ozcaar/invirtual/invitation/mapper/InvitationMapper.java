@@ -14,7 +14,7 @@ public interface InvitationMapper {
 
     @Mapping(target = "invitationUuid", ignore = true)
     // Temporaly ignore
-    @Mapping(target = "invitation_type_id", ignore = true)
+    @Mapping(target = "invitationTypeId", ignore = true)
     // @Mapping(target = "music_id", ignore = true)
     // @Mapping(target = "sign_book_id", ignore = true)
     @Mapping(target = "maxPeople", ignore = true)

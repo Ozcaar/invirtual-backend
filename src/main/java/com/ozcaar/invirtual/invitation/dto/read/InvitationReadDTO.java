@@ -7,14 +7,14 @@ public class InvitationReadDTO {
 
     private UUID invitationUuid;
     // private Integer envelope_id;
-    // private Integer invitation_type_id;
+    // private Integer invitationTypeId;
     // private Integer music_id;
     // private Integer sign_book_id;
-    private Integer max_people;
-    private String slug_url;
-    private LocalDateTime creation_date;
-    private LocalDateTime limit_date;
-    private Boolean is_demo;
+    private Integer maxPeople;
+    private String slugUrl;
+    private LocalDateTime creationDate;
+    private LocalDateTime limitDate;
+    private Boolean isDemo;
     private Boolean active;
 
     // Getters & setters
@@ -27,44 +27,44 @@ public class InvitationReadDTO {
         this.invitationUuid = invitationUuid;
     }
 
-    public Integer getMax_people() {
-        return max_people;
+    public Integer getMaxPeople() {
+        return maxPeople;
     }
 
-    public void setMax_people(Integer max_people) {
-        this.max_people = max_people;
+    public void setMaxPeople(Integer maxPeople) {
+        this.maxPeople = maxPeople;
     }
 
-    public String getSlug_url() {
-        return slug_url;
+    public String getSlugUrl() {
+        return slugUrl;
     }
 
-    public void setSlug_url(String slug_url) {
-        this.slug_url = slug_url;
+    public void setSlugUrl(String slugUrl) {
+        this.slugUrl = slugUrl;
     }
 
-    public LocalDateTime getCreation_date() {
-        return creation_date;
+    public LocalDateTime getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreation_date(LocalDateTime creation_date) {
-        this.creation_date = creation_date;
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
 
-    public LocalDateTime getLimit_date() {
-        return limit_date;
+    public LocalDateTime getLimitDate() {
+        return limitDate;
     }
 
-    public void setLimit_date(LocalDateTime limit_date) {
-        this.limit_date = limit_date;
+    public void setLimitDate(LocalDateTime limitDate) {
+        this.limitDate = limitDate;
     }
 
-    public Boolean getIs_demo() {
-        return is_demo;
+    public Boolean getIsDemo() {
+        return isDemo;
     }
 
-    public void setIs_demo(Boolean is_demo) {
-        this.is_demo = is_demo;
+    public void setIsDemo(Boolean isDemo) {
+        this.isDemo = isDemo;
     }
 
     public Boolean getActive() {

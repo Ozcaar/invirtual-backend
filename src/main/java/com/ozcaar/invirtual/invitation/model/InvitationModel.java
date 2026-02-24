@@ -29,8 +29,8 @@ public class InvitationModel {
     // private EnvelopeModel envelope_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invitation_type_id", nullable = false)
-    private InvitationTypeModel invitation_type_id;
+    @JoinColumn(name = "invitationTypeId", nullable = false)
+    private InvitationTypeModel invitationTypeId;
 
     // private MusicModel music_id;
 
@@ -72,12 +72,12 @@ public class InvitationModel {
         this.entitlement = entitlement;
     }
 
-    public InvitationTypeModel getInvitation_type_id() {
-        return invitation_type_id;
+    public InvitationTypeModel getInvitationTypeId() {
+        return invitationTypeId;
     }
 
-    public void setInvitation_type_id(InvitationTypeModel invitation_type_id) {
-        this.invitation_type_id = invitation_type_id;
+    public void setInvitationTypeId(InvitationTypeModel invitationTypeId) {
+        this.invitationTypeId = invitationTypeId;
     }
 
     public UUID getInvitationUuid() {

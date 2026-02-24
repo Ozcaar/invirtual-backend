@@ -11,7 +11,7 @@ public class InvitationUpdateDTO {
 
     // ? I think this field might not be editable because it'll be
     // ? selected when the user chose a plan.
-    // public String invitation_type_id;
+    // public String invitationTypeId;
 
     // public String music_id;
     // public String sign_book_id;
@@ -30,11 +30,11 @@ public class InvitationUpdateDTO {
 
     // Getters & setters
 
-    // public String getInvitation_type_id() {
-    // return invitation_type_id;
+    // public String getInvitationTypeId() {
+    // return invitationTypeId;
     // }
-    // public void setInvitation_type_id(String invitation_type_id) {
-    // this.invitation_type_id = invitation_type_id;
+    // public void setInvitationTypeId(String invitationTypeId) {
+    // this.invitationTypeId = invitationTypeId;
     // }
     public String getName() {
         return name;
