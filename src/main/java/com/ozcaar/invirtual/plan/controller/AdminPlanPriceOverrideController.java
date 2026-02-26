@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/admin/plan-price-overrides")
-@Tag(name = "Admin Plan Price Override Controller", description = "manejar precios temporales para temporadas, etc.")
+@Tag(name = "Admin Plan Price Override", description = "manejar precios temporales para temporadas, etc.")
 public class AdminPlanPriceOverrideController {
 
     private final PriceOverrideService service;

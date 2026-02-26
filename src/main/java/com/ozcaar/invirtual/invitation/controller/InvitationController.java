@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/invitation")
-@Tag(name = "Invitation Controller", description = "operaciones con invitaciones")
+@Tag(name = "Invitation", description = "operaciones con invitaciones")
 @RequiredArgsConstructor
 public class InvitationController implements InvitationApiDoc {
 

@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Stripe Controller", description = "operaciones con stripe")
+@Tag(name = "Stripe", description = "operaciones con stripe")
 @RequestMapping("/api/public/stripe")
 public class StripeController {
 

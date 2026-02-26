@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Admin Plan Controller", description = "operaciones de administrador con planes")
+@Tag(name = "Admin Plan", description = "operaciones de administrador con planes")
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/api/admin/plan")
 public class AdminPlanController {

@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Billing Controller", description = "operaciones con facturación")
+@Tag(name = "Billing", description = "operaciones con facturación")
 @RequestMapping("/api/billing")
 public class BillingController {
 

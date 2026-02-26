@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Plan Controller", description = "operaciones con planes")
+@Tag(name = "Plan", description = "operaciones con planes")
 @RequestMapping("/api/plan")
 public class PlanController {
 

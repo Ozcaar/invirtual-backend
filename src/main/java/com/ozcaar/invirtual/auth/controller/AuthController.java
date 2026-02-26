@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Auth Controller", description = "autenticar usuarios")
+@Tag(name = "Auth", description = "autenticar usuarios")
 @RequiredArgsConstructor
 public class AuthController implements AuthApiDoc {
 

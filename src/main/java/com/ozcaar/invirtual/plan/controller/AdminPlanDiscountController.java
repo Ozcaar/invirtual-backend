@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@Tag(name = "Admin Plan Discount Controller", description = "manejar descuentos de planes")
+@Tag(name = "Admin Plan Discount", description = "manejar descuentos de planes")
 @RequestMapping("/api/admin/plan-discounts")
 public class AdminPlanDiscountController {
 

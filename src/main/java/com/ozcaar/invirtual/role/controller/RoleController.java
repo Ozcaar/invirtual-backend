@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/admin/role")
-@Tag(name = "Role Controller", description = "operaciones con roles")
+@Tag(name = "Role", description = "operaciones con roles")
 @RequiredArgsConstructor
 public class RoleController implements RoleApiDoc {
 
