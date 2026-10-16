@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -35,6 +36,9 @@ public class SecurityConfig {
 
     private final Environment environment;
 
+    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
+    private String issuerUri;
+
     // Configure security filters
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
@@ -52,7 +56,7 @@ public class SecurityConfig {
                         auth.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll();
                     }
 
-                    auth.requestMatchers("/admin/**").hasAnyRole("ADMIN", "DEV");
+                    auth.requestMatchers("/api/admin/**", "/admin/**").hasRole("ADMIN");
                     auth.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN", "DEV");
                     auth.anyRequest().authenticated();
                 })
@@ -70,11 +74,10 @@ public class SecurityConfig {
 
     @Bean
     public JwtDecoder jwtDecoder() {
-        JwtDecoder decoder = JwtDecoders.fromIssuerLocation(
-                "https://jooaptsldvtinckgvwhx.supabase.co/auth/v1");
+        JwtDecoder decoder = JwtDecoders.fromIssuerLocation(issuerUri);
 
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators
-                .createDefaultWithIssuer("https://jooaptsldvtinckgvwhx.supabase.co/auth/v1");
+                .createDefaultWithIssuer(issuerUri);
 
         OAuth2TokenValidator<Jwt> audienceValidator = jwt -> {
             var aud = jwt.getAudience();

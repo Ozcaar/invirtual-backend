@@ -37,7 +37,7 @@ public class GuestGroupModel {
     // private Boolean enabled_conf_mess;
 
     @ManyToMany
-    @JoinTable(name = "invitation_type_guest_group", joinColumns = @JoinColumn(name = "guest_group_id"), inverseJoinColumns = @JoinColumn(name = "invitationTypeId"))
+    @JoinTable(name = "invitation_type_guest_group", joinColumns = @JoinColumn(name = "guest_group_id"), inverseJoinColumns = @JoinColumn(name = "invitation_type_id"))
     private Set<InvitationTypeModel> invitationTypes = new HashSet<>();
 
     // Getters & setters

@@ -1,7 +1,9 @@
 package com.ozcaar.invirtual.common.repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.ozcaar.invirtual.common.model.id.UserInvitationID;
 import com.ozcaar.invirtual.common.model.manytomany.UserInvitationModel;
+import com.ozcaar.invirtual.invitation.model.InvitationModel;
 
 public interface UserInvitationRepository extends JpaRepository<UserInvitationModel, UserInvitationID> {
 
@@ -22,6 +25,12 @@ public interface UserInvitationRepository extends JpaRepository<UserInvitationMo
         // @Param("name") String name);
 
         Optional<UserInvitationModel> findByUserSupabaseIdAndInvitationName(String supabaseId, String name);
+
+        Optional<UserInvitationModel> findByUserSupabaseIdAndInvitationInvitationUuid(String supabaseId,
+                        UUID invitationUuid);
+
+        @Query("select ui.invitation from UserInvitationModel ui where ui.user.supabaseId = :supabaseId")
+        List<InvitationModel> findInvitationsByUserSupabaseId(@Param("supabaseId") String supabaseId);
 
         // @Query("SELECT u FROM UserInvitationModel u WHERE u.user.user_id = :user_id
         // AND u.invitation.is_demo = true")
@@ -48,6 +57,19 @@ public interface UserInvitationRepository extends JpaRepository<UserInvitationMo
                         """)
         boolean existsByUserSupabaseIdAndInvitationSlugUrl(
                         @Param("supabaseId") String supabaseId,
+                        @Param("slugUrl") String slugUrl);
+
+        @Query("""
+                        select (count(ui) > 0) from UserInvitationModel ui
+                        where ui.user.supabaseId = (
+                            select owner.user.supabaseId from UserInvitationModel owner
+                            where owner.invitation.invitationUuid = :invitationUuid
+                        )
+                          and ui.invitation.slugUrl = :slugUrl
+                          and ui.invitation.invitationUuid <> :invitationUuid
+                        """)
+        boolean existsByInvitationOwnerAndSlugUrlAndInvitationUuidNot(
+                        @Param("invitationUuid") UUID invitationUuid,
                         @Param("slugUrl") String slugUrl);
 
 }

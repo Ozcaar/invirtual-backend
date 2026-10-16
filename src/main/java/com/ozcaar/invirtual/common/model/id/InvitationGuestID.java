@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
+@Embeddable
 public class InvitationGuestID implements Serializable {
 
     @Column(name = "invitation_uuid")

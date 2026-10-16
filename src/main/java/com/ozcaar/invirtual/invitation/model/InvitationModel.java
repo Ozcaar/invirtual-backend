@@ -29,7 +29,7 @@ public class InvitationModel {
     // private EnvelopeModel envelope_id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invitationTypeId", nullable = false)
+    @JoinColumn(name = "invitation_type_id", nullable = false)
     private InvitationTypeModel invitationTypeId;
 
     // private MusicModel music_id;

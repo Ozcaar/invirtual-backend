@@ -41,7 +41,7 @@ public class InvitationController implements InvitationApiDoc {
     // POST
     // @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
-    @Operation(summary = "Crear invitación", description = "- Se requiere el rol \"DEV\"")
+    @Operation(summary = "Crear invitación", description = "Requiere autenticación.")
     public ResponseEntity<InvitationReadDTO> createInvitation(@Valid @RequestBody InvitationCreateDTO invitation) {
         InvitationReadDTO created = invitationService.createInvitation(invitation);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
@@ -63,9 +63,8 @@ public class InvitationController implements InvitationApiDoc {
     }
 
     // UPDATE
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{invitationUUID}")
-    @Operation(summary = "Actualizar invitación", description = "- Se requiere rol \"DEV\"")
+    @Operation(summary = "Actualizar invitación", description = "Requiere ser propietario o ADMIN. El cupo se gestiona por separado.")
     public ResponseEntity<InvitationReadDTO> updateInvitation(@PathVariable UUID invitationUUID,
             @Valid @RequestBody InvitationUpdateDTO dto) {
         InvitationReadDTO updatedInvitation = invitationService.updateInvitation(invitationUUID, dto);
@@ -73,9 +72,8 @@ public class InvitationController implements InvitationApiDoc {
     }
 
     // DELETE
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{invitationUUID}")
-    @Operation(summary = "Eliminar invitación", description = "- Se requiere rol \"DEV\"")
+    @Operation(summary = "Eliminar invitación", description = "Requiere ser propietario o ADMIN.")
     public ResponseEntity<Void> deleteInvitation(@PathVariable UUID invitationUUID) {
         invitationService.deleteInvitation(invitationUUID);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

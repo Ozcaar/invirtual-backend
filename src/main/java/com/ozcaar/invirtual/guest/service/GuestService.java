@@ -59,7 +59,7 @@ public class GuestService {
 
 		// Validate the user's access to the invitation
 		if (!userInvitationRepository
-				.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), invitation.getName())
+				.findByUserSupabaseIdAndInvitationInvitationUuid(user.getSupabaseId(), invitationUUID)
 				.isPresent()) {
 			throw new AccessDeniedException("No puedes modificar esta invitación");
 		}
@@ -99,7 +99,7 @@ public class GuestService {
 
 		// Validate the user's access to the invitation
 		if (!userInvitationRepository
-				.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), invitation.getName())
+				.findByUserSupabaseIdAndInvitationInvitationUuid(user.getSupabaseId(), invitationUUID)
 				.isPresent()) {
 			throw new AccessDeniedException("No puedes modificar esta invitación");
 		}
@@ -146,7 +146,7 @@ public class GuestService {
 				.orElseThrow(() -> new NotFoundException("Invitación no encontrada"));
 
 		if (!userInvitationRepository
-				.findByUserSupabaseIdAndInvitationName(user.getSupabaseId(), invitation.getName())
+				.findByUserSupabaseIdAndInvitationInvitationUuid(user.getSupabaseId(), invitationUUID)
 				.isPresent()) {
 			throw new AccessDeniedException("No puedes modificar esta invitación");
 		}

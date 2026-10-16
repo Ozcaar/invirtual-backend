@@ -1,44 +1,58 @@
-version: "3.8"
-
 services:
   postgres:
     image: postgres:15
-    container_name: postgres_container
-    restart: always
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: invirtual
-      POSTGRES_USER: oscar
-      POSTGRES_PASSWORD: oscar
+      POSTGRES_DB: ${POSTGRES_DB:-invirtual}
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin}
     ports:
-      - "5432:5432"
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-admin} -d ${POSTGRES_DB:-invirtual}",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   app:
-    build:
-      context: .
-    container_name: springboot_app
+    profiles: [app]
+    build: .
+    restart: unless-stopped
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/invirtual
-      SPRING_DATASOURCE_USERNAME: oscar
-      SPRING_DATASOURCE_PASSWORD: oscar
-      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: https://jooaptsldvtinckgvwhx.supabase.co/auth/v1
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-invirtual}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-admin}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-admin}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      SPRING_SQL_INIT_MODE: never
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
     ports:
-      - "8080:8080"
+      - "127.0.0.1:${API_PORT:-8080}:8080"
 
   pgadmin:
+    profiles: [tools]
     image: dpage/pgadmin4
-    container_name: pgadmin_container
-    restart: always
-    ports:
-      - "5050:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+    restart: unless-stopped
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@localhost}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-change-me-local-only}
+    ports:
+      - "127.0.0.1:${PGADMIN_PORT:-5050}:80"
 
 volumes:
+  # Keep the existing volume name so previous local data remains available.
   postgres_data:

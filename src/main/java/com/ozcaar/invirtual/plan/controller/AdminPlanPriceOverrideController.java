@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.ozcaar.invirtual.plan.dto.create.AdminPriceOverrideCreateDTO;
 import com.ozcaar.invirtual.plan.dto.read.AdminPriceOverrideReadDTO;
@@ -23,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/api/admin/plan-price-overrides")
 @Tag(name = "Admin Plan Price Override", description = "manejar precios temporales para temporadas, etc.")
 public class AdminPlanPriceOverrideController {

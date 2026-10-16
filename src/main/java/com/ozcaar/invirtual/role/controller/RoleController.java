@@ -26,6 +26,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
+@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/admin/role")
 @Tag(name = "Role", description = "operaciones con roles")
 @RequiredArgsConstructor
