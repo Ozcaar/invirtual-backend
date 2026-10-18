@@ -20,7 +20,7 @@ public class UserProvisioningService {
     }
 
     @Transactional
-    public UserModel getOrCreate(String supabase_id, Object userMetadata) {
+    public UserModel getOrCreate(String supabase_id, String tokenEmail, Object userMetadata) {
 
         final String email;
         final String fullName;
@@ -29,18 +29,23 @@ public class UserProvisioningService {
         if (userMetadata instanceof Map<?, ?> map) {
 
             Object e = map.get("email");
-            email = (e != null) ? e.toString() : null;
+            String metadataEmail = (e != null) ? e.toString() : null;
+            email = (tokenEmail != null && !tokenEmail.isBlank()) ? tokenEmail : metadataEmail;
 
             Object fn = map.get("full_name");
             fullName = (fn != null) ? fn.toString() : null;
 
             Object n = map.get("name");
-            name = (n != null) ? n.toString() : null;
+            name = (n != null) ? n.toString() : fullName;
         } else {
-            email = null;
+            email = tokenEmail;
             fullName = null;
             name = null;
         }
+
+        String resolvedName = (name != null && !name.isBlank())
+                ? name
+                : (email != null && !email.isBlank() ? email.split("@", 2)[0] : "Usuario");
 
         return userRepository.findBySupabaseId(supabase_id)
                 .orElseGet(() -> {
@@ -48,7 +53,7 @@ public class UserProvisioningService {
                     UserModel user = new UserModel();
                     user.setSupabaseId(supabase_id);
 
-                    user.setName(name);
+                    user.setName(resolvedName);
                     user.setFull_name(fullName);
                     user.setEmail(email);
                     user.setActive(true);

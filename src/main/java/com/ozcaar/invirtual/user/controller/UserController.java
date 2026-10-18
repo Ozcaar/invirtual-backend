@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import com.ozcaar.invirtual.common.exception.documentation.UserApiDoc;
 import com.ozcaar.invirtual.user.dto.create.UserCreateDTO;
@@ -42,6 +44,13 @@ public class UserController implements UserApiDoc {
     }
 
     // GET
+    @GetMapping("/me")
+    @Operation(summary = "Obtener o aprovisionar el usuario autenticado")
+    public ResponseEntity<UserReadDTO> getAuthenticatedUser(@AuthenticationPrincipal Jwt jwt) {
+        UserReadDTO user = userService.getAuthenticatedUser(jwt.getSubject());
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @Deprecated
     // @GetMapping("/{id}")
     @Operation(summary = "Obtener usuario por ID", description = "")

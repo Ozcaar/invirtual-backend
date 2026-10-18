@@ -40,7 +40,7 @@ public class SupabaseJwtAuthenticationConverter implements Converter<Jwt, Abstra
     }
 
     Object userMetadata = jwt.getClaim("user_metadata");
-    UserModel user = users.getOrCreate(supabaseId, userMetadata);
+    UserModel user = users.getOrCreate(supabaseId, email, userMetadata);
 
     // Convert roles -> GrantedAuthorities ("ROLE_DEV", etc.)
     Collection<GrantedAuthority> authorities = toAuthorities(user.getUser_roles().stream()

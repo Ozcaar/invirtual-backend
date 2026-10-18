@@ -117,6 +117,12 @@ public class UserService {
         return userMapper.toDTO(user);
     }
 
+    public UserReadDTO getAuthenticatedUser(String supabaseId) {
+        UserModel user = userRepository.findBySupabaseId(supabaseId)
+                .orElseThrow(() -> new NotFoundException("No se encontró el usuario con el ID: " + supabaseId));
+        return userMapper.toDTO(user);
+    }
+
     public List<UserReadDTO> getAllUsers() {
         List<UserModel> users = (List<UserModel>) userRepository.findAll();
         return userMapper.toDTOList(users);
