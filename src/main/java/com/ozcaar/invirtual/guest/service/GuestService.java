@@ -158,5 +158,31 @@ public class GuestService {
 	// UPDATE
 
 	// DELETE
+	@Transactional
+	public void deleteGuest(UUID invitationUUID, Integer guestId) {
+		UserModel user = authService.getUserFromToken()
+				.orElseThrow(() -> new NotFoundException("Ha ocurrido un error con el usuario"));
+
+		invitationRepository.findByUUID(invitationUUID)
+				.orElseThrow(() -> new NotFoundException("Invitación no encontrada"));
+
+		if (userInvitationRepository
+				.findByUserSupabaseIdAndInvitationInvitationUuid(user.getSupabaseId(), invitationUUID)
+				.isEmpty()) {
+			throw new AccessDeniedException("No puedes modificar esta invitación");
+		}
+
+		InvitationGuestModel invitationGuest = invitationGuestRepository
+				.findByInvitationUuidAndGuestId(invitationUUID, guestId)
+				.orElseThrow(() -> new NotFoundException("Invitado no encontrado en esta invitación"));
+
+		GuestModel guest = invitationGuest.getGuest();
+		invitationGuestRepository.delete(invitationGuest);
+		invitationGuestRepository.flush();
+
+		if (invitationGuestRepository.countAssignmentsByGuestId(guestId) == 0) {
+			guestRepository.delete(guest);
+		}
+	}
 
 }

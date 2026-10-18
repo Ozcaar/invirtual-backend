@@ -107,4 +107,11 @@ public class InvitationController implements InvitationApiDoc {
         return new ResponseEntity<>(guestList, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{invitationUUID}/guest/{guestId}")
+    @Operation(summary = "Eliminar un invitado de una invitación", description = "Requiere ser propietario de la invitación.")
+    public ResponseEntity<Void> deleteGuest(@PathVariable UUID invitationUUID, @PathVariable Integer guestId) {
+        guestService.deleteGuest(invitationUUID, guestId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

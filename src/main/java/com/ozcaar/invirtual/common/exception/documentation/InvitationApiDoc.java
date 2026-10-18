@@ -148,4 +148,18 @@ public interface InvitationApiDoc {
             content = @Content(schema = @Schema(implementation = ApiError.class)))
     })
     ResponseEntity<List<GuestReadDTO>> getAllGuests(@PathVariable UUID invitationUUID);
+
+    @Operation(summary = "Eliminar un invitado de una invitación", description = "Desvincula y elimina el invitado si no está asociado a otra invitación")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Invitado eliminado correctamente"),
+        @ApiResponse(responseCode = "401", description = "La petición carece de credenciales válidas",
+            content = @Content(schema = @Schema(implementation = ApiError.class))),
+        @ApiResponse(responseCode = "403", description = "No tiene permisos sobre la invitación",
+            content = @Content(schema = @Schema(implementation = ApiError.class))),
+        @ApiResponse(responseCode = "404", description = "No se encontró la invitación o el invitado",
+            content = @Content(schema = @Schema(implementation = ApiError.class))),
+        @ApiResponse(responseCode = "500", description = "Error interno",
+            content = @Content(schema = @Schema(implementation = ApiError.class)))
+    })
+    ResponseEntity<Void> deleteGuest(@PathVariable UUID invitationUUID, @PathVariable Integer guestId);
 }
