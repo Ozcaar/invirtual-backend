@@ -34,6 +34,8 @@ public class PlanService {
         plan.setCode(code);
         plan.setName(req.name().trim());
         plan.setDescription(req.description());
+        plan.setMaxPeople(req.maxPeople());
+        plan.setDurationDays(req.durationDays());
         plan.setFeatures(req.features());
         plan.setPosition(req.position());
         plan.setActive(true);
