@@ -26,6 +26,7 @@ public interface InvitationMapper {
     @Mapping(target = "active", ignore = true)
     InvitationModel toEntity(InvitationCreateDTO dto);
 
+    @Mapping(target = "invitationTypeId", source = "invitationTypeId.invitationTypeId")
     InvitationReadDTO toDTO(InvitationModel invitation);
 
     List<InvitationReadDTO> toDTOList(List<InvitationModel> invitations);

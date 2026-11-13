@@ -6,8 +6,9 @@ import java.util.UUID;
 public class InvitationReadDTO {
 
     private UUID invitationUuid;
+    private String name;
+    private Integer invitationTypeId;
     // private Integer envelope_id;
-    // private Integer invitationTypeId;
     // private Integer music_id;
     // private Integer sign_book_id;
     private Integer maxPeople;
@@ -25,6 +26,22 @@ public class InvitationReadDTO {
 
     public void setInvitationUuid(UUID invitationUuid) {
         this.invitationUuid = invitationUuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getInvitationTypeId() {
+        return invitationTypeId;
+    }
+
+    public void setInvitationTypeId(Integer invitationTypeId) {
+        this.invitationTypeId = invitationTypeId;
     }
 
     public Integer getMaxPeople() {
