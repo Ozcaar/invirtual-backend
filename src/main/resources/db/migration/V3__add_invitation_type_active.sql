@@ -1,0 +1,2 @@
+ALTER TABLE invitation_type
+    ADD COLUMN active BOOLEAN NOT NULL DEFAULT TRUE;

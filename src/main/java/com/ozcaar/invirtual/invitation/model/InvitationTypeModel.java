@@ -20,6 +20,9 @@ public class InvitationTypeModel {
     @Column(nullable = true)
     private String description;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
     // Getters & setters
 
     public Integer getInvitationTypeId() {
@@ -44,5 +47,13 @@ public class InvitationTypeModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

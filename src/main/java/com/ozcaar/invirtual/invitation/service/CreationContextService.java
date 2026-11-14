@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ozcaar.invirtual.common.exception.global.ForbiddenException;
+import com.ozcaar.invirtual.common.exception.global.GlobalBadRequestException;
 import com.ozcaar.invirtual.common.exception.global.NotFoundException;
 import com.ozcaar.invirtual.common.repository.UserInvitationRepository;
 import com.ozcaar.invirtual.entitlement.model.EntitlementModel;
@@ -38,6 +39,10 @@ public class CreationContextService {
         @SuppressWarnings("null")
         InvitationTypeModel type = invitationTypeRepository.findById(dto.getInvitationTypeId())
                 .orElseThrow(() -> new NotFoundException("Tipo de invitación no encontrado"));
+
+        if (!type.isActive()) {
+            throw new GlobalBadRequestException("El tipo de invitación está deshabilitado");
+        }
 
         // 1) Try paid: take available entitlement with lock (without filtering by type)
         Optional<EntitlementModel> entOpt = entitlementRepository
