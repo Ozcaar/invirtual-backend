@@ -11,6 +11,7 @@ import com.ozcaar.invirtual.entitlement.model.EntitlementModel;
 import com.ozcaar.invirtual.entitlement.repository.EntitlementRepository;
 import com.ozcaar.invirtual.invitation.model.InvitationModel;
 import com.ozcaar.invirtual.order.model.OrderModel;
+import com.ozcaar.invirtual.plan.model.PlanModel;
 import com.ozcaar.invirtual.user.model.UserModel;
 import com.ozcaar.invirtual.user.repository.UserRepository;
 
@@ -24,7 +25,8 @@ public class EntitlementService {
     private final UserRepository userRepository;
     private final PlanEntitlementResolver planEntitlementResolver;
 
-    public record EntitlementSnapshot(int maxPeople, int durationDays) {
+    public record EntitlementSnapshot(PlanModel plan, String planCode, String planName,
+            int maxPeople, int durationDays) {
     }
 
     public void consume(EntitlementModel ent, InvitationModel invitation, LocalDateTime now) {
@@ -58,6 +60,9 @@ public class EntitlementService {
         EntitlementModel ent = new EntitlementModel();
         ent.setUser(user);
         ent.setOrder(order);
+        ent.setPlan(snap.plan());
+        ent.setPlanCodeSnapshot(snap.planCode());
+        ent.setPlanNameSnapshot(snap.planName());
         ent.setMaxPeople(snap.maxPeople());
         ent.setDurationDays(snap.durationDays());
         ent.setConsumedAt(null);

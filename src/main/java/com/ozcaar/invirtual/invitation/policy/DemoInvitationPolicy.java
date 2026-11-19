@@ -6,10 +6,13 @@ import com.ozcaar.invirtual.invitation.model.InvitationModel;
 
 public class DemoInvitationPolicy implements InvitationPolicy {
 
+    public static final int MAX_PEOPLE = 50;
+    public static final int DURATION_DAYS = 3;
+
     @Override
     public void apply(InvitationModel inv) {
         inv.setIsDemo(true);
-        inv.setMaxPeople(50);
-        inv.setLimitDate(LocalDateTime.now().plusDays(3));
+        inv.setMaxPeople(MAX_PEOPLE);
+        inv.setLimitDate(LocalDateTime.now().plusDays(DURATION_DAYS));
     }
 }

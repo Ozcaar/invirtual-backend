@@ -23,14 +23,16 @@ public class PlanEntitlementResolver {
         var baseOpt = planPriceRepository.findByStripePriceId(stripePriceId);
         if (baseOpt.isPresent()) {
             PlanModel plan = baseOpt.get().getPlan();
-            return new EntitlementSnapshot(plan.getMaxPeople(), plan.getDurationDays());
+            return new EntitlementSnapshot(plan, plan.getCode(), plan.getName(),
+                    plan.getMaxPeople(), plan.getDurationDays());
         }
 
         // Is it an override?
         var overrideOpt = overrideRepository.findByStripePriceIdOverride(stripePriceId);
         if (overrideOpt.isPresent()) {
             PlanModel plan = overrideOpt.get().getPlanPrice().getPlan();
-            return new EntitlementSnapshot(plan.getMaxPeople(), plan.getDurationDays());
+            return new EntitlementSnapshot(plan, plan.getCode(), plan.getName(),
+                    plan.getMaxPeople(), plan.getDurationDays());
         }
 
         throw new NotFoundException("stripePriceId no reconocido: " + stripePriceId);

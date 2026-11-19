@@ -16,6 +16,8 @@ import jakarta.persistence.LockModeType;
 
 public interface EntitlementRepository extends JpaRepository<EntitlementModel, Long> {
 
+  Optional<EntitlementModel> findByUser_SupabaseIdAndConsumedAtIsNull(String supabaseId);
+
   @Lock(LockModeType.PESSIMISTIC_WRITE)
   @Query("""
           select e from EntitlementModel e

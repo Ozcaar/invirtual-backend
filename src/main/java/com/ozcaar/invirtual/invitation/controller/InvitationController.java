@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ozcaar.invirtual.common.exception.documentation.InvitationApiDoc;
 import com.ozcaar.invirtual.invitation.dto.create.InvitationCreateDTO;
+import com.ozcaar.invirtual.invitation.dto.read.InvitationCreationContextReadDTO;
 import com.ozcaar.invirtual.invitation.dto.read.InvitationReadDTO;
 import com.ozcaar.invirtual.invitation.dto.update.InvitationUpdateDTO;
+import com.ozcaar.invirtual.invitation.service.CreationContextService;
 import com.ozcaar.invirtual.invitation.service.InvitationService;
 import com.ozcaar.invirtual.guest.dto.create.GuestCreateDTO;
 import com.ozcaar.invirtual.guest.dto.read.GuestReadDTO;
@@ -37,6 +39,7 @@ public class InvitationController implements InvitationApiDoc {
 
     private final InvitationService invitationService;
     private final GuestService guestService;
+    private final CreationContextService creationContextService;
 
     // POST
     // @PreAuthorize("hasRole('ADMIN')")
@@ -48,6 +51,11 @@ public class InvitationController implements InvitationApiDoc {
     }
 
     // GET
+    @GetMapping("/creation-context")
+    public ResponseEntity<InvitationCreationContextReadDTO> getCreationContext() {
+        return ResponseEntity.ok(creationContextService.getCreationContext());
+    }
+
     @GetMapping("/{invitationUUID}")
     @Operation(summary = "Obtener invitación por UUID", description = "")
     public ResponseEntity<InvitationReadDTO> getInvitation(@PathVariable UUID invitationUUID) {

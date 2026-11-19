@@ -12,6 +12,7 @@ import com.ozcaar.invirtual.common.exception.global.ApiFieldsError;
 import com.ozcaar.invirtual.guest.dto.create.GuestCreateDTO;
 import com.ozcaar.invirtual.guest.dto.read.GuestReadDTO;
 import com.ozcaar.invirtual.invitation.dto.create.InvitationCreateDTO;
+import com.ozcaar.invirtual.invitation.dto.read.InvitationCreationContextReadDTO;
 import com.ozcaar.invirtual.invitation.dto.read.InvitationReadDTO;
 import com.ozcaar.invirtual.invitation.dto.update.InvitationUpdateDTO;
 
@@ -24,6 +25,20 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
 public interface InvitationApiDoc {
+
+    @Operation(summary = "Consultar capacidades y derechos para crear invitaciones",
+        description = "Requiere autenticación. No reserva ni consume derechos. La elegibilidad para demo solo refleja "
+            + "la ausencia de otra demo activa y vigente; no permite elegir demo explícitamente en el POST actual.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Derecho disponible y elegibilidad para demo",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = InvitationCreationContextReadDTO.class))),
+        @ApiResponse(responseCode = "401", description = "Credenciales ausentes o inválidas",
+            content = @Content(schema = @Schema(implementation = ApiError.class))),
+        @ApiResponse(responseCode = "404", description = "Usuario no registrado",
+            content = @Content(schema = @Schema(implementation = ApiError.class)))
+    })
+    ResponseEntity<InvitationCreationContextReadDTO> getCreationContext();
 
     @Operation(summary = "Crear nueva invitación", description = "Devuelve la invitación creada")
     @ApiResponses(value = {

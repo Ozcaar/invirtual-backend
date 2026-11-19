@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import com.ozcaar.invirtual.invitation.model.InvitationModel;
 import com.ozcaar.invirtual.order.model.OrderModel;
+import com.ozcaar.invirtual.plan.model.PlanModel;
 import com.ozcaar.invirtual.user.model.UserModel;
 
 import jakarta.persistence.Column;
@@ -34,6 +35,16 @@ public class EntitlementModel {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", unique = true)
     private OrderModel order; // nullable si es demo/grant manual/admin
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "plan_id")
+    private PlanModel plan;
+
+    @Column(name = "plan_code_snapshot", length = 40)
+    private String planCodeSnapshot;
+
+    @Column(name = "plan_name_snapshot", length = 80)
+    private String planNameSnapshot;
 
     // snapshot de capacidades (evita que cambien si cambias planes después)
     @Column(nullable = false)
@@ -77,6 +88,30 @@ public class EntitlementModel {
 
     public void setOrder(OrderModel order) {
         this.order = order;
+    }
+
+    public PlanModel getPlan() {
+        return plan;
+    }
+
+    public void setPlan(PlanModel plan) {
+        this.plan = plan;
+    }
+
+    public String getPlanCodeSnapshot() {
+        return planCodeSnapshot;
+    }
+
+    public void setPlanCodeSnapshot(String planCodeSnapshot) {
+        this.planCodeSnapshot = planCodeSnapshot;
+    }
+
+    public String getPlanNameSnapshot() {
+        return planNameSnapshot;
+    }
+
+    public void setPlanNameSnapshot(String planNameSnapshot) {
+        this.planNameSnapshot = planNameSnapshot;
     }
 
     public Integer getMaxPeople() {
