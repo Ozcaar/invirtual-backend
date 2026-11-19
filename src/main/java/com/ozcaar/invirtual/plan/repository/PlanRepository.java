@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PlanRepository extends JpaRepository<PlanModel, UUID> {
+    Optional<PlanModel> findByCode(String code);
+
     Optional<PlanModel> findByCodeAndActiveTrue(String code);
 
     List<PlanModel> findAllByActiveTrueOrderByPositionAscIdAsc();
