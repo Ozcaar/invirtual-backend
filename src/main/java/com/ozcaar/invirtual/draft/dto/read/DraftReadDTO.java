@@ -11,6 +11,7 @@ public record DraftReadDTO(
         SelectedPlan plan,
         String name,
         Integer invitationTypeId,
+        SelectedTemplate template,
         String slugUrl,
         Integer schemaVersion,
         JsonNode configuration,
@@ -19,6 +20,10 @@ public record DraftReadDTO(
         Instant updatedAt) {
 
     public record SelectedPlan(UUID id, String code, String name, boolean active) {
+    }
+
+    public record SelectedTemplate(UUID id, String code, int revision, String name, boolean active,
+            int schemaVersion) {
     }
 
     public enum EntitlementPlanMatch {

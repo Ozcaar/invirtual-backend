@@ -11,6 +11,7 @@ import org.hibernate.type.SqlTypes;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ozcaar.invirtual.invitation.model.InvitationTypeModel;
 import com.ozcaar.invirtual.plan.model.PlanModel;
+import com.ozcaar.invirtual.template.model.TemplateModel;
 import com.ozcaar.invirtual.user.model.UserModel;
 
 import jakarta.persistence.Column;
@@ -48,6 +49,10 @@ public class DraftModel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invitation_type_id")
     private InvitationTypeModel invitationType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "template_id")
+    private TemplateModel template;
 
     @Column(length = 100)
     private String name;

@@ -21,6 +21,7 @@ import com.ozcaar.invirtual.draft.dto.create.DraftCreateDTO;
 import com.ozcaar.invirtual.draft.dto.read.DraftReadDTO;
 import com.ozcaar.invirtual.draft.dto.read.DraftReadDTO.EntitlementPlanMatch;
 import com.ozcaar.invirtual.draft.dto.read.DraftReadDTO.SelectedPlan;
+import com.ozcaar.invirtual.draft.dto.read.DraftReadDTO.SelectedTemplate;
 import com.ozcaar.invirtual.draft.dto.update.DraftUpdateDTO;
 import com.ozcaar.invirtual.draft.model.DraftModel;
 import com.ozcaar.invirtual.draft.repository.DraftRepository;
@@ -30,6 +31,8 @@ import com.ozcaar.invirtual.invitation.model.InvitationTypeModel;
 import com.ozcaar.invirtual.invitation.repository.InvitationTypeRepository;
 import com.ozcaar.invirtual.plan.model.PlanModel;
 import com.ozcaar.invirtual.plan.repository.PlanRepository;
+import com.ozcaar.invirtual.template.model.TemplateModel;
+import com.ozcaar.invirtual.template.service.TemplateService;
 import com.ozcaar.invirtual.user.model.UserModel;
 
 import lombok.RequiredArgsConstructor;
@@ -43,6 +46,7 @@ public class DraftService {
     private final InvitationTypeRepository invitationTypeRepository;
     private final EntitlementRepository entitlementRepository;
     private final AuthService authService;
+    private final TemplateService templateService;
 
     @Transactional
     public DraftReadDTO create(DraftCreateDTO dto) {
@@ -55,12 +59,14 @@ public class DraftService {
         Optional<EntitlementModel> entitlement = availableEntitlement(user);
         PlanModel plan = resolvePlan(dto.planCode(), null, entitlement);
         InvitationTypeModel type = resolveType(dto.invitationTypeId(), null);
+        TemplateModel template = templateService.resolveSelection(dto.templateId(), plan, type, null);
         String slug = normalizeSlug(dto.slugUrl());
 
         DraftModel draft = new DraftModel();
         draft.setUser(user);
         draft.setPlan(plan);
         draft.setInvitationType(type);
+        draft.setTemplate(template);
         draft.setName(dto.name());
         draft.setSlugUrl(slug);
         draft.setSchemaVersion(dto.schemaVersion());
@@ -98,10 +104,12 @@ public class DraftService {
         Optional<EntitlementModel> entitlement = availableEntitlement(user);
         PlanModel plan = resolvePlan(dto.planCode(), draft.getPlan(), entitlement);
         InvitationTypeModel type = resolveType(dto.invitationTypeId(), draft.getInvitationType());
+        TemplateModel template = templateService.resolveSelection(dto.templateId(), plan, type, draft.getTemplate());
         String slug = normalizeSlug(dto.slugUrl());
 
         draft.setPlan(plan);
         draft.setInvitationType(type);
+        draft.setTemplate(template);
         draft.setName(dto.name());
         draft.setSlugUrl(slug);
         draft.setSchemaVersion(dto.schemaVersion());
@@ -192,6 +200,7 @@ public class DraftService {
 
     private DraftReadDTO toDto(DraftModel draft, Optional<EntitlementModel> entitlement) {
         PlanModel plan = draft.getPlan();
+        TemplateModel template = draft.getTemplate();
         EntitlementPlanMatch match = EntitlementPlanMatch.NO_ENTITLEMENT;
         if (entitlement.isPresent()) {
             PlanModel acquiredPlan = entitlement.get().getPlan();
@@ -203,6 +212,8 @@ public class DraftService {
                 new SelectedPlan(plan.getId(), plan.getCode(), plan.getName(), plan.isActive()),
                 draft.getName(),
                 draft.getInvitationType() == null ? null : draft.getInvitationType().getInvitationTypeId(),
+                template == null ? null : new SelectedTemplate(template.getId(), template.getCode(),
+                        template.getRevision(), template.getName(), template.isActive(), template.getSchemaVersion()),
                 draft.getSlugUrl(), draft.getSchemaVersion(), draft.getConfiguration().deepCopy(),
                 match, draft.getCreatedAt(), draft.getUpdatedAt());
     }

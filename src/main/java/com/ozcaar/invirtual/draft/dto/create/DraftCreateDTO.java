@@ -1,5 +1,7 @@
 package com.ozcaar.invirtual.draft.dto.create;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
@@ -11,6 +13,7 @@ public record DraftCreateDTO(
         @NotBlank @Size(max = 40) String planCode,
         @Size(min = 3, max = 100) String name,
         @Positive Integer invitationTypeId,
+        UUID templateId,
         String slugUrl,
         @Positive Integer schemaVersion,
         JsonNode configuration) {
